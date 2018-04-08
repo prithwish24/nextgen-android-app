@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listview_show_reservation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/res_list_thumbnail"
+        android:layout_width="50dp"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="6dp"
+        android:scaleType="centerInside"
+        tools:src="@mipmap/ctyp_compact"
+        android:contentDescription="@string/show_reservation_thumbnail"/>
+
+    <RelativeLayout
+        android:id="@+id/res_list_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/res_list_thumbnail"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="4dp">
+
+        <TextView
+            android:id="@+id/res_list_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:textSize="18sp"
+            tools:text="Res# 53256375"
+            android:textColor="#26A65B"
+            />
+
+        <TextView
+            android:id="@+id/res_list_cartype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/res_list_number"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            tools:text="Type: Midsize"
+            android:textColor="#acacac"/>
+
+        <TextView
+            android:id="@+id/res_list_pickup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/res_list_cartype"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="16sp"
+            tools:text="From: St. Louis Int Airport @ 12:00 Noon" />
+
+        <TextView
+            android:id="@+id/res_list_dropoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/res_list_pickup"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="16sp"
+            tools:text="To: St. Louis Int Airport at 12:00 Noon" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
