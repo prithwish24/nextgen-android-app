@@ -83,6 +83,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         handler.postDelayed(pauseCallback, PAUSE_CALLBACK_DELAY);
     }
 
+    public SessionManager getAppSessionManager() {
+        return sessionManager;
+    }
+
     protected void showUserDetailsOnDrawer(final NavigationView.OnNavigationItemSelectedListener navView) {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(navView);
