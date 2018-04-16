@@ -73,7 +73,7 @@ public class UserProfile {
 
 	public List<Preference> getPreferences() {
 		if (preferences == null) {
-			preferences = new ArrayList<Preference>();
+			preferences = new ArrayList<>();
 		}
 		return preferences;
 	}

@@ -70,7 +70,7 @@
             android:layout_width="70dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:layout_marginRight="2dp"
+            android:layout_marginEnd="2dp"
             android:foregroundGravity="center" />
 
     </LinearLayout>

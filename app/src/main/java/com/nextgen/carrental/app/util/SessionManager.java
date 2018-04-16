@@ -17,9 +17,9 @@ public class SessionManager {
     private static final String SHARED_PREF_NAME = "CarRentalPref";
     private static final String IS_LOGGED_IN = "isUserLoggedIn";
 
-    public static final String KEY_NAME = "name";
-    public static final String KEY_USERID = "userId";
-    public static final String KEY_EMAIL = "email";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_USERID = "userId";
+    private static final String KEY_EMAIL = "email";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -29,6 +29,7 @@ public class SessionManager {
         this.context = context;
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
+        this.editor.apply();
     }
 
     public boolean isLoggedIn(){
@@ -40,7 +41,6 @@ public class SessionManager {
         editor.putString(KEY_NAME, userProfile.getFullName());
         editor.putString(KEY_EMAIL, userProfile.getEmailId());
         editor.putString(KEY_USERID, userProfile.getUserId());
-
         editor.commit();
     }
 

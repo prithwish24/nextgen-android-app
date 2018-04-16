@@ -27,7 +27,7 @@ import org.springframework.util.MultiValueMap;
 
 public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfile>> {
     private static final String[] DUMMY_CREDENTIALS = new String[]{ "admin:admin" };
-    public static final String TAG = UserLoginTask.class.getName();
+    private static final String TAG = UserLoginTask.class.getName();
 
     private final String mUsername;
     private final String mPassword;
