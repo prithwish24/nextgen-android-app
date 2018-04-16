@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.nextgen.carrental.app.android.LoginActivity;
-
-import java.util.HashMap;
+import com.nextgen.carrental.app.bo.UserProfile;
+import com.nextgen.carrental.app.model.User;
 
 /**
- * Created by prithwish on 2/12/2018.
+ * Session Manager
+ * @author Prithwish
  */
 
 public class SessionManager {
@@ -17,6 +18,7 @@ public class SessionManager {
     private static final String IS_LOGGED_IN = "isUserLoggedIn";
 
     public static final String KEY_NAME = "name";
+    public static final String KEY_USERID = "userId";
     public static final String KEY_EMAIL = "email";
 
     private SharedPreferences sharedPreferences;
@@ -33,18 +35,25 @@ public class SessionManager {
         return sharedPreferences.getBoolean(IS_LOGGED_IN, false);
     }
 
-    public void createLoginSession(String name, String email) {
+    public void createLoginSession(UserProfile userProfile) {
         editor.putBoolean(IS_LOGGED_IN, true);
-        editor.putString(KEY_NAME, name);
-        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_NAME, userProfile.getFullName());
+        editor.putString(KEY_EMAIL, userProfile.getEmailId());
+        editor.putString(KEY_USERID, userProfile.getUserId());
+
         editor.commit();
     }
 
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put(KEY_NAME, sharedPreferences.getString(KEY_NAME, null));
-        map.put(KEY_EMAIL, sharedPreferences.getString(KEY_EMAIL, null));
-        return map;
+    public User getLoggedInUser(){
+        User user = new User();
+        user.setUserId(sharedPreferences.getString(KEY_USERID, ""));
+        user.setName(sharedPreferences.getString(KEY_NAME, ""));
+        user.setEmail(sharedPreferences.getString(KEY_EMAIL, ""));
+        return user;
+    }
+
+    public String getLoggedInUserID() {
+        return sharedPreferences.getString(KEY_USERID, null);
     }
 
     public String getData(String key) {

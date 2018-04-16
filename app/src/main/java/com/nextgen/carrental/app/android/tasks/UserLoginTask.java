@@ -51,7 +51,8 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
         for (String credential : DUMMY_CREDENTIALS) {
             String[] pieces = credential.split(":");
             if (pieces[0].equals(mUsername) && pieces[1].equals(mPassword)) {
-                UserProfile up = new UserProfile("Administrator", mUsername+"@example.com");
+                UserProfile up = new UserProfile(mUsername+"@example.com", "Administrator");
+                up.setUserId(mUsername);
                 response = new BaseResponse<>();
                 response.setSuccess(true);
                 response.setResponse(up);
@@ -81,17 +82,17 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
     @Override
     protected void onPostExecute(final BaseResponse<UserProfile> response) {
-
+        super.onPostExecute(response);
 
         boolean success = (response != null) && response.isSuccess();
         if (success) {
-
             UserProfile profile = response.getResponse();
             SessionManager sessionManager = new SessionManager(context);
-            sessionManager.createLoginSession(profile.getFullName(), profile.getEmailId());
+            sessionManager.createLoginSession(profile);
 
             // open home activity
             Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //???
             context.startActivity(intent);
 
             showProgress(false);

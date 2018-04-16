@@ -51,4 +51,27 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    /*public static Set<String> serializeToSet(final User user) {
+        return new HashSet<String>(4) {
+            {
+                add(nullSafeAdd(user.getUserId()));
+                add(nullSafeAdd(user.getName()));
+                add(nullSafeAdd(user.getNickname()));
+                add(nullSafeAdd(user.getEmail()));
+            }
+            String nullSafeAdd(String str){
+                return (str==null || str.trim().isEmpty())
+                        ?"":str;
+            }
+        };
+    }
+
+    public static User deserializeFromSet(final Set<String> set) {
+        if (set != null && !set.isEmpty()) {
+            set.
+            return new User();
+        }
+        return null;
+    }*/
 }

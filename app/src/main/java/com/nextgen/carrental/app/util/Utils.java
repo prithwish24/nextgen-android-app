@@ -13,6 +13,9 @@ public class Utils {
     public static final String SHORT_TIME_AMPM = "h:mm a";
 
 
+    public static String fmtTime (long value){
+        return fmtTime(value, SHORT_TIME_AMPM);
+    }
     public static String fmtTime (long value, String fmt){
         final Date dt = new Date(value);
         final SimpleDateFormat sdf = new SimpleDateFormat(fmt);

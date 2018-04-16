@@ -23,6 +23,30 @@ public class UserProfile {
 		this.emailId = emailId;
 	}
 
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public String getFullName() {
 		return fullName;
 	}

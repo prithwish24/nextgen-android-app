@@ -1,5 +1,7 @@
 package com.nextgen.carrental.app.model;
 
+import java.util.Date;
+
 /**
  * Holds each chat message
  */
@@ -7,14 +9,30 @@ package com.nextgen.carrental.app.model;
 public class ChatMessage {
     private String message;
     private User sender;
+    private boolean selfMessage = false;
     private long createdAt;
 
     public ChatMessage() {
     }
 
+    public ChatMessage(String message, User sender) {
+        this.message = message;
+        this.sender = sender;
+        this.createdAt = new Date().getTime();
+    }
     public ChatMessage(String message, User sender, long createdAt) {
         this.message = message;
         this.sender = sender;
+        this.createdAt = createdAt;
+    }
+    public ChatMessage(String message, boolean isSelfMessage) {
+        this.message = message;
+        this.selfMessage = isSelfMessage;
+        this.createdAt = new Date().getTime();
+    }
+    public ChatMessage(String message, boolean isSelfMessage, long createdAt) {
+        this.message = message;
+        this.selfMessage = isSelfMessage;
         this.createdAt = createdAt;
     }
 
@@ -42,4 +60,11 @@ public class ChatMessage {
         this.createdAt = createdAt;
     }
 
+    public boolean isSelfMessage() {
+        return selfMessage;
+    }
+
+    public void setSelfMessage(boolean selfMessage) {
+        this.selfMessage = selfMessage;
+    }
 }

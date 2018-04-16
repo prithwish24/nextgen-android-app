@@ -5,6 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_configure">Configure</string>
 
+    <!-- permission related messages -->
+    <string name="permission_rationale_text">"Please enable required permissions
+        to use this app."
+    </string>
+
     <!-- Strings related to menu -->
     <string name="menu_home">Home</string>
     <string name="menu_reservations">Reservation</string>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/recyclerview_chat_window">
@@ -17,7 +15,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/divider_chat"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        app:stackFromEnd="true">
     </android.support.v7.widget.RecyclerView>
 
     <!-- A horizontal line between the chatbox and RecyclerView -->
@@ -42,9 +41,10 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <EditText
-            android:id="@+id/edittext_chat"
-            android:hint="Enter message"
+
+        <TextView
+            android:id="@+id/textView_chat"
+            android:hint=""
             android:background="@android:color/transparent"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:maxLines="6"/>
 
-        <Button
+        <!--<Button
             android:id="@+id/button_chat_send"
             android:text="SEND"
             android:textSize="14dp"
@@ -63,7 +63,16 @@
             android:layout_width="64dp"
             android:layout_height="48dp"
             android:gravity="center"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom" />-->
+        <ai.api.ui.AIButton
+            android:id="@+id/micButton"
+            style="@style/ApiAi.Microphone"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="2dp"
+            android:foregroundGravity="center" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
