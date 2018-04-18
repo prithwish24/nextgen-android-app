@@ -1,62 +1,78 @@
 package com.nextgen.carrental.app.android;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.adapter.MessageListAdapter;
+import com.nextgen.carrental.app.ai.Config;
+import com.nextgen.carrental.app.model.ChatMessage;
+import com.nextgen.carrental.app.model.User;
+import com.nextgen.carrental.app.util.GPSTracker;
+import com.nextgen.carrental.app.util.PermissionManager;
+import com.nextgen.carrental.app.util.TTS;
 
+import java.util.List;
+
+import ai.api.AIListener;
+import ai.api.PartialResultsListener;
+import ai.api.android.AIConfiguration;
+import ai.api.model.AIError;
+import ai.api.model.AIResponse;
+import ai.api.model.Result;
+import ai.api.model.Status;
+import ai.api.ui.AIButton;
 
 /**
- * Home - User Home after login
+ * View of Chat Window
  * @author Prithwish
+ *
  */
 
-public class HomeFragment extends Fragment {
-    private static final String TAG = HomeFragment.class.getName();
-    private View homeView;
-    /*private MainActivity parent;
+public class ChatFragment extends Fragment implements AIButton.AIButtonListener {
+    private static final String TAG = ChatFragment.class.getName();
+    private View view;
+
     private AIButton aiButton;
     private MessageListAdapter mMessageListAdapter;
     private TextView textViewChat;
     private PermissionManager permissionManager;
-    private Handler handler;*/
+    private Handler handler;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        this.homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        /*this.aiButton = homeView.findViewById(R.id.micButton);
-        this.textViewChat = homeView.findViewById(R.id.textView_chat);
-        this.parent = (MainActivity) getActivity();
+        this.view = inflater.inflate(R.layout.fragment_voice_chat, container, false);
+        this.aiButton = view.findViewById(R.id.micButton);
+        this.textViewChat = view.findViewById(R.id.textView_chat);
         this.handler = new Handler(Looper.getMainLooper());
-        this.permissionManager = PermissionManager.getInstance();*/
-        return homeView;
+        this.permissionManager = PermissionManager.getInstance();
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        FloatingActionButton fab = (FloatingActionButton) homeView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, new ChatFragment())
-                        .commit();
-            }
-        });
-
-        /*mMessageListAdapter = new MessageListAdapter();
-        final RecyclerView recyclerView = homeView.findViewById(R.id.recycler_chat_window);
+        mMessageListAdapter = new MessageListAdapter();
+        final RecyclerView recyclerView = this.view.findViewById(R.id.recycler_chat_window);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mMessageListAdapter);
 
@@ -74,11 +90,27 @@ public class HomeFragment extends Fragment {
                     public void onResponse(int requestCode, Activity activity) {
                         onPermissionGranted();
                     }
-                });*/
+                });
+
+        /*ArrayList<ChatMessage> list = new ArrayList<ChatMessage>(){
+            {
+                User u1 = new User("admin", "Administrator", "MyAdmin", "admin@example.com");
+                User u2 = new User("vagent", "Virtual Agent", "Agent John", "vagent@example.com");
+
+                add(new ChatMessage("Hi", u1, new Date().getTime()));
+                add(new ChatMessage("Hello", u1, new Date().getTime()));
+                add(new ChatMessage("Welcome to my world", u2, new Date().getTime()));
+                add(new ChatMessage("Thanks You", u2, new Date().getTime()));
+                add(new ChatMessage("Good Bye", u1, new Date().getTime()));
+            }
+        };
+
+        mMessageListAdapter.setMessageList(list);*/
+
 
     }
 
-    /*private void onPermissionGranted() {
+    private void onPermissionGranted() {
         Address currentLocation;
         if (permissionManager.hasPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 || permissionManager.hasPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
@@ -120,15 +152,15 @@ public class HomeFragment extends Fragment {
             aiButton.initialize(config);
             aiButton.setResultsListener(this);
 
-            aiButton.setPartialResultsListener(new MyResultListener());
+            aiButton.setPartialResultsListener(new ChatFragment.MyResultListener());
         }
 
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onStart() {
         super.onStart();
-        //aiButton.startListening();
+        aiButton.startListening();
     }
 
     @Override
@@ -149,7 +181,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResult(final AIResponse response) {
-        parent.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 Log.i(TAG, "onResult");
                 Log.i(TAG, "Received success response");
@@ -175,26 +207,24 @@ public class HomeFragment extends Fragment {
                 TTS.speak(speech);
             }
         });
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onError(final AIError error) {
-        parent.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "onError");
-                *//*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();*//*
-                Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-
-                //resultTextView.setText(error.getMessage());
+                Snackbar.make(view, error.getMessage(), Snackbar.LENGTH_LONG)
+                    .setAction("Error", null).show();
+                //Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     @Override
     public void onCancelled() {
-        parent.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "onCancelled");
@@ -204,43 +234,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onAudioLevel(float level) {
-
-    }
-
-
-
-    @Override
-    public void onListeningStarted() {
-        parent.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-    }
-
-    @Override
-    public void onListeningCanceled() {
-        parent.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-    }
-
-    @Override
-    public void onListeningFinished() {
-        parent.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ChatMessage chat = new ChatMessage(textViewChat.getText().toString(), true);
-                mMessageListAdapter.addMessage(chat);
-            }
-        });
-    }
 
     class MyResultListener implements PartialResultsListener {
         @Override
@@ -255,6 +248,39 @@ public class HomeFragment extends Fragment {
                 });
             }
         }
-    }*/
+    }
+
+    class MyAIListener implements AIListener {
+
+        @Override
+        public void onResult(AIResponse result) {
+
+        }
+
+        @Override
+        public void onError(AIError error) {
+
+        }
+
+        @Override
+        public void onAudioLevel(float level) {
+
+        }
+
+        @Override
+        public void onListeningStarted() {
+
+        }
+
+        @Override
+        public void onListeningCanceled() {
+
+        }
+
+        @Override
+        public void onListeningFinished() {
+
+        }
+    }
 
 }

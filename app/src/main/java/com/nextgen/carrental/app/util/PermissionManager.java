@@ -12,6 +12,14 @@ import android.support.v4.content.ContextCompat;
  */
 
 public final class PermissionManager {
+    private static final PermissionManager INSTANCE = new PermissionManager();
+
+    private PermissionManager() {
+    }
+
+    public static PermissionManager getInstance() {
+        return INSTANCE;
+    }
 
     public interface CallbackHandler {
         void onResponse(final int requestCode, final Activity activity);

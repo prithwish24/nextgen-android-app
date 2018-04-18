@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.AIApplication;
-import com.nextgen.carrental.app.util.PermissionManager;
+import com.nextgen.carrental.app.model.User;
 import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.TTS;
 
@@ -47,7 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     };
 
     protected SessionManager sessionManager;
-    protected PermissionManager permissionManager;
+    //protected PermissionManager permissionManager;
     private SparseIntArray mErrorString;
 
     @Override
@@ -56,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mErrorString = new SparseIntArray();
 
         sessionManager = new SessionManager(getApplicationContext());
-        permissionManager = new PermissionManager();
+        //permissionManager = new PermissionManager();
 
         app = (AIApplication) getApplication();
         TTS.init(getApplicationContext());
@@ -88,11 +88,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(navView);
 
+        final User user = sessionManager.getLoggedInUser();
+
         final View headerView = navigationView.getHeaderView(0);
         final TextView textViewName = headerView.findViewById(R.id.textView_name);
         final TextView textViewEmail = headerView.findViewById(R.id.textView_email);
-        textViewName.setText(sessionManager.getData(SessionManager.KEY_NAME));
-        textViewEmail.setText(sessionManager.getData(SessionManager.KEY_EMAIL));
+        textViewName.setText(user.getName());
+        textViewEmail.setText(user.getEmail());
 
         final ImageView imageViewProfile = headerView.findViewById(R.id.imageView_profile);
         imageViewProfile.setImageResource(R.mipmap.ic_profile);

@@ -96,7 +96,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             context.startActivity(intent);
 
             showProgress(false);
-            activity.finish();
+            //activity.finish();
 
         } else {
             final EditText mPasswordView = activity.findViewById(R.id.password);
