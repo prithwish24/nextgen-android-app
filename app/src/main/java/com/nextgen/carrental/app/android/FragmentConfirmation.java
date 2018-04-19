@@ -15,8 +15,8 @@ import com.nextgen.carrental.app.R;
  *
  */
 
-public class ConfirmationFragment extends Fragment {
-    private static final String TAG = HomeFragment.class.getName();
+public class FragmentConfirmation extends Fragment {
+    private static final String TAG = FragmentHome.class.getName();
     View view;
 
     @Nullable

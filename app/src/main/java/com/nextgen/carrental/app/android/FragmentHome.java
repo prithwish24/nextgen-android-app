@@ -1,6 +1,7 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,8 +18,8 @@ import com.nextgen.carrental.app.R;
  * @author Prithwish
  */
 
-public class HomeFragment extends Fragment {
-    private static final String TAG = HomeFragment.class.getName();
+public class FragmentHome extends Fragment {
+    private static final String TAG = FragmentHome.class.getName();
     private View homeView;
     /*private MainActivity parent;
     private AIButton aiButton;
@@ -49,9 +50,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, new ChatFragment())
-                        .commit();
+                /*getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, new FragmentVoiceChat())
+                        .commit();*/
+                startActivity(new Intent(getActivity().getApplicationContext(), VoiceChatActivity.class));
             }
         });
 

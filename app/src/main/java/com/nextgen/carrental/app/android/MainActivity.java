@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new HomeFragment())
+                .replace(R.id.content_frame, new FragmentHome())
                 .commit();
     }
 
@@ -69,9 +69,9 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_configure) {
+        /*if (id == R.id.action_configure) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -84,19 +84,21 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, new HomeFragment())
+                    .replace(R.id.content_frame, new FragmentHome())
                     .commit();
 
         } else if (id == R.id.nav_show_reservation) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, new ShowReservationFragment())
+                    .replace(R.id.content_frame, new FragmentShowReservation())
                     .commit();
 
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Nothing assigned", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_profile) {
-            Toast.makeText(this, "Nothing assigned", Toast.LENGTH_SHORT).show();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, new FragmentProfileView())
+                    .commit();
 
         } else if (id == R.id.nav_logout) {
             sessionManager.logoutUser();

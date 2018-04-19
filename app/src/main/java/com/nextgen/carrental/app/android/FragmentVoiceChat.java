@@ -48,8 +48,8 @@ import ai.api.ui.AIButton;
  *
  */
 
-public class ChatFragment extends Fragment implements AIButton.AIButtonListener {
-    private static final String TAG = ChatFragment.class.getName();
+public class FragmentVoiceChat extends Fragment implements AIButton.AIButtonListener {
+    private static final String TAG = FragmentVoiceChat.class.getName();
     private View view;
 
     private AIButton aiButton;
@@ -57,6 +57,7 @@ public class ChatFragment extends Fragment implements AIButton.AIButtonListener 
     private TextView textViewChat;
     private PermissionManager permissionManager;
     private Handler handler;
+
 
     @Nullable
     @Override
@@ -71,6 +72,7 @@ public class ChatFragment extends Fragment implements AIButton.AIButtonListener 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         mMessageListAdapter = new MessageListAdapter();
         final RecyclerView recyclerView = this.view.findViewById(R.id.recycler_chat_window);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -152,7 +154,7 @@ public class ChatFragment extends Fragment implements AIButton.AIButtonListener 
             aiButton.initialize(config);
             aiButton.setResultsListener(this);
 
-            aiButton.setPartialResultsListener(new ChatFragment.MyResultListener());
+            aiButton.setPartialResultsListener(new FragmentVoiceChat.MyResultListener());
         }
 
     }

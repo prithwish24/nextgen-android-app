@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author Prithwish
  */
 
-public class ShowReservationFragment extends Fragment {
+public class FragmentShowReservation extends Fragment {
     View showReservationView;
 
     @Nullable
