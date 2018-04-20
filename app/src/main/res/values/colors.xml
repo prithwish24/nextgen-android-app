@@ -7,4 +7,5 @@
     <color name="white">#FFFFFF</color>
     <color name="startColor">#004b2a</color>
     <color name="endColor">#00b967</color>
+    <color name="buttonColor">#4FAB5B</color>
 </resources>

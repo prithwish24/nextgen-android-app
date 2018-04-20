@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme.NoActionBar">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -11,7 +11,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="225dp"
+            android:layout_height="200dp"
             android:background="@drawable/gradient_background"
             android:orientation="vertical">
 
@@ -19,7 +19,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="25dp"
                 android:src="@mipmap/ic_profile" />
 
             <TextView
@@ -46,46 +46,95 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/relativeLayout"
-        android:layout_below="@+id/relativeLayout">
-
+        android:layout_height="match_parent">
         <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/fullName"
-                android:layout_width="wrap_content"
+                android:id="@+id/textViewFullName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="First Name: " />
+                android:text="@string/profile_name"
+                android:textStyle="bold" />
 
             <EditText
-                android:hint="Name"
-                android:layout_below="@+id/fullName"
+                android:id="@+id/editFullName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewFullName"
+                android:hint="@string/profile_name_hint" />
 
             <TextView
-                android:id="@+id/prefCarType"
-                android:layout_width="wrap_content"
+                android:id="@+id/textViewAltName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Preferred Car Type: " />
+                android:layout_below="@id/editFullName"
+                android:layout_marginTop="20dp"
+                android:text="@string/profile_alt_name"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editAltName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAltName"
+                android:hint="@string/profile_alt_name_hint" />
+
+            <TextView
+                android:id="@+id/textViewPrefCarType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editAltName"
+                android:layout_marginTop="20dp"
+                android:text="@string/profile_car_type"
+                android:textStyle="bold" />
 
             <Spinner
-                android:hint="Car Types"
-                android:layout_below="@+id/fullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:id="@+id/spinnerCarType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewPrefCarType"
+                android:hint="@string/profile_car_type_hint" />
 
+            <Space
+                android:id="@+id/spacer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/spinnerCarType"
+                android:minHeight="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spacer"
+                android:layout_marginBottom="25dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_button_save"
+                    android:theme="@style/ActiveButtonTheme" />
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/profile_button_cancel" />
+
+            </LinearLayout>
         </RelativeLayout>
-
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>
