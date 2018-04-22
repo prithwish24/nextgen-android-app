@@ -7,6 +7,7 @@ package com.nextgen.carrental.app.model;
 
 public class Reservation {
     private String number;
+    private String status;
     private String carType;
     private String pickUpPoint;
     private String dropOffPoint;
@@ -17,9 +18,10 @@ public class Reservation {
         this.number = number;
     }
 
-    public Reservation(String number, String carType, String pickUpPoint, String dropOffPoint,
+    public Reservation(String number, String status, String carType, String pickUpPoint, String dropOffPoint,
                        String pickUpTime, String dropOffTime) {
         this.number = number;
+        this.status = status;
         this.carType = carType;
         this.pickUpPoint = pickUpPoint;
         this.dropOffPoint = dropOffPoint;
@@ -37,6 +39,14 @@ public class Reservation {
 
     public String getCarType() {
         return carType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setCarType(String carType) {

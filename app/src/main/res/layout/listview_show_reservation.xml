@@ -14,18 +14,18 @@
         android:layout_marginBottom="6dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="6dp"
+        android:contentDescription="@string/show_reservation_thumbnail"
         android:scaleType="centerInside"
-        tools:src="@mipmap/ctyp_compact"
-        android:contentDescription="@string/show_reservation_thumbnail"/>
+        tools:src="@mipmap/ctyp_compact" />
 
     <RelativeLayout
         android:id="@+id/res_list_text_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/res_list_thumbnail"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="4dp">
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@id/res_list_thumbnail">
 
         <TextView
             android:id="@+id/res_list_number"
@@ -33,26 +33,25 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:textSize="18sp"
-            tools:text="Res# 53256375"
             android:textColor="#26A65B"
-            />
+            android:textSize="18sp"
+            tools:text="Res# 53256375" />
 
         <TextView
             android:id="@+id/res_list_cartype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/res_list_number"
             android:layout_alignParentEnd="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="2dp"
-            android:textAlignment="textEnd"
+            android:layout_toEndOf="@+id/res_list_number"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAlignment="textEnd"
+            android:textColor="#acacac"
             android:textSize="16sp"
-            tools:text="Type: Midsize"
-            android:textColor="#acacac"/>
+            tools:text="Type: Midsize" />
 
         <TextView
             android:id="@+id/res_list_pickup"

@@ -111,7 +111,7 @@
         <ImageView
             android:id="@+id/vehicle_image_confirm"
             android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/show_reservation_thumbnail"
             android:scaleType="centerInside"
@@ -123,6 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/vehicle_image_confirm"
             android:paddingBottom="2sp"
+            android:paddingStart="5dp"
             android:text="Economy"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -135,6 +136,7 @@
             android:layout_below="@id/vehicle_class_confirm"
             android:layout_toEndOf="@id/vehicle_image_confirm"
             android:paddingBottom="2sp"
+            android:paddingStart="5dp"
             android:text="Mitsubishi Mirage or similar"
             android:textColor="@color/black"
             android:textSize="14sp" />

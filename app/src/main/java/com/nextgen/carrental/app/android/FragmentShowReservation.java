@@ -36,9 +36,9 @@ public class FragmentShowReservation extends Fragment {
 
         ArrayList<Reservation> list = new ArrayList<Reservation>(3) {
             {
-                add(new Reservation("5154353", "Midsize", "St. Louis Int Airport", "St. Louis Int Airport", "9:00 am", "9:00 am"));
-                add(new Reservation("8765456", "Standard", "Denver Int Airport", "Denver Int Airport", "8:00 am", "8:00 am"));
-                add(new Reservation("2456787", "Premium", "Chicago Int Airport", "Chicago Int Airport", "12:00 noon", "12:00 noon"));
+                add(new Reservation("5154353", "UPCOMING", "Compact", "St. Louis Int Airport", "St. Louis Int Airport", "Apr 24, 2018 - 9:00 PM", "Apr 26, 2018 - 9:00 AM"));
+                add(new Reservation("8765456", "COMPLETED","Standard", "Denver Int Airport", "Denver Int Airport", "Apr 18, 2018 - 8:00 PM", "Apr 22, 2018 - 8:00 AM"));
+                add(new Reservation("2456787", "COMPLETED","Premium", "Chicago Int Airport", "Chicago Int Airport", "Feb 5, 2018 - 12:00 PM", "Feb 14, 2018 - 12:00 PM"));
             }
         };
 

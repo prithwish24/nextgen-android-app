@@ -24,9 +24,9 @@ public class ReservationListAdapter extends BaseAdapter {
     //public static final String TAG = ReservationListAdapter.class.getSimpleName();
     private static final HashMap <String, Integer> CAR_IMAGES = new HashMap <String, Integer> () {
         {
-            put("midsize", R.mipmap.ctyp_compact);
-            put("standard", R.mipmap.ctyp_standard);
-            put("premium", R.mipmap.ctyp_premium);
+            put("COMPACT", R.drawable.ct_compact);
+            put("STANDARD", R.drawable.ct_standard);
+            put("PREMIUM", R.drawable.ct_premium);
         }
     };
 
@@ -60,14 +60,15 @@ public class ReservationListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.listview_show_reservation, parent, false);
+            convertView = mInflater.inflate(R.layout.show_reservation_item, parent, false);
 
             holder = new ViewHolder();
             holder.thumbnailImageView = convertView.findViewById(R.id.res_list_thumbnail);
-            holder.numberTextView = convertView.findViewById(R.id.res_list_number);
-            holder.carTypeTextView  = convertView.findViewById(R.id.res_list_cartype);
+            holder.statusTextView = convertView.findViewById(R.id.res_list_status);
+            holder.carTypeTextView  = convertView.findViewById(R.id.res_list_car_type);
             holder.pickUpTextView = convertView.findViewById(R.id.res_list_pickup);
-            holder.dropOffTextView = convertView.findViewById(R.id.res_list_dropoff);
+            holder.pickUpTimeTextView = convertView.findViewById(R.id.res_list_pickup_time);
+            holder.returnTimeTextView = convertView.findViewById(R.id.res_list_return_time);
 
             convertView.setTag(holder);
 
@@ -77,11 +78,12 @@ public class ReservationListAdapter extends BaseAdapter {
         }
 
         final Reservation res = (Reservation) getItem(position);
-        holder.numberTextView.setText("Res# " + res.getNumber());
-        holder.carTypeTextView.setText("Type: " + res.getCarType());
-        holder.pickUpTextView.setText("From: "+res.getPickUpPoint()+" @ "+res.getPickUpTime());
-        holder.dropOffTextView.setText("To: "+res.getDropOffPoint()+" @ "+res.getDropOffTime());
-        final Integer imgId = CAR_IMAGES.get(res.getCarType().toLowerCase());
+        holder.statusTextView.setText(res.getStatus());
+        holder.carTypeTextView.setText(res.getCarType());
+        holder.pickUpTextView.setText(res.getPickUpPoint());
+        holder.pickUpTimeTextView.setText(res.getPickUpTime());
+        holder.returnTimeTextView.setText(res.getDropOffTime());
+        final Integer imgId = CAR_IMAGES.get(res.getCarType().toUpperCase());
         if (imgId != null) {
             holder.thumbnailImageView.setImageResource(imgId);
         }
@@ -91,10 +93,11 @@ public class ReservationListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView thumbnailImageView;
-        TextView numberTextView;
+        TextView statusTextView;
         TextView carTypeTextView;
         TextView pickUpTextView;
-        TextView dropOffTextView;
+        TextView pickUpTimeTextView;
+        TextView returnTimeTextView;
     }
 
 }
