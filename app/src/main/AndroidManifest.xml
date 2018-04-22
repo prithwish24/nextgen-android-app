@@ -20,6 +20,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--<activity
+            android:name=".android.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateHidden|adjustResize">-->
         <activity
             android:name=".android.LoginActivity"
             android:label="@string/title_activity_login">
@@ -34,7 +38,8 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".android.VoiceChatActivity">
+        <activity android:name=".android.VoiceChatActivity"
+            android:theme="@style/AppTheme.ChatWindow">
             <!--<meta-data android:name="" android:value=".android.MainActivity"/>-->
         </activity>
     </application>

@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/recyclerview_chat_window"/>
+    <include layout="@layout/recycler_view_chat_window"/>
 
 </RelativeLayout>

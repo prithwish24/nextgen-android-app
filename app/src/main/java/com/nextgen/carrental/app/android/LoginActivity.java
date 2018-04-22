@@ -17,8 +17,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,12 +35,17 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private static final int REQUEST_READ_CONTACTS = 0;
 
     // UI references.
-    private AutoCompleteTextView mUsernameView;
+    private EditText mUsernameView;
     private EditText mPasswordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_login);
 
         mUsernameView = findViewById(R.id.username);
@@ -147,7 +150,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             focusView = mUsernameView;
             cancel = true;
         } else if (TextUtils.isEmpty(password)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
+            mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -197,7 +200,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        //addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -205,14 +208,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    /*private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mUsernameView.setAdapter(adapter);
-    }
+    }*/
 
 
     private interface ProfileQuery {

@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.android.MainActivity;
@@ -90,18 +90,17 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             SessionManager sessionManager = new SessionManager(context);
             sessionManager.createLoginSession(profile);
 
+            showProgress(false);
+            activity.finish();
+
             // open home activity
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //???
             context.startActivity(intent);
 
-            showProgress(false);
-            //activity.finish();
-
         } else {
-            final EditText mPasswordView = activity.findViewById(R.id.password);
-            mPasswordView.setError(getString(R.string.error_incorrect_login_attempt));
-            mPasswordView.requestFocus();
+            final TextView mErrorMessage = activity.findViewById(R.id.login_error_message);
+            mErrorMessage.setText(getString(R.string.error_incorrect_login_attempt));
             showProgress(false);
         }
     }

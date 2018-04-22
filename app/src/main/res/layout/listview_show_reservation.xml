@@ -65,7 +65,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textSize="16sp"
-            tools:text="From: St. Louis Int Airport @ 12:00 Noon" />
+            tools:text="St. Louis Int Airport @ 12:00 Noon" />
 
         <TextView
             android:id="@+id/res_list_dropoff"
@@ -78,7 +78,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textSize="16sp"
-            tools:text="To: St. Louis Int Airport at 12:00 Noon" />
+            tools:text="St. Louis Int Airport at 12:00 Noon" />
 
     </RelativeLayout>
 

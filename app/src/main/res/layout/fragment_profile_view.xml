@@ -124,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/profile_button_save"
-                    android:theme="@style/ActiveButtonTheme" />
+                    android:theme="@style/LoginActiveButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonCancel"

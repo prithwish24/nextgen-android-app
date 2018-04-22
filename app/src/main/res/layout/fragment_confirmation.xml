@@ -1,15 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/fluorescentGreen"
+        android:contentDescription="confirmation number"
+        android:gravity="left|center"
+        android:paddingLeft="10dp"
+        android:text="CONFIRMATION #: 13243545543"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="30dp"
-        android:text="Confirmation Layout" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="TRIP DETAILS" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="Pickup:"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/pickup_time_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="Thu Apr 19, 2018 - 12:00 PM"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/pickup_location_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lambert-St. Louis Int. Airport"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="Return:"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/return_time_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="Thu Apr 24, 2018 - 12:00 PM"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/return_location_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lambert-St. Louis Int. Airport"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="VEHICLE SELECTED" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/vehicle_image_confirm"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/show_reservation_thumbnail"
+            android:scaleType="centerInside"
+            tools:src="@drawable/ct_compact" />
+
+        <TextView
+            android:id="@+id/vehicle_class_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/vehicle_image_confirm"
+            android:paddingBottom="2sp"
+            android:text="Economy"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/vehicle_class_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vehicle_class_confirm"
+            android:layout_toEndOf="@id/vehicle_image_confirm"
+            android:paddingBottom="2sp"
+            android:text="Mitsubishi Mirage or similar"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="SELECTED ADDONS" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="GPS Navigator"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2sp"
+            android:text="Child Seat"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_done_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="DONE"
+        android:theme="@style/LoginActiveButtonStyle" />
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">NextGen CarRental</string>
+    <string name="VoiceChatWindowTitle">Virtual Agent</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -23,6 +24,7 @@
     <string name="title_activity_login">CarRental Login</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_remember_me">Remember me</string>
     <string name="action_login">Login</string>
     <string name="action_login_short">Login</string>
     <string name="error_invalid_username">This username is invalid</string>
@@ -46,6 +48,11 @@
     <string name="profile_car_type_hint">Select preferred car type</string>
     <string name="profile_button_save">Save</string>
     <string name="profile_button_cancel">Cancel</string>
+    <string name="close_icon">close icon</string>
+    <string name="info_icon">info icon</string>
+    <string name="home_pickup_text">Lambert - St. Louis Int Airport</string>
+    <string name="home_car_type_text">Compact</string>
+    <string name="home_pickup_time_text">Thu Apr 19, 2018 - 12:00 PM</string>
 
     <string-array name="car_type_list">
         <item>Economy</item>
