@@ -27,6 +27,10 @@ public class FragmentVoiceChat extends Fragment implements View.OnClickListener 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().findViewById(R.id.micButton);
+
+        //((VoiceChatActivity)getActivity()).getAiButton()
+
     }
 
     @Override

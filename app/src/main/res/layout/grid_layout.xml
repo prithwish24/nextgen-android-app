@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="1"
-    tools:context=".android.VoiceChatActivity">
+    android:columnCount="1">
 
     <RelativeLayout
         android:id="@+id/toolbar_layout"
@@ -61,15 +59,8 @@
         </FrameLayout>
     </RelativeLayout>
 
-    <View
-        android:layout_row="2"
-        android:layout_column="0"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/darkGray" />
-
     <LinearLayout
-        android:layout_row="3"
+        android:layout_row="2"
         android:layout_column="0"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -94,6 +85,6 @@
             android:layout_gravity="bottom"
             android:layout_weight="0.2"
             android:layout_marginEnd="2dp" />
-    </LinearLayout>
 
+    </LinearLayout>
 </GridLayout>

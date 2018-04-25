@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nextgen.carrental.app.bo.BaseResponse;
+import com.nextgen.carrental.app.bo.ZipCodeResponse;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 
 /**
  * Rest service client
+ *
  * @author Prithwish
  */
 
@@ -36,10 +38,11 @@ public enum RestClient {
         restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory(){
+        restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory() {
             public void setConnectTimeout(int connectTimeout) {
                 super.setConnectTimeout(DEFAULT_SERVICE_TIMEOUT);
             }
+
             public void setReadTimeout(int readTimeout) {
                 super.setReadTimeout(DEFAULT_SERVICE_TIMEOUT);
             }
@@ -49,7 +52,7 @@ public enum RestClient {
     }
 
     private BaseResponse makeRequestWithFormData(String url, MultiValueMap<String, String> formData, HttpMethod method) {
-        Log.d(TAG,"In RestClient.makeRequestWithFormData ::");
+        Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         //requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -60,18 +63,8 @@ public enum RestClient {
 
 
     public <T> BaseResponse<T> getRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws IOException {
-        Log.d(TAG,"In RestServiceClient.getRequestForm ::");
-        BaseResponse br = makeRequestWithFormData (url, formData, HttpMethod.GET);
-        if (br.isSuccess()) {
-            String temp = mapper.writeValueAsString(br.getResponse());
-            T type = mapper.readValue(temp, clazz);
-            br.setResponse(type);
-        }
-        return br;
-    }
-    public <T> BaseResponse<T>  postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws IOException {
-        Log.d(TAG,"In RestServiceClient.postRequestForm ::");
-        BaseResponse br = makeRequestWithFormData (url, formData, HttpMethod.POST);
+        Log.d(TAG, "In RestServiceClient.getRequestForm ::");
+        BaseResponse br = makeRequestWithFormData(url, formData, HttpMethod.GET);
         if (br.isSuccess()) {
             String temp = mapper.writeValueAsString(br.getResponse());
             T type = mapper.readValue(temp, clazz);
@@ -80,4 +73,31 @@ public enum RestClient {
         return br;
     }
 
+    public <T> BaseResponse<T> postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws IOException {
+        Log.d(TAG, "In RestServiceClient.postRequestForm ::");
+        BaseResponse br = makeRequestWithFormData(url, formData, HttpMethod.POST);
+        if (br.isSuccess()) {
+            String temp = mapper.writeValueAsString(br.getResponse());
+            T type = mapper.readValue(temp, clazz);
+            br.setResponse(type);
+        }
+        return br;
+    }
+
+    private ZipCodeResponse makeGetRequest(String url, Object... urlVariables) {
+        Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        //requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<MultiValueMap> httpEntity = new HttpEntity<>(requestHeaders);
+        ResponseEntity<ZipCodeResponse> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, ZipCodeResponse.class, urlVariables);
+        return response.getBody();
+    }
+
+
+    public <T> BaseResponse<T> getRequest(String url, Class<T> clazz, Object... urlVariables) throws IOException {
+        Log.d(TAG, "In RestServiceClient.getRequestForm ::");
+        ZipCodeResponse br = makeGetRequest(url, urlVariables);
+        return br;
+    }
 }
