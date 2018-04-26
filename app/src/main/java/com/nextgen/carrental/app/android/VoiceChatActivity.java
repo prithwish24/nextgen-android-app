@@ -1,11 +1,17 @@
 package com.nextgen.carrental.app.android;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +20,14 @@ import android.widget.Toast;
 import com.google.gson.JsonElement;
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.adapter.MessageListAdapter;
+import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.android.tasks.GetUserSessionIdTask;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.ZipCodeResponse;
+import com.nextgen.carrental.app.model.Reservation;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.util.GPSTracker;
+import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
 import org.springframework.util.StringUtils;
@@ -41,17 +51,23 @@ import ai.api.model.Result;
 import ai.api.model.Status;
 import ai.api.ui.AIButton;
 
-public class VoiceChatActivity extends BaseActivity implements AIButton.AIButtonListener {
+public class VoiceChatActivity extends BaseActivity implements AIButton.AIButtonListener, PartialResultsListener {
     private static final String TAG = VoiceChatActivity.class.getName();
     //private Toolbar toolbar;
 
     public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
 
+    private PermissionManager permissionManager;
     private AIButton aiButton;
     private Handler handler;
     private String totalText;
     private String dateMe;
     private MessageListAdapter messageListAdapter;
+    private Reservation reservation;
+
+    public Reservation getReservation() {
+        return reservation;
+    }
 
     public AIButton getAiButton() {
         return aiButton;
@@ -61,12 +77,15 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.handler = new Handler(Looper.getMainLooper());
+        this.permissionManager = PermissionManager.getInstance();
+        this.messageListAdapter = new MessageListAdapter();
+        this.aiButton = findViewById(R.id.micButton);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_voice_chat);
 
-        messageListAdapter = new MessageListAdapter();
         /*toolbar = findViewById(R.id.app_bar_chat);
         setSupportActionBar(toolbar);*/
 
@@ -92,16 +111,59 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
                 .replace(R.id.vc_content_frame, new FragmentVoiceChat())
                 .commit();
 
-        initAIAgent();
+        askPermissionToUser();
+    }
+
+    private void askPermissionToUser() {
+        final String[] permissions = new String[]{
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        permissionManager.requestPermission(
+                permissions, this,
+                new PermissionManager.CallbackHandler() {
+                    @Override
+                    public void onResponse(int requestCode, Activity activity) {
+                        executeOnPermissionGranted();
+                    }
+                });
+    }
+
+    private void executeOnPermissionGranted() {
+        Address currentLocation;
+        if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                || permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            GPSTracker gpsTracker = new GPSTracker(this);
+            final Location location = gpsTracker.getLocation();
+            if (gpsTracker.isGPSServiceOn() && (location != null)) {
+                currentLocation = gpsTracker.getAddress(location);
+                if (currentLocation != null) {
+                    Toast.makeText(getApplicationContext(), "Location Tracked: " + currentLocation.toString(),
+                            Toast.LENGTH_LONG).show();
+                }
+            } else {
+                gpsTracker.tryEnablingGPS(); // response will be displayed on onActivityResult method
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Location Access disabled.", Toast.LENGTH_SHORT).show();
+        }
+
+        if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
+            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN2);
+            //Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
+            initAIAgent(googleDialogFlowAccessToken);
+        }
 
     }
 
-    private void initAIAgent() {
+    private void initAIAgent(final String googleDialogFlowAccessToken) {
         final String START_SPEECH = "Hi";
-        aiButton = findViewById(R.id.micButton);
-
         AIConfiguration config = new AIConfiguration(
-                "c33cc5dc601d48799b48f085e1360e59",
+                googleDialogFlowAccessToken,
                 AIConfiguration.SupportedLanguages.English,
                 AIConfiguration.RecognitionEngine.System);
 
@@ -111,21 +173,7 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
 
         aiButton.initialize(config);
         aiButton.setResultsListener(this);
-        aiButton.setPartialResultsListener(new PartialResultsListener() {
-            @Override
-            public void onPartialResults(List<String> partialResults) {
-                final String result = partialResults.get(0);
-                if (!TextUtils.isEmpty(result)) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            totalText=result;
-                            dateMe = DateFormat.getDateTimeInstance().format(new Date());
-                        }
-                    });
-                }
-            }
-        });
+        aiButton.setPartialResultsListener(this);
 
         TTS.speak(START_SPEECH);
 
@@ -135,7 +183,28 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
         AIRequest firstRequest = new AIRequest();
         firstRequest.setQuery(START_SPEECH);
         new GetUserSessionIdTask().execute(firstRequest);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //aiButton.startListening();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (aiButton != null) {
+            aiButton.pause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (aiButton != null) {
+            aiButton.resume();
+        }
     }
 
     @Override
@@ -163,19 +232,19 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
                 Log.i(TAG, "Speech: " + speech);
 
                 final ListIterator listIterator = result.getContexts().listIterator();
-                while(listIterator.hasNext()) {
+                while (listIterator.hasNext()) {
                     AIOutputContext context = (AIOutputContext) listIterator.next();
-                    if(context.getName().equals("carrental")){
-                        if(context.getParameters().get("review") != null &&
-                                context.getParameters().get("review").getAsBoolean()){
+                    if (context.getName().equals("carrental")) {
+                        if (context.getParameters().get("review") != null &&
+                                context.getParameters().get("review").getAsBoolean()) {
 
                             //Intent intent = new Intent(HomeActivity.this, ShowReviewPageActivity.class);
-                            Map<String,JsonElement> parameters  = context.getParameters();
-                            HashMap<String,String> data = new HashMap<>();
-                            data.put("Location",parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
-                            data.put("Date",parameters.get("pickupdate").getAsString());
-                            data.put("Days",parameters.get("duration").getAsJsonObject().get("amount").getAsString());
-                            data.put("Car",parameters.get("cartype").getAsJsonArray().get(0).getAsString());
+                            Map<String, JsonElement> parameters = context.getParameters();
+                            HashMap<String, String> data = new HashMap<>();
+                            data.put("Location", parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
+                            data.put("Date", parameters.get("pickupdate").getAsString());
+                            data.put("Days", parameters.get("duration").getAsJsonObject().get("amount").getAsString());
+                            data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());
                             //intent.putExtra("data", data);
                             //startActivity(intent);
 
@@ -235,7 +304,21 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
         });
     }
 
-    private class GetUserSessionIdTask extends AsyncTask<AIRequest,Void,AIResponse> {
+    @Override
+    public void onPartialResults(List<String> partialResults) {
+        final String result = partialResults.get(0);
+        if (!TextUtils.isEmpty(result)) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    totalText = result;
+                    dateMe = DateFormat.getDateTimeInstance().format(new Date());
+                }
+            });
+        }
+    }
+
+    private class GetUserSessionIdTask extends AsyncTask<AIRequest, Void, AIResponse> {
         @Override
         protected AIResponse doInBackground(AIRequest... requests) {
             final AIRequest request = requests[0];
@@ -268,4 +351,5 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
             }
         }
     }
+
 }

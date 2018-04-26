@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.model.Reservation;
+
+import ai.api.ui.AIButton;
 
 /**
  * View for Voice Chat
@@ -27,9 +30,10 @@ public class FragmentVoiceChat extends Fragment implements View.OnClickListener 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().findViewById(R.id.micButton);
+        AIButton aiButton1 = getActivity().findViewById(R.id.micButton);
 
-        //((VoiceChatActivity)getActivity()).getAiButton()
+        AIButton aiButton = ((VoiceChatActivity)getActivity()).getAiButton();
+        Reservation res = ((VoiceChatActivity)getActivity()).getReservation();
 
     }
 
