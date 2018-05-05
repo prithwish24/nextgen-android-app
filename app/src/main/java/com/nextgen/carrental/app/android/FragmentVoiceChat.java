@@ -17,7 +17,6 @@ import com.nextgen.carrental.app.model.ChatMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.api.ui.AIButton;
 
 /**
  * View for Voice Chat
@@ -25,7 +24,7 @@ import ai.api.ui.AIButton;
  */
 
 public class FragmentVoiceChat extends Fragment {
-    private static final String TAG = FragmentVoiceChat.class.getName();
+    public static final String TAG = FragmentVoiceChat.class.getName();
 
     private RecyclerView mRecyclerView;
     private MessageAdapter mMessageAdapter;
@@ -50,8 +49,6 @@ public class FragmentVoiceChat extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_chat_window);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mMessageAdapter);
-
-        AIButton aiButton1 = getActivity().findViewById(R.id.aiMicButton);
     }
 
     public void addMessage(ChatMessage chatMessage) {

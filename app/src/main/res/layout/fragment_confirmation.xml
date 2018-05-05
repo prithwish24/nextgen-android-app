@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/confirm_number"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
@@ -47,7 +48,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/pickup_time_confirm"
+                android:id="@+id/confirm_pickup_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2sp"
@@ -56,7 +57,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/pickup_location_confirm"
+                android:id="@+id/confirm_pickup_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Lambert-St. Louis Int. Airport"
@@ -82,7 +83,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/return_time_confirm"
+                android:id="@+id/confirm_return_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2sp"
@@ -91,7 +92,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/return_location_confirm"
+                android:id="@+id/confirm_return_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Lambert-St. Louis Int. Airport"
@@ -123,7 +124,7 @@
                 tools:src="@drawable/ct_compact" />
 
             <TextView
-                android:id="@+id/vehicle_class_confirm"
+                android:id="@+id/confirm_vehicle_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/vehicle_image_confirm"
@@ -138,7 +139,7 @@
                 android:id="@+id/vehicle_class_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/vehicle_class_confirm"
+                android:layout_below="@id/confirm_vehicle_class"
                 android:layout_toEndOf="@id/vehicle_image_confirm"
                 android:paddingBottom="2sp"
                 android:paddingStart="5dp"

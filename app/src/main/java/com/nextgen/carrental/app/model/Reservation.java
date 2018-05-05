@@ -14,8 +14,7 @@ public class Reservation {
     private String pickUpTime;
     private String dropOffTime;
 
-    public Reservation(String number) {
-        this.number = number;
+    public Reservation() {
     }
 
     public Reservation(String number, String status, String carType, String pickUpPoint, String dropOffPoint,
@@ -41,16 +40,16 @@ public class Reservation {
         return carType;
     }
 
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setCarType(String carType) {
-        this.carType = carType;
     }
 
     public String getPickUpPoint() {
