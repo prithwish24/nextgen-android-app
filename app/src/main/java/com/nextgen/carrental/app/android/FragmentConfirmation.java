@@ -1,6 +1,7 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,6 +20,10 @@ import com.nextgen.carrental.app.R;
 
 public class FragmentConfirmation extends Fragment implements View.OnClickListener {
     private static final String TAG = FragmentHome.class.getName();
+    private TextView pickupTime;
+    private TextView pickupLocation;
+    private TextView returnLocation;
+    private TextView returnTime;
     View view;
 
     @Nullable
@@ -47,11 +52,37 @@ public class FragmentConfirmation extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onClick(View v) {
         final int itemId = v.getId();
         if (itemId == R.id.button_done_confirm) {
             getActivity().onBackPressed();
         }
 
+    }
+
+    public TextView getPickupTime() {
+        return pickupTime;
+    }
+
+    public TextView getPickupLocation() {
+        return pickupLocation;
+    }
+
+    public TextView getReturnLocation() {
+        return returnLocation;
+    }
+
+    public TextView getReturnTime() {
+        return returnTime;
     }
 }

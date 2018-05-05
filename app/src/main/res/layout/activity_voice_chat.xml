@@ -90,7 +90,7 @@
             android:id="@+id/micButton"
             style="@style/ApiAi.Microphone"
             android:layout_width="70dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="2dp" />
     </LinearLayout>
 

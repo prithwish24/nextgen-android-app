@@ -18,7 +18,7 @@
             android:contentDescription="confirmation number"
             android:gravity="left|center"
             android:paddingLeft="10dp"
-            android:text="CONFIRMATION #: 13243545543"
+            android:text="Review"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
 
@@ -51,7 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2sp"
-                android:text="Thu Apr 19, 2018 - 12:00 PM"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -59,7 +58,6 @@
                 android:id="@+id/pickup_location_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lambert-St. Louis Int. Airport"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>

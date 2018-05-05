@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -12,9 +13,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
@@ -61,9 +64,14 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
     private AIButton aiButton;
     private Handler handler;
     private String totalText;
-    private String dateMe;
     private MessageListAdapter messageListAdapter;
     private Reservation reservation;
+    private TextView speechTextView;
+    private FragmentVoiceChat fragmentVoiceChat;
+    private FragmentConfirmation fragmentConfirmation;
+    private long dateMe;
+
+    //private Reservation reservation;
 
     public Reservation getReservation() {
         return reservation;
@@ -107,6 +115,8 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
             }
         });
 
+        this.fragmentVoiceChat = new FragmentVoiceChat();
+        this.fragmentConfirmation = new FragmentConfirmation();
         getFragmentManager().beginTransaction()
                 .replace(R.id.vc_content_frame, new FragmentVoiceChat())
                 .commit();
@@ -245,6 +255,11 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
                             data.put("Date", parameters.get("pickupdate").getAsString());
                             data.put("Days", parameters.get("duration").getAsJsonObject().get("amount").getAsString());
                             data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());
+//                            getFragmentManager().beginTransaction()
+//                                    .replace(R.id.vc_content_frame, fragmentConfirmation)
+//                                    .commit();
+//                            assignConfirmationValues(data);
+                            TTS.speak("Check the details and let me know if you wish to reserve");
                             //intent.putExtra("data", data);
                             //startActivity(intent);
 
@@ -312,7 +327,7 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
                 @Override
                 public void run() {
                     totalText = result;
-                    dateMe = DateFormat.getDateTimeInstance().format(new Date());
+                    //dateMe = DateFormat.getDateTimeInstance().format(new Date());
                 }
             });
         }
@@ -352,4 +367,37 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            executeOnPermissionGranted();
+        } else {
+//            Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode),
+//                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+//                    new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                            intent.setData(Uri.parse("package:" + getPackageName()));
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//                            startActivity(intent);
+//                        }
+//                    }).show();
+        }
+    }
+
+    private void assignConfirmationValues(HashMap<String, String> data) {
+        fragmentConfirmation.getPickupLocation().setText(data.get("Location"));
+        fragmentConfirmation.getPickupTime().setText(data.get("Date"));
+        fragmentConfirmation.getReturnLocation().setText(data.get("Location"));
+    }
 }
