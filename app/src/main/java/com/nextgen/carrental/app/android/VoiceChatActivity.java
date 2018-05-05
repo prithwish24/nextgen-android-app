@@ -2,13 +2,19 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +31,8 @@ import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -40,6 +48,7 @@ import ai.api.model.AIResponse;
 import ai.api.model.Result;
 import ai.api.model.Status;
 import ai.api.ui.AIButton;
+import ai.api.util.StringUtils;
 
 public class VoiceChatActivity extends BaseActivity
         implements AIButton.AIButtonListener,
@@ -55,8 +64,7 @@ public class VoiceChatActivity extends BaseActivity
     private Handler handler;
     private TextView speechTextView;
     private FragmentVoiceChat fragmentVoiceChat;
-    ///private String totalText;
-    //private String dateMe;
+    private long dateMe;
 
     //private Reservation reservation;
 
@@ -134,7 +142,8 @@ public class VoiceChatActivity extends BaseActivity
 
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN);
+            //final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN);
+            final String googleDialogFlowAccessToken = Config.ACCESS_TOKEN2;
             //Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
             initAIAgent(googleDialogFlowAccessToken);
         }
@@ -226,31 +235,26 @@ public class VoiceChatActivity extends BaseActivity
                             data.put("Date", parameters.get("pickupdate").getAsString());
                             data.put("Days", parameters.get("duration").getAsJsonObject().get("amount").getAsString());
                             data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());
+
+                            TTS.speak("Check the details and let me know if you wish to reserve");
                             //intent.putExtra("data", data);
                             //startActivity(intent);
 
                         } else {
 
 
-                            /*ChatMessage chatMessageMe = new ChatMessage();
-                            chatMessageMe.setMessage(totalText);
-                            chatMessageMe.setDate(dateMe);
-                            chatMessageMe.setMe(true);
-                            if (!StringUtils.isEmpty(totalText)) {
-                                displayMessage(chatMessageMe);
+                            ChatMessage chatMessageMe = new ChatMessage(speechTextView.getText().toString(),true);
+                            chatMessageMe.setCreatedAt(dateMe);
+
+                            if (!StringUtils.isEmpty(chatMessageMe.getMessage())) {
+                                fragmentVoiceChat.addMessage(chatMessageMe);
                             }
 
-                            totalText="";
-                            dateMe="";
+                            dateMe=0L;
 
-                            ChatMessage chatMessageBot = new ChatMessage();
-                            chatMessageBot.setId(122);//dummy
-                            chatMessageBot.setMessage(speech);
-                            chatMessageBot.setDate(DateFormat.getDateTimeInstance().format(new Date()));
-                            chatMessageBot.setMe(false);
-
-                            displayMessage(chatMessageBot);
-                            TTS.speak(speech);*/
+                            ChatMessage chatMessageBot = new ChatMessage(speech,"bot");
+                            fragmentVoiceChat.addMessage(chatMessageBot);
+                            TTS.speak(speech);
                         }
                     }
                 }
@@ -305,8 +309,7 @@ public class VoiceChatActivity extends BaseActivity
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //totalText = result;
-                    //dateMe = DateFormat.getDateTimeInstance().format(new Date());
+                    dateMe = new Date().getTime();
                     speechTextView.setText(result);
                 }
             });
@@ -363,6 +366,34 @@ public class VoiceChatActivity extends BaseActivity
 
                 }
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            executeOnPermissionGranted();
+        } else {
+//            Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode),
+//                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+//                    new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                            intent.setData(Uri.parse("package:" + getPackageName()));
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//                            startActivity(intent);
+//                        }
+//                    }).show();
         }
     }
 

@@ -48,6 +48,10 @@ public class ChatMessage {
         return createdAt;
     }
 
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public boolean isSelfMessage() {
         return selfMessage;
     }

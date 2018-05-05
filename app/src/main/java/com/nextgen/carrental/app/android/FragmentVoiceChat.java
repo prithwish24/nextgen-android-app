@@ -52,28 +52,6 @@ public class FragmentVoiceChat extends Fragment {
         mRecyclerView.setAdapter(mMessageAdapter);
 
         AIButton aiButton1 = getActivity().findViewById(R.id.aiMicButton);
-
-
-        addMessage(new ChatMessage("How can I help you?", "bot"));
-        addMessage(new ChatMessage("I wanted to book a car", true));
-        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
-        addMessage(new ChatMessage("Today or some other days?", "bot"));
-        addMessage(new ChatMessage("Tomorrow at 9 am", true));
-        addMessage(new ChatMessage("How can I help you?", "bot"));
-        addMessage(new ChatMessage("I wanted to book a car", true));
-        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
-        addMessage(new ChatMessage("Today or some other days?", "bot"));
-        addMessage(new ChatMessage("Tomorrow at 9 am", true));
-        addMessage(new ChatMessage("How can I help you?", "bot"));
-        addMessage(new ChatMessage("I wanted to book a car", true));
-        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
-        addMessage(new ChatMessage("Today or some other days?", "bot"));
-        addMessage(new ChatMessage("Tomorrow at 9 am", true));
-        addMessage(new ChatMessage("How can I help you?", "bot"));
-        addMessage(new ChatMessage("I wanted to book a car", true));
-        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
-        addMessage(new ChatMessage("Today or some other days?", "bot"));
-        addMessage(new ChatMessage("Tomorrow at 9 am", true));
     }
 
     public void addMessage(ChatMessage chatMessage) {
