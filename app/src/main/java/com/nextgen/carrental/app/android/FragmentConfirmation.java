@@ -50,7 +50,10 @@ public class FragmentConfirmation extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         final int itemId = v.getId();
         if (itemId == R.id.button_done_confirm) {
-            getActivity().onBackPressed();
+            //getActivity().onBackPressed();;
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.vc_content_frame, new FragmentVoiceChat())
+                    .commit();
         }
 
     }

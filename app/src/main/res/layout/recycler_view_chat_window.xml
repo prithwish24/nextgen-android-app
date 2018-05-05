@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/recycler_view_chat_window"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_chat_window"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5sp"
+        android:background="@color/lightGreen"
+        android:scrollbars="vertical"
+        app:stackFromEnd="true">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <!--<android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_chat_window"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:stackFromEnd="true">
 
-    </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.RecyclerView>-->
 
     <!-- A horizontal line between the chatbox and RecyclerView
     <View
@@ -65,4 +77,4 @@
     </LinearLayout>
     -->
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

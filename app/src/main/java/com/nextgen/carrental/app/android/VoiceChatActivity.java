@@ -2,10 +2,7 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,31 +12,24 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.nextgen.carrental.app.R;
-import com.nextgen.carrental.app.adapter.MessageListAdapter;
 import com.nextgen.carrental.app.ai.Config;
-import com.nextgen.carrental.app.android.tasks.GetUserSessionIdTask;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.ZipCodeResponse;
-import com.nextgen.carrental.app.model.Reservation;
+import com.nextgen.carrental.app.model.ChatMessage;
 import com.nextgen.carrental.app.service.RestClient;
-import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
-import org.springframework.util.StringUtils;
-
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import ai.api.AIListener;
 import ai.api.AIServiceException;
 import ai.api.PartialResultsListener;
 import ai.api.android.AIConfiguration;
@@ -51,7 +41,9 @@ import ai.api.model.Result;
 import ai.api.model.Status;
 import ai.api.ui.AIButton;
 
-public class VoiceChatActivity extends BaseActivity implements AIButton.AIButtonListener, PartialResultsListener {
+public class VoiceChatActivity extends BaseActivity
+        implements AIButton.AIButtonListener,
+        PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
     //private Toolbar toolbar;
 
@@ -59,27 +51,28 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
 
     private PermissionManager permissionManager;
     private AIButton aiButton;
+    //private AIMicButton aiButton;
     private Handler handler;
-    private String totalText;
-    private String dateMe;
-    private MessageListAdapter messageListAdapter;
-    private Reservation reservation;
+    private TextView speechTextView;
+    private FragmentVoiceChat fragmentVoiceChat;
+    ///private String totalText;
+    //private String dateMe;
 
-    public Reservation getReservation() {
+    //private Reservation reservation;
+
+    /*public Reservation getReservation() {
         return reservation;
-    }
+    }*/
 
-    public AIButton getAiButton() {
+    /*public AIButton getAiButton() {
         return aiButton;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.handler = new Handler(Looper.getMainLooper());
         this.permissionManager = PermissionManager.getInstance();
-        this.messageListAdapter = new MessageListAdapter();
-        this.aiButton = findViewById(R.id.micButton);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -89,26 +82,14 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
         /*toolbar = findViewById(R.id.app_bar_chat);
         setSupportActionBar(toolbar);*/
 
-        findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(VoiceChatActivity.this, "Close clicked", Toast.LENGTH_SHORT).show();
-                onBackPressed();
-            }
-        });
+        this.speechTextView = findViewById(R.id.text_view_speech);
+        this.aiButton = findViewById(R.id.aiMicButton);
+        findViewById(R.id.close_button).setOnClickListener(this);
+        findViewById(R.id.info_button).setOnClickListener(this);
 
-        findViewById(R.id.info_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(VoiceChatActivity.this, "Info clicked", Toast.LENGTH_SHORT).show();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.vc_content_frame, new FragmentConfirmation())
-                        .commit();
-            }
-        });
-
+        this.fragmentVoiceChat = new FragmentVoiceChat();
         getFragmentManager().beginTransaction()
-                .replace(R.id.vc_content_frame, new FragmentVoiceChat())
+                .replace(R.id.vc_content_frame, fragmentVoiceChat)
                 .commit();
 
         askPermissionToUser();
@@ -133,7 +114,7 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
     }
 
     private void executeOnPermissionGranted() {
-        Address currentLocation;
+        /*Address currentLocation;
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 || permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
             GPSTracker gpsTracker = new GPSTracker(this);
@@ -149,11 +130,11 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
             }
         } else {
             Toast.makeText(getApplicationContext(), "Location Access disabled.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN2);
+            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN);
             //Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
             initAIAgent(googleDialogFlowAccessToken);
         }
@@ -286,7 +267,7 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-
+                addSpeechToChatRoster();
                 //resultTextView.setText(error.getMessage());
             }
         });
@@ -299,10 +280,23 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
             public void run() {
                 Log.d(TAG, "onCancelled");
                 Toast.makeText(getApplicationContext(), "Action Cancelled", Toast.LENGTH_SHORT).show();
+                addSpeechToChatRoster();
                 //resultTextView.setText("Action Cancelled !");
             }
         });
     }
+
+    private void addSpeechToChatRoster() {
+        if (this.fragmentVoiceChat != null) {
+            final TextView speechTextBox = findViewById(R.id.text_view_speech);
+            CharSequence speech = speechTextBox.getText();
+            speechTextBox.setText("");
+            if (speech != null) {
+                fragmentVoiceChat.addMessage(new ChatMessage(speech.toString(), true));
+            }
+        }
+    }
+
 
     @Override
     public void onPartialResults(List<String> partialResults) {
@@ -311,10 +305,30 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    totalText = result;
-                    dateMe = DateFormat.getDateTimeInstance().format(new Date());
+                    //totalText = result;
+                    //dateMe = DateFormat.getDateTimeInstance().format(new Date());
+                    speechTextView.setText(result);
                 }
             });
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int viewId = v.getId();
+        switch (viewId) {
+            case R.id.close_button:
+                Toast.makeText(VoiceChatActivity.this, "Close clicked", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+                break;
+            case R.id.info_button:
+                Toast.makeText(VoiceChatActivity.this, "Info clicked", Toast.LENGTH_SHORT).show();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.vc_content_frame, new FragmentConfirmation())
+                        .commit();
+                break;
+            default:
+                Toast.makeText(VoiceChatActivity.this, "Unassigned Event", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -334,17 +348,17 @@ public class VoiceChatActivity extends BaseActivity implements AIButton.AIButton
         @Override
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
-                String sessionid = "";
+                String sessionId = "";
                 for (AIOutputContext a : aiResponse.getResult().getContexts()) {
                     if (a.getName().equals("carrental")) {
-                        sessionid = a.getParameters().get("sessionId").getAsString();
+                        sessionId = a.getParameters().get("sessionId").getAsString();
                     }
                 }
 
                 try {
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, ZipCodeResponse.class, sessionid, "63001");
-                    System.out.println(resp);
+                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63001");
+                    Log.i(TAG, resp.toString());
                 } catch (Exception e) {
 
                 }

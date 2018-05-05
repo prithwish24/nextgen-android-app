@@ -26,11 +26,11 @@ import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.adapter.MessageListAdapter;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.model.ChatMessage;
-import com.nextgen.carrental.app.model.User;
 import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ai.api.AIListener;
@@ -73,7 +73,7 @@ public class FragmentVoiceChat2 extends Fragment implements AIButton.AIButtonLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        mMessageListAdapter = new MessageListAdapter();
+        mMessageListAdapter = new MessageListAdapter(getContext(), new ArrayList<ChatMessage>());
         final RecyclerView recyclerView = this.view.findViewById(R.id.recycler_chat_window);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mMessageListAdapter);
@@ -203,9 +203,9 @@ public class FragmentVoiceChat2 extends Fragment implements AIButton.AIButtonLis
                 //resultTextView.setText(speech);
                 Log.i(TAG, "Speech: " + speech);
 
-                User vAgent = new User("vagent", "Virtual Agent", "Agent John", "vagent@example.com");
+                /*User vAgent = new User("vagent", "Virtual Agent", "Agent John", "vagent@example.com");
                 ChatMessage chat = new ChatMessage(speech, vAgent);
-                mMessageListAdapter.addMessage(chat);
+                mMessageListAdapter.addMessage(chat);*/
                 TTS.speak(speech);
             }
         });

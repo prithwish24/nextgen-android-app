@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.nextgen.carrental.app.R;
  * @author  Prithwish
  */
 
-public class FragmentProfileView extends Fragment implements View.OnClickListener {
+public class FragmentProfileView extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     View view;
 
     @Nullable
@@ -35,6 +36,7 @@ public class FragmentProfileView extends Fragment implements View.OnClickListene
                 getActivity(), R.array.car_type_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCarTypes.setAdapter(adapter);
+        spinnerCarTypes.setOnItemSelectedListener(this);
 
         return view;
     }
@@ -62,6 +64,17 @@ public class FragmentProfileView extends Fragment implements View.OnClickListene
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, new FragmentHome())
                 .commit();
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        final CharSequence item = (CharSequence) parent.getItemAtPosition(position);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

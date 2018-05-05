@@ -7,64 +7,49 @@ import java.util.Date;
  */
 
 public class ChatMessage {
+    public static final int VIEW_TYPE_MESSAGE_SENT = 0;
+    public static final int VIEW_TYPE_MESSAGE_RECEIVED = 1;
+
     private String message;
-    private User sender;
+    private String sender;
     private boolean selfMessage = false;
     private long createdAt;
 
     public ChatMessage() {
+        createdAt = new Date().getTime();
     }
 
-    public ChatMessage(String message, User sender) {
+    public ChatMessage(String message, String sender) {
+        this();
         this.message = message;
         this.sender = sender;
-        this.createdAt = new Date().getTime();
-    }
-    public ChatMessage(String message, User sender, long createdAt) {
-        this.message = message;
-        this.sender = sender;
-        this.createdAt = createdAt;
     }
     public ChatMessage(String message, boolean isSelfMessage) {
+        this();
         this.message = message;
         this.selfMessage = isSelfMessage;
-        this.createdAt = new Date().getTime();
     }
-    public ChatMessage(String message, boolean isSelfMessage, long createdAt) {
-        this.message = message;
-        this.selfMessage = isSelfMessage;
-        this.createdAt = createdAt;
+
+    public int getType() {
+        return selfMessage
+                ? VIEW_TYPE_MESSAGE_SENT
+                : VIEW_TYPE_MESSAGE_RECEIVED;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public User getSender() {
+    public String getSender() {
         return sender;
-    }
-
-    public void setSender(User sender) {
-        this.sender = sender;
     }
 
     public long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public boolean isSelfMessage() {
         return selfMessage;
     }
 
-    public void setSelfMessage(boolean selfMessage) {
-        this.selfMessage = selfMessage;
-    }
 }

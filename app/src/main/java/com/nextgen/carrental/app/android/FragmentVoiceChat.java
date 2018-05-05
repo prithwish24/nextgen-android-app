@@ -1,14 +1,21 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nextgen.carrental.app.R;
-import com.nextgen.carrental.app.model.Reservation;
+import com.nextgen.carrental.app.adapter.MessageAdapter;
+import com.nextgen.carrental.app.model.ChatMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ai.api.ui.AIButton;
 
@@ -17,29 +24,65 @@ import ai.api.ui.AIButton;
  * @author Pithwish
  */
 
-public class FragmentVoiceChat extends Fragment implements View.OnClickListener {
-    View fragmentView;
+public class FragmentVoiceChat extends Fragment {
+    private static final String TAG = FragmentVoiceChat.class.getName();
+
+    private RecyclerView mRecyclerView;
+    private MessageAdapter mMessageAdapter;
+    private List<ChatMessage> mChatMessages = new ArrayList<>();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mMessageAdapter = new MessageAdapter(mChatMessages);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        fragmentView = inflater.inflate(R.layout.fragment_voice_chat, container, false);
-        return fragmentView;
+        return inflater.inflate(R.layout.fragment_voice_chat, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AIButton aiButton1 = getActivity().findViewById(R.id.micButton);
 
-        AIButton aiButton = ((VoiceChatActivity)getActivity()).getAiButton();
-        Reservation res = ((VoiceChatActivity)getActivity()).getReservation();
+        mRecyclerView = view.findViewById(R.id.recycler_chat_window);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mMessageAdapter);
 
+        AIButton aiButton1 = getActivity().findViewById(R.id.aiMicButton);
+
+
+        addMessage(new ChatMessage("How can I help you?", "bot"));
+        addMessage(new ChatMessage("I wanted to book a car", true));
+        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
+        addMessage(new ChatMessage("Today or some other days?", "bot"));
+        addMessage(new ChatMessage("Tomorrow at 9 am", true));
+        addMessage(new ChatMessage("How can I help you?", "bot"));
+        addMessage(new ChatMessage("I wanted to book a car", true));
+        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
+        addMessage(new ChatMessage("Today or some other days?", "bot"));
+        addMessage(new ChatMessage("Tomorrow at 9 am", true));
+        addMessage(new ChatMessage("How can I help you?", "bot"));
+        addMessage(new ChatMessage("I wanted to book a car", true));
+        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
+        addMessage(new ChatMessage("Today or some other days?", "bot"));
+        addMessage(new ChatMessage("Tomorrow at 9 am", true));
+        addMessage(new ChatMessage("How can I help you?", "bot"));
+        addMessage(new ChatMessage("I wanted to book a car", true));
+        addMessage(new ChatMessage("Ok. When you need this car?", "bot"));
+        addMessage(new ChatMessage("Today or some other days?", "bot"));
+        addMessage(new ChatMessage("Tomorrow at 9 am", true));
     }
 
-    @Override
-    public void onClick(View v) {
-        final int itemId = v.getId();
+    public void addMessage(ChatMessage chatMessage) {
+        mChatMessages.add(chatMessage);
+        mMessageAdapter.notifyItemChanged(mChatMessages.size() - 1);
+        scrollToBottom();
+    }
 
+    private void scrollToBottom() {
+        mRecyclerView.scrollToPosition(mMessageAdapter.getItemCount() - 1);
     }
 }

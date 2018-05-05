@@ -27,22 +27,20 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Prithwish on 2/18/2018.
+ *
+ * @author Prithwish on 2/18/2018.
  */
 
 public class GPSTracker implements LocationListener {
+    public static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final String TAG = GPSTracker.class.getName();
-
     private static final long MIN_TIME_FOR_UPDATE = 6000;
     private static final long MIN_DISTANCE_FOR_UPDATE = 10;
-    public static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
-
-
+    private static GoogleApiClient mGoogleApiClient;
     private final Context context;
     private final Activity activity;
     private final LocationManager locationManager;
-    private static GoogleApiClient mGoogleApiClient;
 
     public GPSTracker(final Activity activity) {
         this.activity = activity;
