@@ -2,6 +2,7 @@ package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.speech.tts.Voice;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.model.Reservation;
+
+import org.springframework.util.StringUtils;
 
 /**
  * View to display confirmation details
@@ -54,9 +57,17 @@ public class FragmentConfirmation extends Fragment {
                         .commit();
             }
         });
+        Reservation res = ((VoiceChatActivity)getActivity()).getReservation();
+        bindConfirmationData(res);
+        if(!StringUtils.isEmpty(res.getNumber())){
+            view.findViewById(R.id.confirm_number).setVisibility(View.VISIBLE);
+            ((TextView)(view.findViewById(R.id.confirm_number))).setText("CONFIRMATION #: "+res.getNumber());
+        }
     }
 
-    public void bindConfirmationData(final Reservation res) {
+
+
+    private void bindConfirmationData(final Reservation res) {
         ((TextView) view.findViewById(R.id.confirm_pickup_location)).setText(res.getPickUpPoint());
         ((TextView) view.findViewById(R.id.confirm_pickup_time)).setText(res.getPickUpTime());
         ((TextView) view.findViewById(R.id.confirm_return_location)).setText(res.getDropOffPoint());

@@ -2,6 +2,8 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -59,13 +61,15 @@ public class VoiceChatActivity extends BaseActivity
     //private TextView speechTextView;
     private FragmentVoiceChat fragmentVoiceChat;
     private FragmentConfirmation fragmentConfirmation;
+    private Reservation res;
+    private boolean reviewComplete;
     //private long dateMe;
 
     //private Reservation reservation;
 
-    /*public Reservation getReservation() {
-        return reservation;
-    }*/
+    public Reservation getReservation() {
+        return res;
+    }
 
     /*public AIButton getAiButton() {
         return aiButton;
@@ -238,18 +242,18 @@ public class VoiceChatActivity extends BaseActivity
                             //intent.putExtra("data", data);
                             //startActivity(intent);
 
-                            Reservation res = new Reservation();
+                            res = new Reservation();
                             res.setPickUpPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
                             res.setPickUpTime(parameters.get("pickupdate").getAsString());
                             res.setDropOffPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
                             res.setDropOffTime(parameters.get("pickupdate").getAsString());
                             res.setCarType(parameters.get("cartype").getAsJsonArray().get(0).getAsString());
-                            fragmentConfirmation.bindConfirmationData(res);
+                            //fragmentConfirmation.bindConfirmationData(res);
 
                             getFragmentManager().beginTransaction()
                                     .replace(R.id.vc_content_frame, fragmentConfirmation)
                                     .commit();
-
+                            reviewComplete = true;
 
                         } else {
 
@@ -266,6 +270,12 @@ public class VoiceChatActivity extends BaseActivity
                             fragmentVoiceChat.addMessage(chatMessageBot);*/
                         }
                     }
+                }
+                if (reviewComplete) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.detach(fragmentConfirmation);
+                    fragmentTransaction.attach(fragmentConfirmation);
+                    fragmentTransaction.commit();
                 }
             }
         });
