@@ -11,6 +11,7 @@ import java.util.Date;
 public class Utils {
 
     public static final String SHORT_TIME_AMPM = "h:mm a";
+    public static final String LONG_DATE_TIME = "EEE MMM d, yyyy - h:mm a";
 
 
     public static String fmtTime (long value){

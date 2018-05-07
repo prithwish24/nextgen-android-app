@@ -12,7 +12,7 @@
     <color name="buttonColor">#4FAB5B</color>
     <color name="lightGreen">#b3dbbc</color>
     <color name="fluorescentGreen">#CCFF90</color>
-    <color name="background_material_light">#eeeeee</color>
+    <color name="default_background_material_light">#e8efe8</color>
 
     <!--<color name="yellow1">#FFEB00</color>
     <color name="yellow2">#A89B00</color>

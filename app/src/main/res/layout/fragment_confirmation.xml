@@ -136,7 +136,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/vehicle_class_desc"
+                android:id="@+id/confirm_vehicle_class_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/confirm_vehicle_class"
@@ -164,6 +164,7 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/confirm_additional_equip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2sp"
@@ -171,13 +172,6 @@
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Child Seat"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
         </LinearLayout>
 
         <Button

@@ -2,17 +2,21 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -27,10 +31,10 @@ import com.nextgen.carrental.app.bo.ZipCodeResponse;
 import com.nextgen.carrental.app.model.ChatMessage;
 import com.nextgen.carrental.app.model.Reservation;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -50,30 +54,15 @@ public class VoiceChatActivity extends BaseActivity
         implements AIButton.AIButtonListener,
         PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
-    //private Toolbar toolbar;
 
     public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
 
     private PermissionManager permissionManager;
     private AIButton aiButton;
-    //private AIMicButton aiButton;
     private Handler handler;
-    //private TextView speechTextView;
     private FragmentVoiceChat fragmentVoiceChat;
     private FragmentConfirmation fragmentConfirmation;
     private Reservation res;
-    private boolean reviewComplete;
-    //private long dateMe;
-
-    //private Reservation reservation;
-
-    public Reservation getReservation() {
-        return res;
-    }
-
-    /*public AIButton getAiButton() {
-        return aiButton;
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +75,6 @@ public class VoiceChatActivity extends BaseActivity
         }
         setContentView(R.layout.activity_voice_chat);
 
-        /*toolbar = findViewById(R.id.app_bar_chat);
-        setSupportActionBar(toolbar);*/
-
-        //this.speechTextView = findViewById(R.id.text_view_speech);
         this.aiButton = findViewById(R.id.aiMicButton);
         findViewById(R.id.close_button).setOnClickListener(this);
         findViewById(R.id.info_button).setOnClickListener(this);
@@ -123,7 +108,7 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private void executeOnPermissionGranted() {
-        /*Address currentLocation;
+        Address currentLocation;
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 || permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
             GPSTracker gpsTracker = new GPSTracker(this);
@@ -139,7 +124,7 @@ public class VoiceChatActivity extends BaseActivity
             }
         } else {
             Toast.makeText(getApplicationContext(), "Location Access disabled.", Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -232,15 +217,25 @@ public class VoiceChatActivity extends BaseActivity
 
                             //Intent intent = new Intent(HomeActivity.this, ShowReviewPageActivity.class);
                             Map<String, JsonElement> parameters = context.getParameters();
-                            HashMap<String, String> data = new HashMap<>();
+                            /*HashMap<String, String> data = new HashMap<>();
                             data.put("Location", parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
                             data.put("Date", parameters.get("pickupdate").getAsString());
                             data.put("Days", parameters.get("duration").getAsJsonObject().get("amount").getAsString());
-                            data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());
+                            data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());*/
 
-                            TTS.speak("Check the details and let me know if you wish to reserve");
+                            TTS.speak("Please check your booking information. Would you like to confirm this booking?");
                             //intent.putExtra("data", data);
                             //startActivity(intent);
+
+                            /*
+                                1. "Please check your booking information...." should come from bot.
+                                2. Reservation should be replace with BookingData object
+                                3. Date-time need to be in Date/Long format so that can be formatted easily.
+                                4. Need some way to display car class desc to be populated as per car type
+                                5. Same for car image. We can restrict our use case till 3 car classes
+                                   as we have only 3 pictures in res folder.
+                                6.
+                             */
 
                             res = new Reservation();
                             res.setPickUpPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
@@ -248,35 +243,40 @@ public class VoiceChatActivity extends BaseActivity
                             res.setDropOffPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
                             res.setDropOffTime(parameters.get("pickupdate").getAsString());
                             res.setCarType(parameters.get("cartype").getAsJsonArray().get(0).getAsString());
-                            //fragmentConfirmation.bindConfirmationData(res);
+                            fragmentConfirmation.populateBookingData(res);
 
                             getFragmentManager().beginTransaction()
                                     .replace(R.id.vc_content_frame, fragmentConfirmation)
                                     .commit();
-                            reviewComplete = true;
 
                         } else {
 
                             addBoTResponseToChatRoster(speech);
                             TTS.speak(speech);
 
-                            /*ChatMessage chatMessageMe = new ChatMessage(speechTextView.getText().toString(),true);
-                            chatMessageMe.setCreatedAt(dateMe);
-                            if (!StringUtils.isEmpty(chatMessageMe.getMessage())) {
-                                fragmentVoiceChat.addMessage(chatMessageMe);
-                            }
-                            dateMe=0L;
-                            ChatMessage chatMessageBot = new ChatMessage(speech,"bot");
-                            fragmentVoiceChat.addMessage(chatMessageBot);*/
                         }
                     }
                 }
-                if (reviewComplete) {
+
+                /*
+                 *  ---- FINAL STEP ----
+                 *  1. Context is missing here. Need context till RES# generates.
+                 *  2. Need some flag like 'review' to know the end step.
+                 *  3. CONF# should be somewhere to extract easily and pass into the fragment
+                 *     which replace green highlighted section
+                 *  4. speech should not contain CONF#. It feels ugly to hear.
+                 */
+                if (result.getContexts().size() < 1
+                        && result.getFulfillment() != null) {
+                    addBoTResponseToChatRoster(speech);
+
+                }
+                /*if (reviewComplete) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.detach(fragmentConfirmation);
                     fragmentTransaction.attach(fragmentConfirmation);
                     fragmentTransaction.commit();
-                }
+                }*/
             }
         });
     }
@@ -287,11 +287,10 @@ public class VoiceChatActivity extends BaseActivity
             @Override
             public void run() {
                 Log.d(TAG, "onError");
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                /*Snackbar.make(findViewById(android.R.id.content), "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 addSpeechToChatRoster();
-                //resultTextView.setText(error.getMessage());
             }
         });
     }
@@ -304,7 +303,6 @@ public class VoiceChatActivity extends BaseActivity
                 Log.d(TAG, "onCancelled");
                 Toast.makeText(getApplicationContext(), "Action Cancelled", Toast.LENGTH_SHORT).show();
                 addSpeechToChatRoster();
-                //resultTextView.setText("Action Cancelled !");
             }
         });
     }
@@ -336,8 +334,6 @@ public class VoiceChatActivity extends BaseActivity
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    //dateMe = new Date().getTime();
-                    //speechTextView.setText(result);
                     final TextView speechTextView = findViewById(R.id.text_view_speech);
                     speechTextView.setText(result);
                 }
@@ -374,21 +370,23 @@ public class VoiceChatActivity extends BaseActivity
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
             executeOnPermissionGranted();
         } else {
-//            Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode),
-//                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-//                    new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent();
-//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-//                            intent.setData(Uri.parse("package:" + getPackageName()));
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-//                            startActivity(intent);
-//                        }
-//                    }).show();
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Please enable required permissions to use this app.",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("ENABLE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                            startActivity(intent);
+                        }
+                    }).show();
         }
     }
 
@@ -401,6 +399,7 @@ public class VoiceChatActivity extends BaseActivity
                 final AIResponse response = aiButton.getAIService().textRequest(request);
                 return response;
             } catch (AIServiceException e) {
+                Log.e(TAG, e.getMessage(), e);
             }
             return null;
         }
@@ -417,10 +416,10 @@ public class VoiceChatActivity extends BaseActivity
 
                 try {
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63001");
+                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63145");
                     Log.i(TAG, resp.toString());
                 } catch (Exception e) {
-
+                    Log.e(TAG, e.getMessage(), e);
                 }
             }
         }

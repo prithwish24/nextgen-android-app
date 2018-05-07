@@ -10,71 +10,10 @@
         android:id="@+id/recycler_chat_window"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5sp"
-        android:background="@color/lightGreen"
+        android:padding="5sp"
         android:scrollbars="vertical"
         app:stackFromEnd="true">
 
     </android.support.v7.widget.RecyclerView>
-
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_chat_window"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingBottom="4dp"
-        android:scrollbars="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:stackFromEnd="true">
-
-    </android.support.v7.widget.RecyclerView>-->
-
-    <!-- A horizontal line between the chatbox and RecyclerView
-    <View
-        android:id="@id/divider_chat"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_marginBottom="0dp"
-        android:background="#dfdfdf"
-        app:layout_constraintBottom_toTopOf="@+id/layout_chat_box"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/layout_chat_box"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-
-        <TextView
-            android:id="@+id/textView_chat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint=""
-            android:maxLines="6" />
-
-        <ai.api.ui.AIButton
-            android:id="@+id/micButton"
-            style="@style/ApiAi.Microphone"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="2dp"
-            android:foregroundGravity="center" />
-
-    </LinearLayout>
-    -->
 
 </LinearLayout>
