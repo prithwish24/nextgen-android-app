@@ -33,20 +33,17 @@ import com.nextgen.carrental.app.util.TTS;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private AIApplication app;
-
     private static final long PAUSE_CALLBACK_DELAY = 500;
     private static final int REQUEST_AUDIO_PERMISSIONS_ID = 33;
-
     private final Handler handler = new Handler();
+    protected SessionManager sessionManager;
+    private AIApplication app;
     private Runnable pauseCallback = new Runnable() {
         @Override
         public void run() {
             app.onActivityPaused();
         }
     };
-
-    protected SessionManager sessionManager;
     //protected PermissionManager permissionManager;
     private SparseIntArray mErrorString;
 
@@ -97,7 +94,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         textViewEmail.setText(user.getEmail());
 
         final ImageView imageViewProfile = headerView.findViewById(R.id.imageView_profile);
-        imageViewProfile.setImageResource(R.mipmap.ic_profile);
+        imageViewProfile.setImageResource(R.mipmap.ic_profilepic);
 
     }
 
