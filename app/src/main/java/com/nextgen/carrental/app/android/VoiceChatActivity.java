@@ -2,6 +2,8 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -28,9 +30,10 @@ import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.ZipCodeResponse;
+import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.ChatMessage;
-import com.nextgen.carrental.app.model.Reservation;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.util.AIResponseTransformer;
 import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
@@ -62,7 +65,6 @@ public class VoiceChatActivity extends BaseActivity
     private Handler handler;
     private FragmentVoiceChat fragmentVoiceChat;
     private FragmentConfirmation fragmentConfirmation;
-    private Reservation res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,16 +110,16 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private void executeOnPermissionGranted() {
-        Address currentLocation;
+        Address curLoc;
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 || permissionManager.hasPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
             GPSTracker gpsTracker = new GPSTracker(this);
             final Location location = gpsTracker.getLocation();
             if (gpsTracker.isGPSServiceOn() && (location != null)) {
-                currentLocation = gpsTracker.getAddress(location);
-                if (currentLocation != null) {
-                    Toast.makeText(getApplicationContext(), "Location Tracked: " + currentLocation.toString(),
-                            Toast.LENGTH_LONG).show();
+                curLoc = gpsTracker.getAddress(location);
+                if (curLoc != null) {
+                    String tmp = "Location Tracked: " + curLoc.getLocality() + "," + curLoc.getPostalCode() + "," + curLoc.getCountryCode();
+                    Toast.makeText(getApplicationContext(), tmp, Toast.LENGTH_LONG).show();
                 }
             } else {
                 gpsTracker.tryEnablingGPS(); // response will be displayed on onActivityResult method
@@ -211,22 +213,15 @@ public class VoiceChatActivity extends BaseActivity
                 final ListIterator listIterator = result.getContexts().listIterator();
                 while (listIterator.hasNext()) {
                     AIOutputContext context = (AIOutputContext) listIterator.next();
+
                     if (context.getName().equals("carrental")) {
-                        if (context.getParameters().get("review") != null &&
-                                context.getParameters().get("review").getAsBoolean()) {
+                        final Map<String, JsonElement> parameters = context.getParameters();
+                        final String step = (parameters.get("step") != null)
+                                ? parameters.get("step").getAsString().toLowerCase() : null;
 
-                            //Intent intent = new Intent(HomeActivity.this, ShowReviewPageActivity.class);
-                            Map<String, JsonElement> parameters = context.getParameters();
-                            /*HashMap<String, String> data = new HashMap<>();
-                            data.put("Location", parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
-                            data.put("Date", parameters.get("pickupdate").getAsString());
-                            data.put("Days", parameters.get("duration").getAsJsonObject().get("amount").getAsString());
-                            data.put("Car", parameters.get("cartype").getAsJsonArray().get(0).getAsString());*/
-
-                            TTS.speak("Please check your booking information. Would you like to confirm this booking?");
-                            //intent.putExtra("data", data);
-                            //startActivity(intent);
-
+                        if (TextUtils.equals(step, "review")) {
+                            //TTS.speak(speech);
+                            TTS.speak("Please review your booking information. Would you like to confirm this booking?");
                             /*
                                 1. "Please check your booking information...." should come from bot.
                                 2. Reservation should be replace with BookingData object
@@ -237,20 +232,25 @@ public class VoiceChatActivity extends BaseActivity
                                 6.
                              */
 
-                            res = new Reservation();
-                            res.setPickUpPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
-                            res.setPickUpTime(parameters.get("pickupdate").getAsString());
-                            res.setDropOffPoint(parameters.get("pickuplocation").getAsJsonPrimitive().getAsString());
-                            res.setDropOffTime(parameters.get("pickupdate").getAsString());
-                            res.setCarType(parameters.get("cartype").getAsJsonArray().get(0).getAsString());
-                            fragmentConfirmation.populateBookingData(res);
+                            final BookingData bookingData = new AIResponseTransformer().transform(parameters);
+                            fragmentConfirmation.bindConfirmationData(bookingData);
 
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.vc_content_frame, fragmentConfirmation)
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
                                     .commit();
 
-                        } else {
+                        } else if (TextUtils.equals(step, "confirmation")) {
+                            final BookingData bookingData = new AIResponseTransformer().transform(parameters);
+                            fragmentConfirmation.bindConfirmationData(bookingData);
 
+                            final Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
+                            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.detach(fragment);
+                            transaction.attach(fragment);
+                            transaction.commit();
+
+                        } else {
                             addBoTResponseToChatRoster(speech);
                             TTS.speak(speech);
 
@@ -266,17 +266,7 @@ public class VoiceChatActivity extends BaseActivity
                  *     which replace green highlighted section
                  *  4. speech should not contain CONF#. It feels ugly to hear.
                  */
-                if (result.getContexts().size() < 1
-                        && result.getFulfillment() != null) {
-                    addBoTResponseToChatRoster(speech);
 
-                }
-                /*if (reviewComplete) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.detach(fragmentConfirmation);
-                    fragmentTransaction.attach(fragmentConfirmation);
-                    fragmentTransaction.commit();
-                }*/
             }
         });
     }
@@ -310,7 +300,7 @@ public class VoiceChatActivity extends BaseActivity
     private void addBoTResponseToChatRoster(String responseText) {
         if (this.fragmentVoiceChat != null) {
             if (responseText != null) {
-                fragmentVoiceChat.addMessage(new ChatMessage(responseText, "Agent John"));
+                fragmentVoiceChat.addMessage(new ChatMessage(responseText, "Agent Emily"));
             }
         }
     }
@@ -320,7 +310,7 @@ public class VoiceChatActivity extends BaseActivity
             final TextView speechTextBox = findViewById(R.id.text_view_speech);
             CharSequence speech = speechTextBox.getText();
             speechTextBox.setText("");
-            if (speech != null) {
+            if (!TextUtils.isEmpty(speech)) {
                 fragmentVoiceChat.addMessage(new ChatMessage(speech.toString(), true));
             }
         }
@@ -416,7 +406,7 @@ public class VoiceChatActivity extends BaseActivity
 
                 try {
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63145");
+                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63001");
                     Log.i(TAG, resp.toString());
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);

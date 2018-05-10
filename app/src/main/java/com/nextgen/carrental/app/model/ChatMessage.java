@@ -13,10 +13,10 @@ public class ChatMessage {
     private String message;
     private String sender;
     private boolean selfMessage = false;
-    private long createdAt;
+    private Date createdAt;
 
     public ChatMessage() {
-        createdAt = new Date().getTime();
+        createdAt = new Date();
     }
 
     public ChatMessage(String message, String sender) {
@@ -44,11 +44,11 @@ public class ChatMessage {
         return sender;
     }
 
-    public long getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

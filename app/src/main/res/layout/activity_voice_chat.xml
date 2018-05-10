@@ -65,12 +65,13 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/top_border"
+        android:id="@+id/aiButtonContainer_topBorder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/darkGray" />
 
     <LinearLayout
+        android:id="@+id/aiButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
