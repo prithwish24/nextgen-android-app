@@ -2,8 +2,7 @@ package com.nextgen.carrental.app.android;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -50,7 +49,6 @@ import ai.api.model.AIOutputContext;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
-import ai.api.model.Status;
 import ai.api.ui.AIButton;
 
 public class VoiceChatActivity extends BaseActivity
@@ -84,8 +82,12 @@ public class VoiceChatActivity extends BaseActivity
         this.fragmentVoiceChat = new FragmentVoiceChat();
         this.fragmentConfirmation = new FragmentConfirmation();
 
+        // Clear existing history
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         getFragmentManager().beginTransaction()
-                .replace(R.id.vc_content_frame, fragmentVoiceChat)
+                .replace(R.id.vc_content_frame, fragmentVoiceChat, FragmentVoiceChat.TAG)
+                .addToBackStack(null)
                 .commit();
 
         askPermissionToUser();
@@ -152,7 +154,7 @@ public class VoiceChatActivity extends BaseActivity
         aiButton.setResultsListener(this);
         aiButton.setPartialResultsListener(this);
 
-        TTS.speak(START_SPEECH);
+        //TTS.speak(START_SPEECH);
 
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -196,19 +198,23 @@ public class VoiceChatActivity extends BaseActivity
             public void run() {
                 addSpeechToChatRoster();
 
-                Log.i(TAG, "onResult");
+                //Log.i(TAG, "onResult");
                 Log.i(TAG, "Received success response");
-                final Status status = response.getStatus();
-                Log.i(TAG, "Status code: " + status.getCode());
-                Log.i(TAG, "Status type: " + status.getErrorType());
+                //final Status status = response.getStatus();
+                //Log.i(TAG, "Status code: " + status.getCode());
+                //Log.i(TAG, "Status type: " + status.getErrorType());
 
                 final Result result = response.getResult();
                 Log.i(TAG, "Resolved query: " + result.getResolvedQuery());
 
                 Log.i(TAG, "Action: " + result.getAction());
                 final String speech = result.getFulfillment().getSpeech();
-                //resultTextView.setText(speech);
+                final String displayText = result.getFulfillment().getDisplayText();
                 Log.i(TAG, "Speech: " + speech);
+                Log.i(TAG, "Speech: " + displayText);
+
+                addBoTResponseToChatRoster(TextUtils.isEmpty(displayText) ? speech : displayText);
+                TTS.speak(speech);
 
                 final ListIterator listIterator = result.getContexts().listIterator();
                 while (listIterator.hasNext()) {
@@ -220,8 +226,6 @@ public class VoiceChatActivity extends BaseActivity
                                 ? parameters.get("step").getAsString().toLowerCase() : null;
 
                         if (TextUtils.equals(step, "review")) {
-                            //TTS.speak(speech);
-                            TTS.speak("Please review your booking information. Would you like to confirm this booking?");
                             /*
                                 1. "Please check your booking information...." should come from bot.
                                 2. Reservation should be replace with BookingData object
@@ -238,21 +242,40 @@ public class VoiceChatActivity extends BaseActivity
                             getFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
+                                    .addToBackStack(null)
                                     .commit();
+
+                            //addBoTResponseToChatRoster(displayText);
+                            //TTS.speak(speech);
+                            //TTS.speak("Please review your booking information. Would you like to confirm this booking?");
 
                         } else if (TextUtils.equals(step, "confirmation")) {
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
+                            fragmentConfirmation.updateConfirmationNumber("99024651");
+
+                            //addBoTResponseToChatRoster(displayText);
+                            //TTS.speak(speech);
+
+                            /*Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
+                            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.detach(fragment).commit();
+
+                            final BookingData bookingData = new AIResponseTransformer().transform(parameters);
                             fragmentConfirmation.bindConfirmationData(bookingData);
 
-                            final Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
+                                    .commit();*/
+                            /*final Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
                             final FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             transaction.detach(fragment);
                             transaction.attach(fragment);
-                            transaction.commit();
+                            transaction.commit();*/
 
-                        } else {
-                            addBoTResponseToChatRoster(speech);
-                            TTS.speak(speech);
+                        /*} else {
+                            addBoTResponseToChatRoster(displayText);
+                            TTS.speak(speech);*/
 
                         }
                     }
@@ -343,6 +366,7 @@ public class VoiceChatActivity extends BaseActivity
                 Toast.makeText(VoiceChatActivity.this, "Info clicked", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.vc_content_frame, new FragmentConfirmation())
+                        .addToBackStack(null)
                         .commit();
                 break;
             default:
