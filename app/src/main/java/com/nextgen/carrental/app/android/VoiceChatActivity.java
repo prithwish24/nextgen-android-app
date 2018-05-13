@@ -3,6 +3,7 @@ package com.nextgen.carrental.app.android;
 import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -29,6 +30,7 @@ import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.ZipCodeResponse;
+import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.ChatMessage;
 import com.nextgen.carrental.app.service.RestClient;
@@ -63,6 +65,7 @@ public class VoiceChatActivity extends BaseActivity
     private Handler handler;
     private FragmentVoiceChat fragmentVoiceChat;
     private FragmentConfirmation fragmentConfirmation;
+    public String sessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,9 @@ public class VoiceChatActivity extends BaseActivity
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_voice_chat);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(GlobalConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        sessionId = pref.getString(GlobalConstants.KEY_SESSIONID,"");
 
         this.aiButton = findViewById(R.id.aiMicButton);
         findViewById(R.id.close_button).setOnClickListener(this);
@@ -421,16 +427,9 @@ public class VoiceChatActivity extends BaseActivity
         @Override
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
-                String sessionId = "";
-                for (AIOutputContext a : aiResponse.getResult().getContexts()) {
-                    if (a.getName().equals("carrental")) {
-                        sessionId = a.getParameters().get("sessionId").getAsString();
-                    }
-                }
-
                 try {
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, ZipCodeResponse.class, sessionId, "63001");
+                            INITIAL_URL, BaseResponse.class, sessionId, "63001");
                     Log.i(TAG, resp.toString());
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);

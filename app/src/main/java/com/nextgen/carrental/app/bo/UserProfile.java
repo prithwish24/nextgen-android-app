@@ -1,18 +1,27 @@
 package com.nextgen.carrental.app.bo;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public class UserProfile {
+	@JsonProperty("fullName")
 	private String fullName;
+	@JsonProperty("userId")
 	private String userId;
+	@JsonProperty("mobileNo")
 	private String mobileNo;
+	@JsonProperty("emailId")
 	private String emailId;
+	@JsonProperty("password")
 	private String password;
+	@JsonProperty("dateOfBirth")
 	private Date dateOfBirth;
+	@JsonProperty("preferences")
 	private List<Preference> preferences;
 
 	public UserProfile() {

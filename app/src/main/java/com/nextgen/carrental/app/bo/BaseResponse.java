@@ -1,8 +1,15 @@
 package com.nextgen.carrental.app.bo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BaseResponse <T>{
+	@JsonProperty("success")
 	private boolean success;
+	@JsonProperty("error")
 	private ServiceError error;
+	@JsonProperty("sessionId")
+	private String sessionId;
+	@JsonProperty("response")
 	private T response;
 	
 	public BaseResponse() {
@@ -25,6 +32,12 @@ public class BaseResponse <T>{
 	}
 	public void setServiceError(String code, String type, String text) {
 		this.error = new ServiceError(code, type, text);
+	}
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 	public T getResponse() {
 		return response;

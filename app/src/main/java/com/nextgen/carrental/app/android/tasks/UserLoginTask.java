@@ -44,7 +44,8 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
     @Override
     protected BaseResponse<UserProfile> doInBackground(Void... params) {
-        final String loginServiceURL = "https://nextgen-gateway.herokuapp.com/ngapi/";
+        //final String loginServiceURL = "https://nextgen-gateway.herokuapp.com/ngapi/";
+        final String loginServiceURL = "http://18.188.102.146:8002/login";
         BaseResponse<UserProfile> response = null;
 
         // Attempt 1 - using dev credentials
@@ -60,7 +61,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
         }
 
         // Attempt 2 - using external service
-        if (response != null && !response.isSuccess()) {
+        if (response == null) {
             MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
             data.add("username", mUsername);
             data.add("password", mPassword);
@@ -88,7 +89,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
         if (success) {
             UserProfile profile = response.getResponse();
             SessionManager sessionManager = new SessionManager(context);
-            sessionManager.createLoginSession(profile);
+            sessionManager.createLoginSession(profile,response.getSessionId());
 
             showProgress(false);
             activity.finish();
