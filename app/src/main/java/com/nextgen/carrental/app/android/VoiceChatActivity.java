@@ -39,13 +39,17 @@ import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
 import com.nextgen.carrental.app.util.TTS;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 import ai.api.AIServiceException;
 import ai.api.PartialResultsListener;
+import ai.api.RequestExtras;
 import ai.api.android.AIConfiguration;
+import ai.api.model.AIContext;
 import ai.api.model.AIError;
 import ai.api.model.AIOutputContext;
 import ai.api.model.AIRequest;
@@ -59,6 +63,7 @@ public class VoiceChatActivity extends BaseActivity
     private static final String TAG = VoiceChatActivity.class.getName();
 
     public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
+    final String START_SPEECH = "Hi";
 
     private PermissionManager permissionManager;
     private AIButton aiButton;
@@ -146,7 +151,6 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private void initAIAgent(final String googleDialogFlowAccessToken) {
-        final String START_SPEECH = "Hi";
         AIConfiguration config = new AIConfiguration(
                 googleDialogFlowAccessToken,
                 AIConfiguration.SupportedLanguages.English,
@@ -413,10 +417,15 @@ public class VoiceChatActivity extends BaseActivity
     private class GetUserSessionIdTask extends AsyncTask<AIRequest, Void, AIResponse> {
         @Override
         protected AIResponse doInBackground(AIRequest... requests) {
-            final AIRequest request = requests[0];
             try {
+                final AIContext aiContext = new AIContext("CarRental");
+                final Map<String, String> maps = new HashMap<>(1);
+                maps.put(GlobalConstants.KEY_SESSIONID,sessionId);
+                aiContext.setParameters(maps);
+                final List<AIContext> contexts = Collections.singletonList(aiContext);
+                final RequestExtras requestExtras = new RequestExtras(contexts, null);
                 aiButton.getAIService().resetContexts();
-                final AIResponse response = aiButton.getAIService().textRequest(request);
+                final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH,requestExtras);
                 return response;
             } catch (AIServiceException e) {
                 Log.e(TAG, e.getMessage(), e);
