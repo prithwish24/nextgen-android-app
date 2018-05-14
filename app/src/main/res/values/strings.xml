@@ -63,4 +63,13 @@
         <item>SUV</item>
     </string-array>
 
+    <string-array name="ai_access_token">
+        <item>c57af71690154ea18eeeebe86edd152b</item>
+        <item>db04aaccc4b241bb98efc2bc2744478c</item>
+        <item>c33cc5dc601d48799b48f085e1360e59</item>
+    </string-array>
+
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

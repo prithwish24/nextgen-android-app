@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, new FragmentHome())
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -85,19 +86,24 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentHome())
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.nav_show_reservation) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentShowReservation())
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "Nothing assigned", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Nothing assigned", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_profile) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentProfileView())
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.nav_logout) {

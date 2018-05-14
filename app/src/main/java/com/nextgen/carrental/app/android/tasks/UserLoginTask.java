@@ -31,8 +31,8 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
     private final String mUsername;
     private final String mPassword;
-    private final Context context;
-    private final Activity activity;
+    private Context context;
+    private Activity activity;
 
 
     public UserLoginTask(String username, String password, Activity activity) {
@@ -98,6 +98,10 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //???
             context.startActivity(intent);
+
+            // releasing for GC
+            context = null;
+            activity = null;
 
         } else {
             final TextView mErrorMessage = activity.findViewById(R.id.login_error_message);

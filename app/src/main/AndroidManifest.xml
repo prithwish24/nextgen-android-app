@@ -42,6 +42,11 @@
             android:theme="@style/AppTheme.ChatWindow">
             <!--<meta-data android:name="" android:value=".android.MainActivity"/>-->
         </activity>
+        <activity
+            android:name=".android.SettingsActivity"
+            android:label="@string/title_activity_settings">
+
+        </activity>
     </application>
 
 </manifest>
