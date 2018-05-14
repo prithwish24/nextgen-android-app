@@ -45,7 +45,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
     @Override
     protected BaseResponse<UserProfile> doInBackground(Void... params) {
         //final String loginServiceURL = "https://nextgen-gateway.herokuapp.com/ngapi/";
-        final String loginServiceURL = "http://18.188.102.146:8002/login";
+        final String loginServiceURL = "http://18.188.102.146:8001/login";
         BaseResponse<UserProfile> response = null;
 
         // Attempt 1 - using dev credentials

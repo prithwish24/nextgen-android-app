@@ -1,9 +1,14 @@
 package com.nextgen.carrental.app.bo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ServiceError {
 
+	@JsonProperty("success")
 	private String code;
+	@JsonProperty("type")
 	private String type;
+	@JsonProperty("text")
 	private String text;
 
 	@Override

@@ -86,8 +86,8 @@ public enum RestClient {
     private BaseResponse makeRequestWithFormData(String url, MultiValueMap<String, String> formData, HttpMethod method) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        //requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        //requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<MultiValueMap> httpEntity = new HttpEntity<MultiValueMap>(formData, requestHeaders);
         ResponseEntity<BaseResponse> response = restTemplate.exchange(url, method, httpEntity, BaseResponse.class);
         return response.getBody();
