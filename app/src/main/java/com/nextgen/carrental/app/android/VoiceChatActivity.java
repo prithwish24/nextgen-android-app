@@ -211,7 +211,7 @@ public class VoiceChatActivity extends BaseActivity
                 final String speech = result.getFulfillment().getSpeech();
                 final String displayText = result.getFulfillment().getDisplayText();
                 Log.i(TAG, "Speech: " + speech);
-                Log.i(TAG, "Speech: " + displayText);
+                Log.i(TAG, "Display Text: " + displayText);
 
                 addBoTResponseToChatRoster(TextUtils.isEmpty(displayText) ? speech : displayText);
                 TTS.speak(speech);
@@ -360,10 +360,11 @@ public class VoiceChatActivity extends BaseActivity
         switch (viewId) {
             case R.id.close_button:
                 Toast.makeText(VoiceChatActivity.this, "Close clicked", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 break;
             case R.id.info_button:
-                Toast.makeText(VoiceChatActivity.this, "Info clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VoiceChatActivity.this, "Showing dummy confirmation", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.vc_content_frame, new FragmentConfirmation())
                         .addToBackStack(null)

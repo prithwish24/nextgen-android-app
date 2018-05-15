@@ -63,4 +63,8 @@
         <item>SUV</item>
     </string-array>
 
+
+    <string name="review_screen_user_message">Please review your booking information..</string>
+    <string name="confirmation_screen_user_message">CONFIRMATION # </string>
+
 </resources>

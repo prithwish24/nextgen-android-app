@@ -1,6 +1,7 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,25 +31,24 @@ public class FragmentConfirmation extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_confirmation, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_confirmation, container, false);
     }
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final View buttonDone = view.findViewById(R.id.button_done_confirm);
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Fragment fragmentVC = getFragmentManager().findFragmentByTag(FragmentVoiceChat.TAG);
+                /*final Fragment fragmentVC = getFragmentManager().findFragmentByTag(FragmentVoiceChat.TAG);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.vc_content_frame, fragmentVC)
                         //.addToBackStack(null)
-                        .commit();
-
+                        .commit();*/
+                startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class), savedInstanceState);
             }
         });
 
@@ -69,7 +69,7 @@ public class FragmentConfirmation extends Fragment {
                 carClassDesc.setText(carClass.getDesc());
             }
 
-            ((TextView) view.findViewById(R.id.confirm_number)).setText("Please review your booking information..");
+            ((TextView) view.findViewById(R.id.confirm_number)).setText(R.string.review_screen_user_message);
             ((TextView) view.findViewById(R.id.confirm_vehicle_class)).setText(bookingData.carType);
             ((TextView) view.findViewById(R.id.confirm_pickup_location)).setText(bookingData.pickupLoc);
             ((TextView) view.findViewById(R.id.confirm_return_location)).setText(bookingData.returnLoc);
@@ -90,7 +90,7 @@ public class FragmentConfirmation extends Fragment {
     public void updateConfirmationNumber(@NonNull final String confNumber) {
         if (!TextUtils.isEmpty(confNumber)) {
             bookingData.confNum = confNumber;
-            ((TextView) view.findViewById(R.id.confirm_number)).setText("CONFIRMATION # " + bookingData.confNum);
+            ((TextView) view.findViewById(R.id.confirm_number)).setText(R.string.confirmation_screen_user_message + bookingData.confNum);
 
             view.findViewById(R.id.button_done_confirm).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.aiButtonContainer).setVisibility(View.INVISIBLE);
