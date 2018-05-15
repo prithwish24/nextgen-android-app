@@ -56,7 +56,7 @@ public class VoiceChatActivity extends BaseActivity
         PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
 
-    public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
+    public static String INITIAL_URL = "http://54.175.239.6:8002/zipcode/{sessionId}?zipcode={zipCode}";
 
     private PermissionManager permissionManager;
     private AIButton aiButton;
@@ -132,7 +132,7 @@ public class VoiceChatActivity extends BaseActivity
 
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN2);
+            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN);
             //Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
             initAIAgent(googleDialogFlowAccessToken);
         }
