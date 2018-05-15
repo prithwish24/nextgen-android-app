@@ -72,9 +72,9 @@ public enum RestClient {
         return response.getBody();
     }
 
-    public <T> BaseResponse<T> postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws IOException {
+    public <T,R> BaseResponse<T> postRequest(String url, R request, Class<T> clazz) throws IOException {
         Log.d(TAG, "In RestServiceClient.postRequestForm ::");
-        BaseResponse br = makeRequestWithFormData(url, formData, HttpMethod.POST);
+        BaseResponse br = makeRequestWithFormData(url, request, HttpMethod.POST);
         if (br.isSuccess()) {
             String temp = mapper.writeValueAsString(br.getResponse());
             T type = mapper.readValue(temp, clazz);
@@ -83,12 +83,12 @@ public enum RestClient {
         return br;
     }
 
-    private BaseResponse makeRequestWithFormData(String url, MultiValueMap<String, String> formData, HttpMethod method) {
+    private <R> BaseResponse makeRequestWithFormData(String url, R request, HttpMethod method) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
         //requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<MultiValueMap> httpEntity = new HttpEntity<MultiValueMap>(formData, requestHeaders);
+        HttpEntity<R> httpEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<BaseResponse> response = restTemplate.exchange(url, method, httpEntity, BaseResponse.class);
         return response.getBody();
     }

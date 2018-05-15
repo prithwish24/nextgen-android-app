@@ -421,7 +421,7 @@ public class VoiceChatActivity extends BaseActivity
                 final AIContext aiContext = new AIContext("CarRental");
                 final Map<String, String> maps = new HashMap<>(1);
                 maps.put(GlobalConstants.KEY_SESSIONID,sessionId);
-                maps.put(GlobalConstants.KEY_SESSIONID,"dummy testing 123");
+                //maps.put(GlobalConstants.KEY_SESSIONID,"dummy testing 123");
                 aiContext.setParameters(maps);
                 final List<AIContext> contexts = Collections.singletonList(aiContext);
                 final RequestExtras requestExtras = new RequestExtras(contexts, null);

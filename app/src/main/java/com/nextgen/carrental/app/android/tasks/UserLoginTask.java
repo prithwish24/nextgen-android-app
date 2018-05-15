@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.android.MainActivity;
 import com.nextgen.carrental.app.bo.BaseResponse;
+import com.nextgen.carrental.app.bo.LoginRQ;
 import com.nextgen.carrental.app.bo.UserProfile;
 import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.util.SessionManager;
@@ -65,8 +66,11 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
             data.add("username", mUsername);
             data.add("password", mPassword);
+            LoginRQ loginRq = new LoginRQ();
+            loginRq.username = mUsername;
+            loginRq.password = mPassword;
             try {
-                response = RestClient.INSTANCE.postRequest(loginServiceURL, data, UserProfile.class);
+                response = RestClient.INSTANCE.postRequest(loginServiceURL, loginRq, UserProfile.class);
             } catch (Exception e) {
                 Log.e(TAG, "Login Service call failed!", e);
             }
