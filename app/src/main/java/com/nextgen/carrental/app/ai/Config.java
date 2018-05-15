@@ -20,6 +20,7 @@ public abstract class Config {
     // copy this keys from your developer dashboard
     public static final String ACCESS_TOKEN = "db04aaccc4b241bb98efc2bc2744478c";
     public static final String ACCESS_TOKEN2 = "c33cc5dc601d48799b48f085e1360e59";
+    public static final String ACCESS_TOKEN3 = "c57af71690154ea18eeeebe86edd152b";
 
     public static final LanguageConfig[] languages = new LanguageConfig[]{
             new LanguageConfig("en", "a11ea1d839e3446d84e402cb97cdadfb"),
