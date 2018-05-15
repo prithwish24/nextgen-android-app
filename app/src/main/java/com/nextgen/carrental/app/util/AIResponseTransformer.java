@@ -22,7 +22,10 @@ public class AIResponseTransformer {
 
     public BookingData transform(final Map<String, JsonElement> parameters) {
         final BookingData bookingData = new BookingData();
-        //bookingData.confNum     = parameters.get("confnumber").getAsString();
+        if (parameters.get("confirmationnumber") != null) {
+            bookingData.confNum = parameters.get("confirmationnumber").getAsString();
+        }
+
         bookingData.step = parameters.get("step").getAsString();
         bookingData.pickupLoc = parameters.get("pickuplocation").getAsString();
         bookingData.returnLoc = parameters.get("pickuplocation").getAsString();

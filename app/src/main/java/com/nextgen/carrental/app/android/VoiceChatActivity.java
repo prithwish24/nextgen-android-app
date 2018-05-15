@@ -251,7 +251,7 @@ public class VoiceChatActivity extends BaseActivity
 
                         } else if (TextUtils.equals(step, "confirmation")) {
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
-                            fragmentConfirmation.updateConfirmationNumber("99024651");
+                            fragmentConfirmation.updateConfirmationNumber(bookingData.confNum);
 
                             //addBoTResponseToChatRoster(displayText);
                             //TTS.speak(speech);
