@@ -13,6 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.bo.BaseResponse;
+import com.nextgen.carrental.app.bo.TripsResponse;
+import com.nextgen.carrental.app.model.CarClassEnum;
+import com.nextgen.carrental.app.service.RestClient;
+
+import java.util.List;
 
 
 /**
@@ -23,6 +29,8 @@ import com.nextgen.carrental.app.R;
 public class FragmentHome extends Fragment {
     private static final String TAG = FragmentHome.class.getName();
     private View homeView;
+
+    public static String TRIPS_URL = "http://18.188.102.146:8002/trips/upcoming/{sessionId}?username={username}";
 
     @Nullable
     @Override
@@ -39,24 +47,41 @@ public class FragmentHome extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final ImageView carClassImage = homeView.findViewById(R.id.car_image_home);
-        carClassImage.setImageResource(R.drawable.ct_compact);
-        carClassImage.refreshDrawableState();
+//        final ImageView carClassImage = homeView.findViewById(R.id.car_image_home);
+//        carClassImage.setImageResource(R.drawable.ct_compact);
+//        carClassImage.refreshDrawableState();
+        MainActivity activity = (MainActivity)getActivity();
+        BaseResponse response = null;
+        try{
+            response = RestClient.INSTANCE.getRequest(
+                    TRIPS_URL, BaseResponse.class, activity.sessionId,activity.userId);
+        }catch(Exception e){
+        }
+        List<TripsResponse> trips = (List<TripsResponse>)response.getResponse();
+
+        populateView(trips);
 
         FloatingActionButton fab = (FloatingActionButton) homeView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 startActivity(new Intent(getActivity().getApplicationContext(), VoiceChatActivity.class));
             }
         });
+    }
 
+    private void populateView(List<TripsResponse> trips) {
 
-
-
-
+        for(TripsResponse t : trips){
+            final CarClassEnum carClass = CarClassEnum.find(t.getCarType());
+            if (carClass == null) {
+                //carClassImage.setImageResource();
+                carClassDesc.setText("");
+            } else {
+                carClassImage.setImageResource(carClass.getImgId());
+                carClassDesc.setText(carClass.getDesc());
+            }
+        }
     }
 
 }

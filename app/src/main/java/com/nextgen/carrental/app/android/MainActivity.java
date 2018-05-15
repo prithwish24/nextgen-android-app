@@ -1,7 +1,9 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,10 +16,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.constants.GlobalConstants;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final String TAG = MainActivity.class.getName();
+
+    public String sessionId;
+    public String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,10 @@ public class MainActivity extends BaseActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(GlobalConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        sessionId = pref.getString(GlobalConstants.KEY_SESSIONID,"");
+        userId = pref.getString(GlobalConstants.KEY_USERID,"");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
