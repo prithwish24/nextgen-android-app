@@ -41,7 +41,7 @@ public class SessionManager {
         editor.putBoolean(IS_LOGGED_IN, true);
         editor.putString(KEY_NAME, userProfile.getFullName());
         editor.putString(KEY_EMAIL, userProfile.getEmailId());
-        editor.putString(KEY_USERID, userProfile.getUserId());
+        editor.putString(KEY_USERID, userProfile.getUsername());
         editor.putString(KEY_SESSIONID, sessionId);
         editor.commit();
     }

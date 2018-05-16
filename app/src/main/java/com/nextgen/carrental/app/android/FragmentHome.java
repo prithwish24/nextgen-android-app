@@ -54,10 +54,10 @@ public class FragmentHome extends Fragment {
 //        carClassImage.setImageResource(R.drawable.ct_compact);
 //        carClassImage.refreshDrawableState();
         MainActivity activity = (MainActivity)getActivity();
-        BaseResponse response = null;
+        BaseResponse<TripsResponse> response = null;
         try{
             response = RestClient.INSTANCE.getRequest(
-                    TRIPS_URL, BaseResponse.class, activity.sessionId,activity.userId);
+                    TRIPS_URL, TripsResponse.class, activity.sessionId,activity.userId);
         }catch(Exception e){
         }
         List<TripsResponse> trips = (List<TripsResponse>)response.getResponse();

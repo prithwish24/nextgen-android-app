@@ -54,7 +54,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             String[] pieces = credential.split(":");
             if (pieces[0].equals(mUsername) && pieces[1].equals(mPassword)) {
                 UserProfile up = new UserProfile(mUsername+"@example.com", "Administrator");
-                up.setUserId(mUsername);
+                up.setUsername(mUsername);
                 response = new BaseResponse<>();
                 response.setSuccess(true);
                 response.setResponse(up);
@@ -63,9 +63,6 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
         // Attempt 2 - using external service
         if (response == null) {
-            MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
-            data.add("username", mUsername);
-            data.add("password", mPassword);
             LoginRQ loginRq = new LoginRQ();
             loginRq.username = mUsername;
             loginRq.password = mPassword;
