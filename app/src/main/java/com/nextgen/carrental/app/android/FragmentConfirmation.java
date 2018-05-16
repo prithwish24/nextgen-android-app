@@ -2,6 +2,8 @@ package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +33,8 @@ public class FragmentConfirmation extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_confirmation, container, false);
+        this.view = inflater.inflate(R.layout.fragment_confirmation, container, false);
+        return view;
     }
 
 
@@ -90,7 +93,8 @@ public class FragmentConfirmation extends Fragment {
     public void updateConfirmationNumber(@NonNull final String confNumber) {
         if (!TextUtils.isEmpty(confNumber)) {
             bookingData.confNum = confNumber;
-            ((TextView) view.findViewById(R.id.confirm_number)).setText(R.string.confirmation_screen_user_message + bookingData.confNum);
+            ((TextView) view.findViewById(R.id.confirm_number)).setText("CONFIRMATION # " + bookingData.confNum);
+            ((TextView) view.findViewById(R.id.confirm_number)).setTextColor(Color.RED);
 
             view.findViewById(R.id.button_done_confirm).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.aiButtonContainer).setVisibility(View.INVISIBLE);
