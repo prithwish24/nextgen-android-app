@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.adapter.ReservationListAdapter;
+import com.nextgen.carrental.app.adapter.TripsListAdapter;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.TripsResponse;
 import com.nextgen.carrental.app.model.CarClassEnum;
@@ -59,29 +62,17 @@ public class FragmentHome extends Fragment {
         }
         List<TripsResponse> trips = (List<TripsResponse>)response.getResponse();
 
-        populateView(trips);
+        final ListView listView = homeView.findViewById(R.id.show_trips_list_view);
+        TripsListAdapter adapter = new TripsListAdapter(getActivity(), trips);
+        listView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) homeView.findViewById(R.id.fab);
+        FloatingActionButton fab = homeView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity().getApplicationContext(), VoiceChatActivity.class));
             }
         });
-    }
-
-    private void populateView(List<TripsResponse> trips) {
-
-        for(TripsResponse t : trips){
-            final CarClassEnum carClass = CarClassEnum.find(t.getCarType());
-            if (carClass == null) {
-                //carClassImage.setImageResource();
-                carClassDesc.setText("");
-            } else {
-                carClassImage.setImageResource(carClass.getImgId());
-                carClassDesc.setText(carClass.getDesc());
-            }
-        }
     }
 
 }

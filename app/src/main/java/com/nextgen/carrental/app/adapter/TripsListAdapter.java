@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.bo.TripsResponse;
-import com.nextgen.carrental.app.model.Reservation;
+import com.nextgen.carrental.app.model.CarClassEnum;
 
 import java.util.List;
 
@@ -46,15 +46,14 @@ public class TripsListAdapter extends BaseAdapter {
         TripsListAdapter.ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.show_reservation_item, parent, false);
+            convertView = mInflater.inflate(R.layout.fragment_home, parent, false);
 
             holder = new TripsListAdapter.ViewHolder();
-            holder.thumbnailImageView = convertView.findViewById(R.id.res_list_thumbnail);
-            holder.statusTextView = convertView.findViewById(R.id.res_list_status);
-            holder.carTypeTextView  = convertView.findViewById(R.id.res_list_car_type);
-            holder.pickUpTextView = convertView.findViewById(R.id.res_list_pickup);
-            holder.pickUpTimeTextView = convertView.findViewById(R.id.res_list_pickup_time);
-            holder.returnTimeTextView = convertView.findViewById(R.id.res_list_return_time);
+            holder.thumbnailImageView = convertView.findViewById(R.id.car_image_home);
+            holder.carTypeTextView  = convertView.findViewById(R.id.car_type_home);
+            holder.pickUpTextView = convertView.findViewById(R.id.pickup_point_home);
+            holder.pickUpTimeTextView = convertView.findViewById(R.id.pickup_time_home);
+            holder.returnTimeTextView = convertView.findViewById(R.id.drop_time_home);
 
             convertView.setTag(holder);
 
@@ -63,15 +62,14 @@ public class TripsListAdapter extends BaseAdapter {
             holder = (TripsListAdapter.ViewHolder) convertView.getTag();
         }
 
-        final Reservation res = (Reservation) getItem(position);
-        holder.statusTextView.setText(res.getStatus());
-        holder.carTypeTextView.setText(res.getCarType());
-        holder.pickUpTextView.setText(res.getPickUpPoint());
-        holder.pickUpTimeTextView.setText(res.getPickUpTime());
-        holder.returnTimeTextView.setText(res.getDropOffTime());
-        final Integer imgId = CAR_IMAGES.get(res.getCarType().toUpperCase());
+        final TripsResponse trip = (TripsResponse) getItem(position);
+        holder.carTypeTextView.setText(trip.getCarType());
+        holder.pickUpTextView.setText(trip.getPickupPoint());
+        holder.pickUpTimeTextView.setText(trip.getPickupDateTime());
+        holder.returnTimeTextView.setText(trip.getDropOffDateTime());
+        final CarClassEnum imgId = CarClassEnum.find(trip.getCarType());
         if (imgId != null) {
-            holder.thumbnailImageView.setImageResource(imgId);
+            holder.thumbnailImageView.setImageResource(imgId.getImgId());
         }
 
         return convertView;
@@ -79,7 +77,6 @@ public class TripsListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView thumbnailImageView;
-        TextView statusTextView;
         TextView carTypeTextView;
         TextView pickUpTextView;
         TextView pickUpTimeTextView;

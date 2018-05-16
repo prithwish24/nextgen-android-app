@@ -7,8 +7,6 @@ package com.nextgen.carrental.app.constants;
 public class GlobalConstants {
 
     public static final String SHARED_PREF_NAME = "CarRentalPref";
-
-
     public static final String KEY_NAME = "name";
     public static final String KEY_USERID = "userId";
     public static final String KEY_EMAIL = "email";

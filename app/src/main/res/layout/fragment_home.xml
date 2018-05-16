@@ -31,59 +31,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:text="YOUR NEXT RESERVATION" />
-
-            <LinearLayout
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/car_image_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="6dp"
-                    android:contentDescription="@string/show_reservation_thumbnail"
-                    android:scaleType="centerInside"
-                    tools:src="@drawable/ct_compact" />
-
-                <TextView
-                    android:id="@+id/pickup_point_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="@string/home_pickup_text"/>
-                <TextView
-                    android:id="@+id/car_type_home"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/darkGray"
-                    android:text="@string/home_car_type_text"/>
-                <TextView
-                    android:id="@+id/pickup_time_home"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="@string/home_pickup_time_text"/>
+            android:text="YOUR RESERVATIONS" />
 
 
-
-            </LinearLayout>
-
+        <ListView
+            android:id="@+id/show_trips_list_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
     </LinearLayout>
 
 </RelativeLayout>
