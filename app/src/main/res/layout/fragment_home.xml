@@ -34,6 +34,26 @@
             android:text="YOUR NEXT RESERVATION" />
 
             <LinearLayout
+                android:id="@+id/no_trip_list_view"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="There is no scheduled reservation for you."
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
+                    android:paddingTop="15sp"
+                    android:paddingBottom="15sp"
+                    android:background="@drawable/message_background"
+                    android:textColor="@color/veryDarkGray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/show_trips_list_view"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingLeft="15dp"
