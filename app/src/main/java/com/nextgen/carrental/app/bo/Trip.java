@@ -1,9 +1,12 @@
 package com.nextgen.carrental.app.bo;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TripsResponse {
+/**
+ * Created by Abhishek on 5/18/2018.
+ */
+
+public class Trip {
 
     @JsonProperty("id")
     private String id;
@@ -13,8 +16,8 @@ public class TripsResponse {
     private String dropPoint;
     @JsonProperty("pickupDateTime")
     private String pickupDateTime;
-    @JsonProperty("dropoffDateTime")
-    private String dropoffDateTime;
+    @JsonProperty("dropOffDateTime")
+    private String dropOffDateTime;
     @JsonProperty("carType")
     private String carType;
 
@@ -50,12 +53,12 @@ public class TripsResponse {
         this.pickupDateTime = pickupDateTime;
     }
 
-    public String getDropoffDateTime() {
-        return dropoffDateTime;
+    public String getDropOffDateTime() {
+        return dropOffDateTime;
     }
 
-    public void setDropoffDateTime(String dropoffDateTime) {
-        this.dropoffDateTime = dropoffDateTime;
+    public void setDropOffDateTime(String dropOffDateTime) {
+        this.dropOffDateTime = dropOffDateTime;
     }
 
     public String getCarType() {

@@ -61,8 +61,6 @@ public class VoiceChatActivity extends BaseActivity
         implements AIButton.AIButtonListener,
         PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
-
-    public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
     final String START_SPEECH = "Hi";
 
     private PermissionManager permissionManager;
@@ -439,7 +437,7 @@ public class VoiceChatActivity extends BaseActivity
             if (aiResponse != null) {
                 try {
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, BaseResponse.class, sessionId, "63001");
+                            GlobalConstants.URL_FIRST_CALL, BaseResponse.class, sessionId, "63001");
                     Log.i(TAG, resp.toString());
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);

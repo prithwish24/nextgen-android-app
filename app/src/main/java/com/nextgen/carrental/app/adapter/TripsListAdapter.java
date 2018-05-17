@@ -66,7 +66,7 @@ public class TripsListAdapter extends BaseAdapter {
         holder.carTypeTextView.setText(trip.getCarType());
         holder.pickUpTextView.setText(trip.getPickupPoint());
         holder.pickUpTimeTextView.setText(trip.getPickupDateTime());
-        holder.returnTimeTextView.setText(trip.getDropOffDateTime());
+        holder.returnTimeTextView.setText(trip.getDropoffDateTime());
         final CarClassEnum imgId = CarClassEnum.find(trip.getCarType());
         if (imgId != null) {
             holder.thumbnailImageView.setImageResource(imgId.getImgId());

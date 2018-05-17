@@ -15,6 +15,7 @@ import com.nextgen.carrental.app.android.MainActivity;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.LoginRQ;
 import com.nextgen.carrental.app.bo.UserProfile;
+import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.util.SessionManager;
 
@@ -46,7 +47,6 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
     @Override
     protected BaseResponse<UserProfile> doInBackground(Void... params) {
         //final String loginServiceURL = "https://nextgen-gateway.herokuapp.com/ngapi/";
-        final String loginServiceURL = "http://18.188.102.146:8001/login";
         BaseResponse<UserProfile> response = null;
 
         // Attempt 1 - using dev credentials
@@ -67,7 +67,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             loginRq.username = mUsername;
             loginRq.password = mPassword;
             try {
-                response = RestClient.INSTANCE.postRequest(loginServiceURL, loginRq, UserProfile.class);
+                response = RestClient.INSTANCE.postRequest(GlobalConstants.URL_USER_LOGIN, loginRq, UserProfile.class);
             } catch (Exception e) {
                 Log.e(TAG, "Login Service call failed!", e);
             }
