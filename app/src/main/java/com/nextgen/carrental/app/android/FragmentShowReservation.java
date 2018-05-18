@@ -10,7 +10,9 @@ import android.widget.ListView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.adapter.ReservationListAdapter;
+import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.Reservation;
+import com.nextgen.carrental.app.util.Utils;
 
 import java.util.ArrayList;
 
@@ -42,8 +44,12 @@ public class FragmentShowReservation extends Fragment {
             }
         };
 
+        String serviceURL = Utils.getServiceURL(getActivity().getApplicationContext(), GlobalConstants.Services.ALL_RESERVATION);
+
         final ListView listView = showReservationView.findViewById(R.id.show_reservation_list_view);
         ReservationListAdapter adapter = new ReservationListAdapter(getActivity(), list);
         listView.setAdapter(adapter);
     }
+
+
 }

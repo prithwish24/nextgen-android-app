@@ -1,10 +1,18 @@
 package com.nextgen.carrental.app.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.constants.GlobalConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.nextgen.carrental.app.constants.GlobalConstants.SHARED_PREF_NAME;
 
 /**
  * Single utility class for all common operations
@@ -42,5 +50,62 @@ public class Utils {
             Log.w(TAG, e.getMessage(), e);
         }
         return null;
+    }
+
+
+    // Settings -
+    // 1. List DEV, PROD
+    // 2. Editable URL DEV, PROD
+    // 3. Editable Zip code
+
+
+    public static String getServiceURL(@NonNull Context context, @NonNull final GlobalConstants.Services svc) {
+        final String environment = getSharedPrefValue(context, "environment", "dev");
+        final String serviceDomain = getSharedPrefValue(context, "serviceURL", "http://18.188.102.146");
+        final StringBuilder sb = new StringBuilder(serviceDomain);
+
+        // Prod URL can have domain name or ip address with
+        // or without TCP port number.
+        if ("prod".equalsIgnoreCase(environment)) {
+            // -- Result URL will be like below --
+            // -- http://84.15.64.12:8080/ngapi/profile/login/
+            // -- http://www.somedomain.com/ngapi/profile/login/
+            if (sb.charAt(sb.length()-1) != '/')
+                sb.append('/');
+
+            sb.append("ngapi/")
+                    .append(svc.getApp())
+                    .append('/')
+                    .append(svc.getName())
+                    .append('/');
+
+            Log.d(TAG, "Service URL: "+sb.toString());
+
+        } else if ("dev".equalsIgnoreCase(environment)) {
+            // -- Result URL will be like below --
+            // -- http://84.15.64.12:8001/login/
+            // -- http://84.15.64.12:8002/zipcode/
+            if (sb.charAt(sb.length()-1) == '/')
+                sb.deleteCharAt(sb.length()-1);
+
+            sb.append(':')
+                    .append(svc.getPort())
+                    .append('/')
+                    .append(svc.getName())
+                    .append('/');
+
+            Log.d(TAG, "Service URL: "+sb.toString());
+        }
+
+        sb.trimToSize();
+        return sb.toString();
+    }
+
+    private static String getSharedPrefValue(final Context context, final String key, final String...defValue) {
+        final SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (defValue == null || (defValue.length <= 0)) {
+            return preferences.getString(key, "");
+        }
+        return preferences.getString(key, defValue[0]);
     }
 }

@@ -15,15 +15,29 @@ public class GlobalConstants {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_SESSIONID = "sessionId";
 
+    public enum Services {
+        USER_LOGIN ("profile", "8001", "/login"),
+        UPCOMING_RESERVATION ("reservation", "8002", "/trips/upcoming"),
+        ALL_RESERVATION ("reservation", "8002", "/trips/all"),
+        SAVE_DUMMY_ZIPCODE ("reservation", "8002", "/zipcode");
 
-    // FINAL URL - Micro-Service Gateway
-    public static final String URL_GATEWAY = "http://18.188.102.146:8080/";
-
-    // TEMP URLs - for testing
-    public static final String URL_USER_LOGIN = "http://18.188.102.146:8001/";
-    public static final String URL_LIST_TRIPS = "http://18.188.102.146:8002/";
-    public static final String URL_SHOW_RESERVATIONS = "http://18.188.102.146:8002/";
-    public static final String URL_SAVE_DUMMY_ZIPCODE = "http://18.188.102.146:8002/";
-
+        private final String app;
+        private final String port;
+        private final String name;
+        Services(String app, String port, String name) {
+            this.app  = app;
+            this.port = port;
+            this.name = name;
+        }
+        public String getName() {
+            return name;
+        }
+        public String getPort() {
+            return port;
+        }
+        public String getApp() {
+            return app;
+        }
+    }
 
 }
