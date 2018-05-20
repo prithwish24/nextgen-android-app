@@ -23,9 +23,10 @@ import com.nextgen.carrental.app.service.RestParameter;
 import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.Utils;
 
+import org.springframework.core.ParameterizedTypeReference;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -48,14 +49,6 @@ public class FragmentShowReservation extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        /*ArrayList<Reservation> list = new ArrayList<Reservation>(3) {
-            {
-                add(new Reservation("5154353", "UPCOMING", "Compact", "St. Louis Int Airport", "St. Louis Int Airport", "Apr 24, 2018 - 9:00 PM", "Apr 26, 2018 - 9:00 AM"));
-                add(new Reservation("8765456", "COMPLETED","Standard", "Denver Int Airport", "Denver Int Airport", "Apr 18, 2018 - 8:00 PM", "Apr 22, 2018 - 8:00 AM"));
-                add(new Reservation("2456787", "COMPLETED","Premium", "Chicago Int Airport", "Chicago Int Airport", "Feb 5, 2018 - 12:00 PM", "Feb 14, 2018 - 12:00 PM"));
-            }
-        };*/
 
         final ListView listView = this.view.findViewById(R.id.show_reservation_list_view);
         final ReservationListAdapter listAdapter = new ReservationListAdapter(
@@ -90,29 +83,34 @@ public class FragmentShowReservation extends Fragment {
 
             RestParameter data = new RestParameter();
             //data.addQueryParam("username", params[0].getUserId());
-            data.addQueryParam("username", "jsmith");   // FIXME TEMP CODE
+            data.addQueryParam("username", "jsmith");
+
+            ParameterizedTypeReference<BaseResponse<List<BookingData>>> typeRef
+                    = new ParameterizedTypeReference<BaseResponse<List<BookingData>>> (){};
 
             try {
-                final BaseResponse<List> response = RestClient.INSTANCE.getRequest(serviceURL, List.class, data);
+                final BaseResponse<List<BookingData>> response = RestClient.INSTANCE.GET(serviceURL, data, typeRef);
+
                 if (response != null) {
                     if (response.isSuccess()) {
-                        //return response.getResponse();
+                        final List<BookingData> list = response.getResponse();
+                        return list;
 
                         // FIXME TEMP code till service change
-                        List<LinkedHashMap<String, String>> resList = response.getResponse();
-                        LinkedHashMap<String, String> lhMap = resList.get(0);
-
+                        /*List<LinkedHashMap<String, Object>> resList = response.getResponse();
                         ArrayList<BookingData> bookingDataList = new ArrayList<>(resList.size());
-                        BookingData bookingData = new BookingData();
-                        bookingData.confNum = lhMap.get("id");
-                        bookingData.carType = lhMap.get("carType");
-                        bookingData.pickupLoc = lhMap.get("pickupPoint");
-                        bookingData.returnLoc = lhMap.get("dropPoint");
-                        bookingData.pickupDateTime = Utils.fmtDateTime(lhMap.get("pickupDateTime"), Utils.LONG_DATE_TIME);
-                        bookingData.returnDateTime = Utils.fmtDateTime(lhMap.get("dropoffDateTime"), Utils.LONG_DATE_TIME);
-                        bookingDataList.add(bookingData);
 
-                        return bookingDataList;
+                        for (LinkedHashMap<String, Object> lhMap  : resList) {
+                            BookingData bookingData = new BookingData();
+                            bookingData.confNum = (String) lhMap.get("confNum");
+                            bookingData.carType = (String) lhMap.get("carType");
+                            bookingData.pickupLoc = (String) lhMap.get("pickupLoc");
+                            bookingData.returnLoc = (String) lhMap.get("returnLoc");
+                            bookingData.pickupDateTime = (Date) lhMap.get("pickupDateTime");
+                            bookingData.returnDateTime = (Date) lhMap.get("returnDateTime");
+                            bookingDataList.add(bookingData);
+                        }
+                        return bookingDataList;*/
 
                     } else {
                         Log.e(TAG, response.getError().toString());

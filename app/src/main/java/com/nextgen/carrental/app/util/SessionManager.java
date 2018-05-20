@@ -58,6 +58,11 @@ public class SessionManager {
         return sharedPreferences.getString(KEY_USERID, null);
     }
 
+    public String getLoggedInSessionID () {
+        return sharedPreferences.getString(KEY_SESSIONID, null);
+    }
+
+    @Deprecated
     public String getData(String key) {
         return sharedPreferences.getString(key, "");
     }

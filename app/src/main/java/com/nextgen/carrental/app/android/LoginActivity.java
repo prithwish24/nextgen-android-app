@@ -38,6 +38,8 @@ import com.nextgen.carrental.app.service.RestParameter;
 import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.Utils;
 
+import org.springframework.core.ParameterizedTypeReference;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -300,8 +302,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 RestParameter<UserDTO> parameter = new RestParameter<>();
                 parameter.addBody(dto);
 
+                ParameterizedTypeReference<BaseResponse<UserProfile>> typeRef
+                        = new ParameterizedTypeReference<BaseResponse<UserProfile>>(){};
+
                 try {
-                    response = RestClient.INSTANCE.postRequest(loginServiceURL, UserProfile.class, parameter);
+                    response = RestClient.INSTANCE.POST(loginServiceURL, parameter, typeRef);
                 } catch (Exception e) {
                     Log.e(TAG, "Login Service call failed!", e);
                 }
