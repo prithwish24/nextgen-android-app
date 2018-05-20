@@ -9,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
-import com.nextgen.carrental.app.model.Reservation;
+import com.nextgen.carrental.app.model.BookingData;
+import com.nextgen.carrental.app.model.CarClassEnum;
+import com.nextgen.carrental.app.util.Utils;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,24 +21,14 @@ import java.util.List;
  */
 
 public class ReservationListAdapter extends BaseAdapter {
+    public static final String TAG = ReservationListAdapter.class.getSimpleName();
 
-    //public static final String TAG = ReservationListAdapter.class.getSimpleName();
-    private static final HashMap <String, Integer> CAR_IMAGES = new HashMap <String, Integer> () {
-        {
-            put("COMPACT", R.drawable.ct_compact);
-            put("STANDARD", R.drawable.ct_standard);
-            put("PREMIUM", R.drawable.ct_premium);
-        }
-    };
+    private Context mContext;
+    private List<BookingData> mDataSource;
 
-    //private Context mContext;
-    private LayoutInflater mInflater;
-    private List<Reservation> mDataSource;
-
-    public ReservationListAdapter(Context mContext, List<Reservation> resList) {
-        //this.mContext = mContext;
+    public ReservationListAdapter(Context context, List<BookingData> resList) {
         this.mDataSource = resList;
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mContext = context;
     }
 
     @Override
@@ -46,7 +37,7 @@ public class ReservationListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public BookingData getItem(int position) {
         return mDataSource.get(position);
     }
 
@@ -60,6 +51,7 @@ public class ReservationListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.show_reservation_item, parent, false);
 
             holder = new ViewHolder();
@@ -73,22 +65,26 @@ public class ReservationListAdapter extends BaseAdapter {
             convertView.setTag(holder);
 
         } else {
-
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final Reservation res = (Reservation) getItem(position);
-        holder.statusTextView.setText(res.getStatus());
-        holder.carTypeTextView.setText(res.getCarType());
-        holder.pickUpTextView.setText(res.getPickUpPoint());
-        holder.pickUpTimeTextView.setText(res.getPickUpTime());
-        holder.returnTimeTextView.setText(res.getDropOffTime());
-        final Integer imgId = CAR_IMAGES.get(res.getCarType().toUpperCase());
-        if (imgId != null) {
-            holder.thumbnailImageView.setImageResource(imgId);
-        }
+        // Need to place logic for zero element
+
+        final BookingData data = getItem(position);
+        holder.statusTextView.setText(data.status);
+        holder.carTypeTextView.setText(data.carType);
+        holder.pickUpTextView.setText(data.pickupLoc);
+        holder.pickUpTimeTextView.setText(Utils.fmtTime(data.pickupDateTime, Utils.LONG_DATE_TIME));
+        holder.returnTimeTextView.setText(Utils.fmtTime(data.returnDateTime, Utils.LONG_DATE_TIME));
+        final CarClassEnum carClass = CarClassEnum.find(data.carType);
+        if (carClass != null)
+            holder.thumbnailImageView.setImageResource(carClass.getImgId());
 
         return convertView;
+    }
+
+    public void setItemList(List<BookingData> itemList) {
+        this.mDataSource = itemList;
     }
 
     private class ViewHolder {

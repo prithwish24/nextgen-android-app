@@ -28,6 +28,7 @@ import org.springframework.util.MultiValueMap;
  * @author Prithwish
  */
 
+@Deprecated
 public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfile>> {
     private static final String[] DUMMY_CREDENTIALS = new String[]{ "admin:admin" };
     private static final String TAG = UserLoginTask.class.getName();
@@ -45,20 +46,13 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
     @Override
     protected BaseResponse<UserProfile> doInBackground(Void... params) {
-        //final String loginServiceURL = "https://nextgen-gateway.herokuapp.com/ngapi/";
-        //final String loginServiceURL = "http://18.188.102.146:8001/login";
-        final String loginServiceURL = Utils.getServiceURL (
-                mActivity.getApplicationContext(),
-                GlobalConstants.Services.USER_LOGIN);
-
-
         BaseResponse<UserProfile> response = null;
 
         // Attempt 1 - using dev credentials
         for (String credential : DUMMY_CREDENTIALS) {
             String[] pieces = credential.split(":");
             if (pieces[0].equals(mUsername) && pieces[1].equals(mPassword)) {
-                UserProfile up = new UserProfile(mUsername+"@example.com", "Administrator");
+                UserProfile up = new UserProfile(mUsername+"@demoapp.com", "Administrator");
                 up.setUserId(mUsername);
                 response = new BaseResponse<>();
                 response.setSuccess(true);
@@ -68,6 +62,10 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
 
         // Attempt 2 - using external service
         if (response == null) {
+            final String loginServiceURL = Utils.getServiceURL (
+                    mActivity.getApplicationContext(),
+                    GlobalConstants.Services.USER_LOGIN);
+
             MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
             data.add("username", mUsername);
             data.add("password", mPassword);

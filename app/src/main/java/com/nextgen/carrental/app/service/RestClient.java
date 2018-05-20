@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nextgen.carrental.app.bo.BaseResponse;
-import com.nextgen.carrental.app.bo.ZipCodeResponse;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,8 +15,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -51,36 +50,57 @@ public enum RestClient {
         mapper = new ObjectMapper();
     }
 
-    public <T> BaseResponse<T> getRequest(String url, Class<T> clazz, Object... urlVariables) throws IOException {
+    @SuppressWarnings("unchecked")
+    public <T> BaseResponse<T> getRequest(String url, Class<T> clazz, RestParameter params) throws RestException {
         Log.d(TAG, "In RestServiceClient.getRequestForm ::");
-        BaseResponse br = makeGetRequest(url, urlVariables);
-        if (br.isSuccess()) {
-            String temp = mapper.writeValueAsString(br.getResponse());
-            T type = mapper.readValue(temp, clazz);
-            br.setResponse(type);
+        try {
+            BaseResponse<T> br = makeGetRequest(url, params);
+            if (br.isSuccess()) {
+                String temp = mapper.writeValueAsString(br.getResponse());
+                T type = mapper.readValue(temp, clazz);
+                br.setResponse(type);
+            }
+            return br;
+
+        }catch (Exception e) {
+            throw new RestException("GET service call failed !", e);
         }
-        return br;
     }
 
-    private BaseResponse makeGetRequest(String url, Object... urlVariables) {
+    private BaseResponse makeGetRequest(String url, RestParameter params) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML));
+
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (params != null && params.hasQueryParam())
+            builder.queryParams(params.getQueryParams());
+
+        if (params != null && params.hasPathParam())
+            builder.buildAndExpand(params.getPathParams());
+
         //requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<MultiValueMap> httpEntity = new HttpEntity<>(requestHeaders);
-        ResponseEntity<BaseResponse> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, BaseResponse.class, urlVariables);
+        ResponseEntity<BaseResponse> response = restTemplate.exchange(builder.toUriString(),
+                HttpMethod.GET, httpEntity, BaseResponse.class);
         return response.getBody();
     }
 
-    public <T> BaseResponse<T> postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws IOException {
+    @SuppressWarnings("unchecked")
+    public <T> BaseResponse<T> postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws RestException {
         Log.d(TAG, "In RestServiceClient.postRequestForm ::");
-        BaseResponse br = makeRequestWithFormData(url, formData, HttpMethod.POST);
-        if (br.isSuccess()) {
-            String temp = mapper.writeValueAsString(br.getResponse());
-            T type = mapper.readValue(temp, clazz);
-            br.setResponse(type);
+        try {
+            BaseResponse<T> br = makeRequestWithFormData(url, formData, HttpMethod.POST);
+            if (br.isSuccess()) {
+                String temp = mapper.writeValueAsString(br.getResponse());
+                T type = mapper.readValue(temp, clazz);
+                br.setResponse(type);
+            }
+            return br;
+
+        } catch (Exception e) {
+            throw new RestException("POST service call failed !", e);
         }
-        return br;
     }
 
     private BaseResponse makeRequestWithFormData(String url, MultiValueMap<String, String> formData, HttpMethod method) {

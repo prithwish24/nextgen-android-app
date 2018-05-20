@@ -1,29 +1,46 @@
 package com.nextgen.carrental.app.android;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
-import com.nextgen.carrental.app.android.tasks.UserLoginTask;
+import com.nextgen.carrental.app.bo.BaseResponse;
+import com.nextgen.carrental.app.bo.UserProfile;
+import com.nextgen.carrental.app.constants.GlobalConstants;
+import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.util.SessionManager;
+import com.nextgen.carrental.app.util.Utils;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +54,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     // UI references.
     private EditText mUsernameView;
     private EditText mPasswordView;
+    private CheckBox mRememberChkBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +80,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 return false;
             }
         });
+
+        mRememberChkBox = findViewById(R.id.remember_me_checkbox);
 
         Button mEmailSignInButton = findViewById(R.id.user_login_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -127,8 +147,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String username = mUsernameView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        final boolean isRememberMe = mRememberChkBox.isChecked();
 
         boolean cancel = false;
         View focusView = null;
@@ -159,8 +180,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             focusView.requestFocus();
 
         } else {
-            UserLoginTask mAuthTask = new UserLoginTask(username, password, this);
-            mAuthTask.execute();
+            //UserLoginTask mAuthTask = new UserLoginTask(username, password, this);
+            //mAuthTask.execute();
+            new LoginTask(this).execute (new UserDTO(username, password, isRememberMe));
         }
 
     }
@@ -225,6 +247,124 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         };
 
         int ADDRESS = 0;
+    }
+
+    private class UserDTO {
+        String mUsername;
+        String mPassword;
+        boolean mRememberMe;
+        UserDTO(String mUsername, String mPassword, boolean mRememberMe) {
+            this.mUsername = mUsername;
+            this.mPassword = mPassword;
+            this.mRememberMe = mRememberMe;
+        }
+    }
+
+
+    private static class LoginTask extends AsyncTask<UserDTO, Void, BaseResponse<UserProfile>> {
+        private static final String[] DUMMY_CREDENTIALS = new String[]{ "admin:admin" };
+        private static final String TAG = LoginTask.class.getName();
+
+        private WeakReference<Activity> activityRef;
+
+        LoginTask(Activity mActivity) {
+            this.activityRef = new WeakReference<Activity>(mActivity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+        @Override
+        protected BaseResponse<UserProfile> doInBackground(UserDTO... userDTOS) {
+            BaseResponse<UserProfile> response = null;
+            UserDTO dto = userDTOS[0];
+
+            // Attempt 1 - using dev credentials
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(dto.mUsername) && pieces[1].equals(dto.mPassword)) {
+                    UserProfile up = new UserProfile(dto.mUsername+"@demoapp.com", "Administrator");
+                    up.setUserId(dto.mUsername);
+                    response = new BaseResponse<>();
+                    response.setSuccess(true);
+                    response.setResponse(up);
+                }
+            }
+
+            // Attempt 2 - using external service
+            if (response == null) {
+                final String loginServiceURL = Utils.getServiceURL (
+                        activityRef.get().getApplicationContext(),
+                        GlobalConstants.Services.USER_LOGIN);
+
+                MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
+                data.add("username", dto.mUsername);
+                data.add("password", dto.mPassword);
+                try {
+                    response = RestClient.INSTANCE.postRequest(loginServiceURL, data, UserProfile.class);
+                } catch (Exception e) {
+                    Log.e(TAG, "Login Service call failed!", e);
+                }
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(BaseResponse<UserProfile> response) {
+            boolean success = (response != null) && response.isSuccess();
+            if (success) {
+                UserProfile profile = response.getResponse();
+                SessionManager sessionManager = new SessionManager(activityRef.get().getApplicationContext());
+                sessionManager.createLoginSession(profile,response.getSessionId());
+
+                showProgress(false);
+
+                // open home mActivity
+                Intent intent = new Intent(activityRef.get().getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //???
+                activityRef.get().getApplicationContext().startActivity(intent);
+
+                activityRef.get().finish();
+
+            } else {
+                final TextView mErrorMessage = activityRef.get().findViewById(R.id.login_error_message);
+                final String str = activityRef.get().getString(R.string.error_incorrect_login_attempt);
+                mErrorMessage.setText(str);
+                showProgress(false);
+            }
+
+        }
+
+        private void showProgress(final boolean show) {
+            final Activity mActivity = activityRef.get();
+            final Resources resources = mActivity.getApplicationContext().getResources();
+            int shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime);
+
+            final View mLoginFormView = mActivity.findViewById(R.id.login_form);
+            final View mProgressView = mActivity.findViewById(R.id.login_progress);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        }
     }
 
 }

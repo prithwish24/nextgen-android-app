@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServiceError {
 
-	@JsonProperty("success")
+	@JsonProperty("code")
 	private String code;
 	@JsonProperty("type")
 	private String type;

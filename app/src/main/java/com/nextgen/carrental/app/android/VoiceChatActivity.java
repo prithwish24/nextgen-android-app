@@ -29,11 +29,11 @@ import com.google.gson.JsonElement;
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.bo.BaseResponse;
-import com.nextgen.carrental.app.bo.ZipCodeResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.ChatMessage;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.service.RestParameter;
 import com.nextgen.carrental.app.util.AIResponseTransformer;
 import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
@@ -437,8 +437,11 @@ public class VoiceChatActivity extends BaseActivity
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
                 try {
+                    final RestParameter rp = new RestParameter();
+                    rp.addQueryParam("zipcode", "63001");
+                    rp.addPathParam("sessionId", sessionId);
                     BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, BaseResponse.class, sessionId, "63001");
+                            INITIAL_URL, BaseResponse.class, rp);
                     Log.i(TAG, resp.toString());
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);
