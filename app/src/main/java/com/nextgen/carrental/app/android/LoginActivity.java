@@ -34,11 +34,9 @@ import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.UserProfile;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.service.RestParameter;
 import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.Utils;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -250,16 +248,15 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     }
 
     private class UserDTO {
-        String mUsername;
-        String mPassword;
-        boolean mRememberMe;
-        UserDTO(String mUsername, String mPassword, boolean mRememberMe) {
-            this.mUsername = mUsername;
-            this.mPassword = mPassword;
-            this.mRememberMe = mRememberMe;
+        String username;
+        String password;
+        boolean rememberMe;
+        UserDTO(String username, String password, boolean rememberMe) {
+            this.username = username;
+            this.password = password;
+            this.rememberMe = rememberMe;
         }
     }
-
 
     private static class LoginTask extends AsyncTask<UserDTO, Void, BaseResponse<UserProfile>> {
         private static final String[] DUMMY_CREDENTIALS = new String[]{ "admin:admin" };
@@ -285,9 +282,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Attempt 1 - using dev credentials
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
-                if (pieces[0].equals(dto.mUsername) && pieces[1].equals(dto.mPassword)) {
-                    UserProfile up = new UserProfile(dto.mUsername+"@demoapp.com", "Administrator");
-                    up.setUserId(dto.mUsername);
+                if (pieces[0].equals(dto.username) && pieces[1].equals(dto.password)) {
+                    UserProfile up = new UserProfile(dto.username +"@demoapp.com", "Administrator");
+                    up.setUsername(dto.username);
                     response = new BaseResponse<>();
                     response.setSuccess(true);
                     response.setResponse(up);
@@ -300,11 +297,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         activityRef.get().getApplicationContext(),
                         GlobalConstants.Services.USER_LOGIN);
 
-                MultiValueMap<String, String> data = new LinkedMultiValueMap<>(2);
-                data.add("username", dto.mUsername);
-                data.add("password", dto.mPassword);
+                RestParameter<UserDTO> parameter = new RestParameter<>();
+                parameter.addBody(dto);
+
                 try {
-                    response = RestClient.INSTANCE.postRequest(loginServiceURL, data, UserProfile.class);
+                    response = RestClient.INSTANCE.postRequest(loginServiceURL, UserProfile.class, parameter);
                 } catch (Exception e) {
                     Log.e(TAG, "Login Service call failed!", e);
                 }
@@ -319,7 +316,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             if (success) {
                 UserProfile profile = response.getResponse();
                 SessionManager sessionManager = new SessionManager(activityRef.get().getApplicationContext());
-                sessionManager.createLoginSession(profile,response.getSessionId());
+                sessionManager.createLoginSession(profile, response.getSessionId());
 
                 showProgress(false);
 

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,13 +14,7 @@ import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.android.MainActivity;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.bo.UserProfile;
-import com.nextgen.carrental.app.constants.GlobalConstants;
-import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.util.SessionManager;
-import com.nextgen.carrental.app.util.Utils;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 /**
  * User Login Task
@@ -53,7 +46,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             String[] pieces = credential.split(":");
             if (pieces[0].equals(mUsername) && pieces[1].equals(mPassword)) {
                 UserProfile up = new UserProfile(mUsername+"@demoapp.com", "Administrator");
-                up.setUserId(mUsername);
+                up.setUsername(mUsername);
                 response = new BaseResponse<>();
                 response.setSuccess(true);
                 response.setResponse(up);
@@ -61,7 +54,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
         }
 
         // Attempt 2 - using external service
-        if (response == null) {
+        /*if (response == null) {
             final String loginServiceURL = Utils.getServiceURL (
                     mActivity.getApplicationContext(),
                     GlobalConstants.Services.USER_LOGIN);
@@ -74,7 +67,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, BaseResponse<UserProfil
             } catch (Exception e) {
                 Log.e(TAG, "Login Service call failed!", e);
             }
-        }
+        }*/
 
         return response;
     }

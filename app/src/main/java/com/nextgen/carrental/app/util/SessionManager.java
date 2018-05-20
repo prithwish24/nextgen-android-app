@@ -1,11 +1,5 @@
 package com.nextgen.carrental.app.util;
 
-import static com.nextgen.carrental.app.constants.GlobalConstants.SHARED_PREF_NAME;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_NAME;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_EMAIL;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_USERID;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_SESSIONID;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +7,12 @@ import android.content.SharedPreferences;
 import com.nextgen.carrental.app.android.LoginActivity;
 import com.nextgen.carrental.app.bo.UserProfile;
 import com.nextgen.carrental.app.model.User;
+
+import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_EMAIL;
+import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_NAME;
+import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_SESSIONID;
+import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_USERID;
+import static com.nextgen.carrental.app.constants.GlobalConstants.SHARED_PREF_NAME;
 
 /**
  * Session Manager
@@ -41,7 +41,7 @@ public class SessionManager {
         editor.putBoolean(IS_LOGGED_IN, true);
         editor.putString(KEY_NAME, userProfile.getFullName());
         editor.putString(KEY_EMAIL, userProfile.getEmailId());
-        editor.putString(KEY_USERID, userProfile.getUserId());
+        editor.putString(KEY_USERID, userProfile.getUsername());
         editor.putString(KEY_SESSIONID, sessionId);
         editor.commit();
     }

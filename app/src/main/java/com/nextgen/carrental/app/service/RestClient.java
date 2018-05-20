@@ -67,7 +67,7 @@ public enum RestClient {
         }
     }
 
-    private BaseResponse makeGetRequest(String url, RestParameter params) {
+    private BaseResponse makeGetRequest(String url, RestParameter<?> params) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML));
@@ -87,10 +87,10 @@ public enum RestClient {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> BaseResponse<T> postRequest(String url, MultiValueMap<String, String> formData, Class<T> clazz) throws RestException {
+    public <T, R> BaseResponse<T> postRequest(String url, Class<T> clazz, RestParameter<R> params) throws RestException {
         Log.d(TAG, "In RestServiceClient.postRequestForm ::");
         try {
-            BaseResponse<T> br = makeRequestWithFormData(url, formData, HttpMethod.POST);
+            BaseResponse<T> br = makeRequestWithFormData(url, params, HttpMethod.POST);
             if (br.isSuccess()) {
                 String temp = mapper.writeValueAsString(br.getResponse());
                 T type = mapper.readValue(temp, clazz);
@@ -103,12 +103,20 @@ public enum RestClient {
         }
     }
 
-    private BaseResponse makeRequestWithFormData(String url, MultiValueMap<String, String> formData, HttpMethod method) {
+    private <R> BaseResponse makeRequestWithFormData(String url, RestParameter<R> params, HttpMethod method) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
         //requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<MultiValueMap> httpEntity = new HttpEntity<MultiValueMap>(formData, requestHeaders);
+
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (params == null || params.getRequestBody() == null)
+            Log.w(TAG, "!! Calling post method with empty body !!");
+
+        if (params != null && params.hasPathParam())
+            builder.buildAndExpand(params.getPathParams());
+
+        HttpEntity<R> httpEntity = new HttpEntity<>(params.getRequestBody(), requestHeaders);
         ResponseEntity<BaseResponse> response = restTemplate.exchange(url, method, httpEntity, BaseResponse.class);
         return response.getBody();
     }

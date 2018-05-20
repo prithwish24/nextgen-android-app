@@ -11,10 +11,11 @@ import java.util.Map;
  * @author Prithwish
  */
 
-public class RestParameter {
+public class RestParameter<T> {
 
     private Map <String, String> qp;
     private Map <String, String> pp;
+    private T rq;
 
     public RestParameter() {
         qp = new HashMap<>();
@@ -45,5 +46,13 @@ public class RestParameter {
 
     public boolean hasPathParam() {
         return !pp.isEmpty();
+    }
+
+    public void addBody(T t) {
+        this.rq = t;
+    }
+
+    public T getRequestBody() {
+        return rq;
     }
 }

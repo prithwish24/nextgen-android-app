@@ -27,7 +27,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="http://18.188.102.146:8002/"
+        android:defaultValue="http://18.188.102.146"
         android:inputType="textCapWords"
         android:key="app_service_url"
         android:maxLines="1"
