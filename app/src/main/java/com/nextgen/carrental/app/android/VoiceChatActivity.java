@@ -266,7 +266,7 @@ public class VoiceChatActivity extends BaseActivity
                                     .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
                                     .addToBackStack(null)
                                     .commit();
-                            
+
                         } else if (TextUtils.equals(step, "confirmation")) {
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
