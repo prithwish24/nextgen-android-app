@@ -16,24 +16,22 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.nextgen.carrental.app.R;
-import com.nextgen.carrental.app.adapter.ReservationListAdapter;
 import com.nextgen.carrental.app.adapter.TripsListAdapter;
 import com.nextgen.carrental.app.bo.BaseResponse;
-import com.nextgen.carrental.app.bo.TripsResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.service.RestException;
 import com.nextgen.carrental.app.service.RestParameter;
+import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.Utils;
 
-import java.io.IOException;
+import org.springframework.core.ParameterizedTypeReference;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import ai.api.model.AIRequest;
 
 
 /**
@@ -73,8 +71,7 @@ public class FragmentHome extends Fragment {
         new GetMyTrips(getActivity().getApplicationContext(),view,adapter).execute();
     }
 
-    private class GetMyTrips extends AsyncTask<Void, Void, BaseResponse<BookingData[]>> {
-
+    private class GetMyTrips extends AsyncTask<Void, Void, List<BookingData>> {
         private WeakReference<Context> contextRef;
         private WeakReference<View> viewRef;
         private TripsListAdapter adapter;
@@ -85,30 +82,40 @@ public class FragmentHome extends Fragment {
             this.adapter = adapter;
         }
         @Override
-        protected BaseResponse<BookingData[]> doInBackground(Void... requests) {
-            BaseResponse<BookingData[]> response = null;
-            SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences(GlobalConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            String sessionId = pref.getString(GlobalConstants.KEY_SESSIONID,"");
-            String userId = pref.getString(GlobalConstants.KEY_USERID,"");
+        protected List<BookingData> doInBackground(Void... requests) {
+            final SessionManager sessionManager = new SessionManager(contextRef.get());
+            final String sessionID = sessionManager.getLoggedInSessionID();
+            final String username  = sessionManager.getLoggedInUserID();
+
             try {
+                final String serviceURL = Utils.getServiceURL(contextRef.get(),
+                        GlobalConstants.Services.UPCOMING_RESERVATION);
+
                 RestParameter data = new RestParameter();
-                data.addQueryParam("sessionId", sessionId);
-                data.addQueryParam("username", userId);
-                response = RestClient.INSTANCE.getRequest(
-                        Utils.getServiceURL(contextRef.get(),
-                                GlobalConstants.Services.UPCOMING_RESERVATION), BookingData[].class, data);
+                data.addQueryParam("sessionId", sessionID);
+                data.addQueryParam("username", username);
+
+                ParameterizedTypeReference<BaseResponse<List<BookingData>>> typeRef
+                        = new ParameterizedTypeReference<BaseResponse<List<BookingData>>>() {};
+
+                final BaseResponse<List<BookingData>> response = RestClient.INSTANCE.GET(serviceURL, data, typeRef);
+
+                if (response != null) {
+                    if (response.isSuccess())
+                        return response.getResponse();
+
+                    Log.e(TAG, response.getError().toString());
+                }
+
             } catch (RestException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
-            return response;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(BaseResponse<BookingData[]> response) {
-            BookingData[] trips = response.getResponse();
-            List<BookingData> bookingDataList = Arrays.asList(trips);
+        protected void onPostExecute(final List<BookingData> bookingDataList) {
             if (bookingDataList == null || bookingDataList.size() == 0) {
-
                 final View viewMessage = viewRef.get().findViewById(R.id.no_trip_list_view);
                 viewMessage.setVisibility(View.VISIBLE);
 
@@ -119,7 +126,6 @@ public class FragmentHome extends Fragment {
                 adapter.setItemList(bookingDataList);
                 adapter.notifyDataSetChanged();
             }
-
         }
     }
 

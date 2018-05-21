@@ -8,12 +8,7 @@ package com.nextgen.carrental.app.constants;
 
 public class GlobalConstants {
 
-    public static final String SHARED_PREF_NAME = "CarRentalPref";
-
-    public static final String KEY_NAME = "name";
-    public static final String KEY_USERID = "userId";
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_SESSIONID = "sessionId";
+    public static final String AGENT_NAME = "Agent Emily";
 
     public enum Services {
         USER_LOGIN ("profile", "8001", "/login"),
@@ -38,6 +33,14 @@ public class GlobalConstants {
         public String getApp() {
             return app;
         }
+    }
+
+    public class AppSettings {
+        public static final String switchZipCodeMocking = "enable_zip_code_mocking";
+        public static final String MockZipCode = "mock_zip_code";
+        public static final String Environment = "app_environment";
+        public static final String ServiceUrl = "app_service_url";
+        public static final String DialogFlowClientToken = "dialog_flow_client_token";
     }
 
 }

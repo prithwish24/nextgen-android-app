@@ -299,14 +299,15 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         activityRef.get().getApplicationContext(),
                         GlobalConstants.Services.USER_LOGIN);
 
-                RestParameter<UserDTO> parameter = new RestParameter<>();
-                parameter.addBody(dto);
-
-                ParameterizedTypeReference<BaseResponse<UserProfile>> typeRef
-                        = new ParameterizedTypeReference<BaseResponse<UserProfile>>(){};
-
                 try {
+                    RestParameter<UserDTO> parameter = new RestParameter<>();
+                    parameter.addBody(dto);
+
+                    ParameterizedTypeReference<BaseResponse<UserProfile>> typeRef
+                            = new ParameterizedTypeReference<BaseResponse<UserProfile>>(){};
+
                     response = RestClient.INSTANCE.POST(loginServiceURL, parameter, typeRef);
+
                 } catch (Exception e) {
                     Log.e(TAG, "Login Service call failed!", e);
                 }

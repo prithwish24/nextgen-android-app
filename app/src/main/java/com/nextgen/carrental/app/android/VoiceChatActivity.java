@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -67,7 +65,7 @@ public class VoiceChatActivity extends BaseActivity
         PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
 
-    public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
+    //public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
     final String START_SPEECH = "Hi";
 
     private PermissionManager permissionManager;
@@ -75,7 +73,7 @@ public class VoiceChatActivity extends BaseActivity
     private Handler handler;
     private FragmentVoiceChat fragmentVoiceChat;
     private FragmentConfirmation fragmentConfirmation;
-    public String sessionId;
+    public Address currentGpsAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +86,9 @@ public class VoiceChatActivity extends BaseActivity
         }
         setContentView(R.layout.activity_voice_chat);
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(GlobalConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        sessionId = pref.getString(GlobalConstants.KEY_SESSIONID,"");
-        Utils.getPreferenceValue(getApplicationContext(), GlobalConstants.KEY_SESSIONID);
-
+        //SharedPreferences pref = getApplicationContext().getSharedPreferences(SessionManager.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        //sessionId = pref.getString(SessionManager.SESSION_KEY_ID,"");
+        //Utils.getSettingsValue(getApplicationContext(), SessionManager.SESSION_KEY_ID);
 
         this.aiButton = findViewById(R.id.aiMicButton);
         findViewById(R.id.close_button).setOnClickListener(this);
@@ -138,7 +135,11 @@ public class VoiceChatActivity extends BaseActivity
             if (gpsTracker.isGPSServiceOn() && (location != null)) {
                 curLoc = gpsTracker.getAddress(location);
                 if (curLoc != null) {
-                    String tmp = "Location Tracked: " + curLoc.getLocality() + "," + curLoc.getPostalCode() + "," + curLoc.getCountryCode();
+                    this.currentGpsAddress = curLoc;
+                    StringBuilder tmp = new StringBuilder("Location Tracked: ")
+                            .append(curLoc.getLocality()).append(",")
+                            .append(curLoc.getPostalCode()).append(",")
+                            .append(curLoc.getCountryCode());
                     Toast.makeText(getApplicationContext(), tmp, Toast.LENGTH_LONG).show();
                 }
             } else {
@@ -149,10 +150,13 @@ public class VoiceChatActivity extends BaseActivity
         }
 
         if (permissionManager.hasPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)) {
-            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            final String googleDialogFlowAccessToken = preferences.getString("dialogflow_agent_token", Config.ACCESS_TOKEN2);
-            //Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
-            initAIAgent(googleDialogFlowAccessToken);
+            String dialogFlowAccessToken = Utils.getSettingsValue(getApplicationContext(),
+                    GlobalConstants.AppSettings.DialogFlowClientToken);
+
+            if (dialogFlowAccessToken == null || dialogFlowAccessToken.isEmpty())
+                dialogFlowAccessToken = Config.ACCESS_TOKEN2;
+
+            initAIAgent(dialogFlowAccessToken);
         }
 
     }
@@ -178,7 +182,7 @@ public class VoiceChatActivity extends BaseActivity
         StrictMode.setThreadPolicy(policy);
         AIRequest firstRequest = new AIRequest();
         firstRequest.setQuery(START_SPEECH);
-        new GetUserSessionIdTask(getApplicationContext()).execute(firstRequest);
+        new GetUserSessionIdTask(getApplicationContext(), currentGpsAddress).execute();
     }
 
     @Override
@@ -340,7 +344,7 @@ public class VoiceChatActivity extends BaseActivity
     private void addBoTResponseToChatRoster(String responseText) {
         if (this.fragmentVoiceChat != null) {
             if (responseText != null) {
-                fragmentVoiceChat.addMessage(new ChatMessage(responseText, "Agent Emily"));
+                fragmentVoiceChat.addMessage(new ChatMessage(responseText, GlobalConstants.AGENT_NAME));
             }
         }
     }
@@ -421,25 +425,30 @@ public class VoiceChatActivity extends BaseActivity
         }
     }
 
-    private class GetUserSessionIdTask extends AsyncTask<AIRequest, Void, AIResponse> {
+    private class GetUserSessionIdTask extends AsyncTask<Void, Void, AIResponse> {
         private WeakReference<Context> contextRef;
+        private WeakReference<Address> addressRef;
 
-        GetUserSessionIdTask(Context context) {
+        GetUserSessionIdTask(Context context, Address address) {
             this.contextRef = new WeakReference<Context>(context);
+            this.addressRef = new WeakReference<Address>(address);
         }
 
         @Override
-        protected AIResponse doInBackground(AIRequest... requests) {
+        protected AIResponse doInBackground(Void... requests) {
             try {
-                final AIContext aiContext = new AIContext("CarRental");
+                final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
                 final Map<String, String> maps = new HashMap<>(1);
-                maps.put(GlobalConstants.KEY_SESSIONID, sessionId);
+                maps.put(SessionManager.SESSION_KEY_ID, sessionID);
+
+                final AIContext aiContext = new AIContext("CarRental");
                 aiContext.setParameters(maps);
-                final List<AIContext> contexts = Collections.singletonList(aiContext);
-                final RequestExtras requestExtras = new RequestExtras(contexts, null);
+                final RequestExtras requestExtras = new RequestExtras(Collections.singletonList(aiContext), null);
+
                 aiButton.getAIService().resetContexts();
                 final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH, requestExtras);
                 return response;
+
             } catch (AIServiceException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
@@ -450,13 +459,20 @@ public class VoiceChatActivity extends BaseActivity
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
                 try {
-                    final String svcURL = Utils.getServiceURL(contextRef.get(), GlobalConstants.Services.SAVE_DUMMY_ZIPCODE);
-                    //String zipCode = Utils.getPreferenceValue(contextRef.get(), "mock_zip_code");
-                    //Utils.get(contextRef.get(), GlobalConstants.KEY_SESSIONID);
+                    final String svcURL = Utils.getServiceURL(contextRef.get(),
+                            GlobalConstants.Services.SAVE_DUMMY_ZIPCODE);
                     final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
 
+                    String zipCode;
+                    if (Utils.isPreferenceSwitchedOn(contextRef.get(), GlobalConstants.AppSettings.switchZipCodeMocking)) {
+                        zipCode = Utils.getSettingsValue(contextRef.get(), GlobalConstants.AppSettings.MockZipCode);
+                    } else {
+                        Address address = addressRef.get();
+                        zipCode = address.getPostalCode();
+                    }
+
                     final RestParameter params = new RestParameter();
-                    params.addQueryParam("zipcode", "63001");
+                    params.addQueryParam("zipcode", zipCode);
                     params.addPathParam("sessionId", sessionID);
 
                     ParameterizedTypeReference<BaseResponse<String>> typeRef

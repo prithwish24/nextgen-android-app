@@ -85,6 +85,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="your speech..."
+            android:textSize="16sp"
             android:maxLines="6" />
 
         <ai.api.ui.AIButton

@@ -8,22 +8,21 @@ import com.nextgen.carrental.app.android.LoginActivity;
 import com.nextgen.carrental.app.bo.UserProfile;
 import com.nextgen.carrental.app.model.User;
 
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_EMAIL;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_NAME;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_SESSIONID;
-import static com.nextgen.carrental.app.constants.GlobalConstants.KEY_USERID;
-import static com.nextgen.carrental.app.constants.GlobalConstants.SHARED_PREF_NAME;
-
 /**
  * Session Manager
  * @author Prithwish
  */
 
 public class SessionManager {
+    public static final String SESSION_KEY_NAME = "name";
+    public static final String SESSION_KEY_USERID = "userId";
+    public static final String SESSION_KEY_EMAIL = "email";
+    public static final String SESSION_KEY_ID = "sessionId";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Context context;
+    public static final String SHARED_PREF_NAME = "CarRentalPref";
     private static final String IS_LOGGED_IN = "isUserLoggedIn";
 
     public SessionManager(Context context) {
@@ -39,27 +38,27 @@ public class SessionManager {
 
     public void createLoginSession(UserProfile userProfile,String sessionId) {
         editor.putBoolean(IS_LOGGED_IN, true);
-        editor.putString(KEY_NAME, userProfile.getFullName());
-        editor.putString(KEY_EMAIL, userProfile.getEmailId());
-        editor.putString(KEY_USERID, userProfile.getUsername());
-        editor.putString(KEY_SESSIONID, sessionId);
+        editor.putString(SESSION_KEY_NAME, userProfile.getFullName());
+        editor.putString(SESSION_KEY_EMAIL, userProfile.getEmailId());
+        editor.putString(SESSION_KEY_USERID, userProfile.getUsername());
+        editor.putString(SESSION_KEY_ID, sessionId);
         editor.commit();
     }
 
     public User getLoggedInUser(){
         User user = new User();
-        user.setUserId(sharedPreferences.getString(KEY_USERID, ""));
-        user.setName(sharedPreferences.getString(KEY_NAME, ""));
-        user.setEmail(sharedPreferences.getString(KEY_EMAIL, ""));
+        user.setUserId(sharedPreferences.getString(SESSION_KEY_USERID, ""));
+        user.setName(sharedPreferences.getString(SESSION_KEY_NAME, ""));
+        user.setEmail(sharedPreferences.getString(SESSION_KEY_EMAIL, ""));
         return user;
     }
 
     public String getLoggedInUserID() {
-        return sharedPreferences.getString(KEY_USERID, null);
+        return sharedPreferences.getString(SESSION_KEY_USERID, null);
     }
 
     public String getLoggedInSessionID () {
-        return sharedPreferences.getString(KEY_SESSIONID, null);
+        return sharedPreferences.getString(SESSION_KEY_ID, null);
     }
 
     @Deprecated

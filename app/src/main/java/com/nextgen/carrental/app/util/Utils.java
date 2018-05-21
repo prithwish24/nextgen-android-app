@@ -51,8 +51,8 @@ public class Utils {
     }
 
     public static String getServiceURL(@NonNull Context context, @NonNull final GlobalConstants.Services svc) {
-        final String environment = getPreferenceValue(context, "app_environment");
-        final String serviceDomain = getPreferenceValue(context, "app_service_url");
+        final String environment = getSettingsValue(context, "app_environment");
+        final String serviceDomain = getSettingsValue(context, "app_service_url");
         final StringBuilder sb = new StringBuilder(serviceDomain);
 
         // Prod URL can have domain name or ip address with
@@ -88,7 +88,7 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String getPreferenceValue(final Context context, final String key, String...defValue) {
+    public static String getSettingsValue(final Context context, final String key, String...defValue) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if ((defValue == null) || (defValue.length <= 0)) {
             return preferences.getString(key, "");
