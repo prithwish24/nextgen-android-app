@@ -51,7 +51,7 @@ public class TripsListAdapter extends BaseAdapter {
         TripsListAdapter.ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.fragment_home, parent, false);
+            convertView = mInflater.inflate(R.layout.listview_show_trips, parent, false);
 
             holder = new TripsListAdapter.ViewHolder();
             holder.thumbnailImageView = convertView.findViewById(R.id.car_image_home);
