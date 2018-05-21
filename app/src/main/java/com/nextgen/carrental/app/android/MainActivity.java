@@ -48,10 +48,10 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        getFragmentManager().beginTransaction()
-//                .replace(R.id.content_frame, new FragmentHome())
-//                .addToBackStack(null)
-//                .commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new FragmentHome())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
