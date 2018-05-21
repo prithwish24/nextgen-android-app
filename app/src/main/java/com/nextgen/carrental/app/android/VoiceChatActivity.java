@@ -27,6 +27,7 @@ import com.google.gson.JsonElement;
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.bo.BaseResponse;
+import com.nextgen.carrental.app.bo.ZipCodeResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.ChatMessage;
@@ -430,8 +431,8 @@ public class VoiceChatActivity extends BaseActivity
         private WeakReference<Address> addressRef;
 
         GetUserSessionIdTask(Context context, Address address) {
-            this.contextRef = new WeakReference<Context>(context);
-            this.addressRef = new WeakReference<Address>(address);
+            this.contextRef = new WeakReference<>(context);
+            this.addressRef = new WeakReference<>(address);
         }
 
         @Override
@@ -475,10 +476,10 @@ public class VoiceChatActivity extends BaseActivity
                     params.addQueryParam("zipcode", zipCode);
                     params.addPathParam("sessionId", sessionID);
 
-                    ParameterizedTypeReference<BaseResponse<String>> typeRef
-                            = new ParameterizedTypeReference<BaseResponse<String>>() {};
+                    ParameterizedTypeReference<BaseResponse<ZipCodeResponse>> typeRef
+                            = new ParameterizedTypeReference<BaseResponse<ZipCodeResponse>>() {};
 
-                    BaseResponse<String> resp = RestClient.INSTANCE.GET(svcURL, params, typeRef);
+                    BaseResponse<ZipCodeResponse> resp = RestClient.INSTANCE.GET(svcURL, params, typeRef);
                     Log.i(TAG, resp.toString());
 
                 } catch (Exception e) {

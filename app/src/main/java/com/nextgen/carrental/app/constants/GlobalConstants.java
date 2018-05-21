@@ -12,7 +12,7 @@ public class GlobalConstants {
 
     public enum Services {
         USER_LOGIN ("profile", "8001", "/login"),
-        UPCOMING_RESERVATION ("reservation", "8002", "/trips/upcoming"),
+        UPCOMING_RESERVATION ("reservation", "8002", "/trips/upcoming/{sessionId}"),
         ALL_RESERVATION ("reservation", "8002", "/rentals"),
         SAVE_DUMMY_ZIPCODE ("reservation", "8002", "/zipcode/{sessionId}");
 
