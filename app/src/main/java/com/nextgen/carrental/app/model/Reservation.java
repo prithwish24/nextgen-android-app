@@ -5,6 +5,7 @@ package com.nextgen.carrental.app.model;
  * @author Prithwish
  */
 
+@Deprecated
 public class Reservation {
     private String number;
     private String status;

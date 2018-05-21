@@ -29,16 +29,21 @@ import com.google.gson.JsonElement;
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.Config;
 import com.nextgen.carrental.app.bo.BaseResponse;
-import com.nextgen.carrental.app.bo.ZipCodeResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.ChatMessage;
 import com.nextgen.carrental.app.service.RestClient;
+import com.nextgen.carrental.app.service.RestParameter;
 import com.nextgen.carrental.app.util.AIResponseTransformer;
 import com.nextgen.carrental.app.util.GPSTracker;
 import com.nextgen.carrental.app.util.PermissionManager;
+import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.TTS;
+import com.nextgen.carrental.app.util.Utils;
 
+import org.springframework.core.ParameterizedTypeReference;
+
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +90,8 @@ public class VoiceChatActivity extends BaseActivity
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(GlobalConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         sessionId = pref.getString(GlobalConstants.KEY_SESSIONID,"");
+        Utils.getPreferenceValue(getApplicationContext(), GlobalConstants.KEY_SESSIONID);
+
 
         this.aiButton = findViewById(R.id.aiMicButton);
         findViewById(R.id.close_button).setOnClickListener(this);
@@ -171,7 +178,7 @@ public class VoiceChatActivity extends BaseActivity
         StrictMode.setThreadPolicy(policy);
         AIRequest firstRequest = new AIRequest();
         firstRequest.setQuery(START_SPEECH);
-        new GetUserSessionIdTask().execute(firstRequest);
+        new GetUserSessionIdTask(getApplicationContext()).execute(firstRequest);
     }
 
     @Override
@@ -415,18 +422,23 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private class GetUserSessionIdTask extends AsyncTask<AIRequest, Void, AIResponse> {
+        private WeakReference<Context> contextRef;
+
+        GetUserSessionIdTask(Context context) {
+            this.contextRef = new WeakReference<Context>(context);
+        }
+
         @Override
         protected AIResponse doInBackground(AIRequest... requests) {
             try {
                 final AIContext aiContext = new AIContext("CarRental");
                 final Map<String, String> maps = new HashMap<>(1);
-                maps.put(GlobalConstants.KEY_SESSIONID,sessionId);
-                //maps.put(GlobalConstants.KEY_SESSIONID,"dummy testing 123");
+                maps.put(GlobalConstants.KEY_SESSIONID, sessionId);
                 aiContext.setParameters(maps);
                 final List<AIContext> contexts = Collections.singletonList(aiContext);
                 final RequestExtras requestExtras = new RequestExtras(contexts, null);
                 aiButton.getAIService().resetContexts();
-                final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH,requestExtras);
+                final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH, requestExtras);
                 return response;
             } catch (AIServiceException e) {
                 Log.e(TAG, e.getMessage(), e);
@@ -438,9 +450,21 @@ public class VoiceChatActivity extends BaseActivity
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
                 try {
-                    BaseResponse resp = RestClient.INSTANCE.getRequest(
-                            INITIAL_URL, BaseResponse.class, sessionId, "63001");
+                    final String svcURL = Utils.getServiceURL(contextRef.get(), GlobalConstants.Services.SAVE_DUMMY_ZIPCODE);
+                    //String zipCode = Utils.getPreferenceValue(contextRef.get(), "mock_zip_code");
+                    //Utils.get(contextRef.get(), GlobalConstants.KEY_SESSIONID);
+                    final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
+
+                    final RestParameter params = new RestParameter();
+                    params.addQueryParam("zipcode", "63001");
+                    params.addPathParam("sessionId", sessionID);
+
+                    ParameterizedTypeReference<BaseResponse<String>> typeRef
+                            = new ParameterizedTypeReference<BaseResponse<String>>() {};
+
+                    BaseResponse<String> resp = RestClient.INSTANCE.GET(svcURL, params, typeRef);
                     Log.i(TAG, resp.toString());
+
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);
                 }

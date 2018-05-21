@@ -1,6 +1,12 @@
 package com.nextgen.carrental.app.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.nextgen.carrental.app.constants.GlobalConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,4 +49,60 @@ public class Utils {
         }
         return null;
     }
+
+    public static String getServiceURL(@NonNull Context context, @NonNull final GlobalConstants.Services svc) {
+        final String environment = getPreferenceValue(context, "app_environment");
+        final String serviceDomain = getPreferenceValue(context, "app_service_url");
+        final StringBuilder sb = new StringBuilder(serviceDomain);
+
+        // Prod URL can have domain name or ip address with
+        // or without TCP port number.
+        if ("prod".equalsIgnoreCase(environment)) {
+            // -- http://84.15.64.12:8080/ngapi/profile/login/
+            // -- http://www.somedomain.com/ngapi/profile/login/
+            if (sb.charAt(sb.length()-1) != '/')
+                sb.append('/');
+
+            sb.append("ngapi/")
+                    .append(svc.getApp())
+                    .append(svc.getName())
+                    .append('/');
+
+            Log.d(TAG, "Service URL: "+sb.toString());
+
+        } else if ("dev".equalsIgnoreCase(environment)) {
+            // -- http://84.15.64.12:8001/login/
+            // -- http://84.15.64.12:8002/zipcode/
+            if (sb.charAt(sb.length()-1) == '/')
+                sb.deleteCharAt(sb.length()-1);
+
+            sb.append(':')
+                    .append(svc.getPort())
+                    .append(svc.getName())
+                    .append('/');
+
+            Log.d(TAG, "Service URL: "+sb.toString());
+        }
+
+        sb.trimToSize();
+        return sb.toString();
+    }
+
+    public static String getPreferenceValue(final Context context, final String key, String...defValue) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if ((defValue == null) || (defValue.length <= 0)) {
+            return preferences.getString(key, "");
+        }
+        return preferences.getString(key, defValue[0]);
+    }
+
+    public static boolean isPreferenceSwitchedOn(final Context context, final String key, boolean...defValue) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if ((defValue == null) || (defValue.length <= 0)) {
+            return preferences.getBoolean(key, false);
+        }
+        return preferences.getBoolean(key, defValue[0]);
+    }
+
+
 }

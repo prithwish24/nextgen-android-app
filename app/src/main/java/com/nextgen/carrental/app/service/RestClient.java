@@ -1,11 +1,9 @@
 package com.nextgen.carrental.app.service;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nextgen.carrental.app.bo.BaseResponse;
-import com.nextgen.carrental.app.bo.ZipCodeResponse;
-
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Rest service client
@@ -32,7 +30,7 @@ public enum RestClient {
     private final String TAG = RestClient.class.getName();
     private final int DEFAULT_SERVICE_TIMEOUT = 20 * 1000;
     private final RestTemplate restTemplate;
-    private final ObjectMapper mapper;
+    //private final ObjectMapper mapper;
 
     RestClient() {
         restTemplate = new RestTemplate();
@@ -48,48 +46,187 @@ public enum RestClient {
             }
         });
 
-        mapper = new ObjectMapper();
+        //mapper = new ObjectMapper();
     }
 
-    public <T> BaseResponse<T> getRequest(String url, Class<T> clazz, Object... urlVariables) throws IOException {
+    @Deprecated
+    public <P, Q> Q getRequest(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<Q> responseType) throws RestException {
         Log.d(TAG, "In RestServiceClient.getRequestForm ::");
-        BaseResponse br = makeGetRequest(url, urlVariables);
-        if (br.isSuccess()) {
-            String temp = mapper.writeValueAsString(br.getResponse());
-            T type = mapper.readValue(temp, clazz);
-            br.setResponse(type);
+        try {
+            Q br = makeCall(url, params, responseType, HttpMethod.GET);
+            //R br = makeGetRequest(url, params, responseType);
+            /*if (r instanceof BaseResponse) {
+                BaseResponse br = BaseResponse.class.cast(r);
+                if (br.isSuccess()) {
+                    String temp = mapper.writeValueAsString(br.getResponse());
+                    T type = mapper.readValue(temp, clazz);
+                    br.setResponse(type);
+                }
+            }*/
+
+            return br;
+
+        }catch (Exception e) {
+            throw new RestException("GET service call failed !", e);
         }
-        return br;
     }
 
-    private BaseResponse makeGetRequest(String url, Object... urlVariables) {
+    /*public <T> T getRequest(String url, T type, RestParameter params) throws RestException {
+        Log.d(TAG, "In RestServiceClient.getRequestForm ::");
+        try {
+            return makeGetRequest(url, params, new ParameterizedTypeReference<T>() {});
+            *//*if (br.isSuccess()) {
+                String temp = mapper.writeValueAsString(br.getResponse());
+                T type = mapper.readValue(temp, clazz);
+                br.setResponse(type);
+            }
+            return br;*//*
+
+        }catch (Exception e) {
+            throw new RestException("GET service call failed !", e);
+        }
+    }*/
+
+    @Deprecated
+    private <P, R> R makeGetRequest(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<R> responseType) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML));
+
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (params.hasQueryParam())
+            builder.queryParams(params.getQueryParams());
+
+        if (params.hasPathParam())
+            builder.buildAndExpand(params.getPathParams());
+
         //requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<MultiValueMap> httpEntity = new HttpEntity<>(requestHeaders);
-        ResponseEntity<BaseResponse> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, BaseResponse.class, urlVariables);
+        HttpEntity<?> httpEntity = new HttpEntity<>(requestHeaders);
+        final ResponseEntity<R> response = restTemplate.exchange(builder.toUriString(),
+                HttpMethod.GET, httpEntity, responseType);
         return response.getBody();
     }
 
-    public <T,R> BaseResponse<T> postRequest(String url, R request, Class<T> clazz) throws IOException {
+    @Deprecated
+    public <P, Q> Q postRequest(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<Q> responseType) throws RestException {
         Log.d(TAG, "In RestServiceClient.postRequestForm ::");
-        BaseResponse br = makeRequestWithFormData(url, request, HttpMethod.POST);
-        if (br.isSuccess()) {
-            String temp = mapper.writeValueAsString(br.getResponse());
-            T type = mapper.readValue(temp, clazz);
-            br.setResponse(type);
+        try {
+            return makeRequestWithFormData(url, params, responseType);
+        } catch (Exception e) {
+            throw new RestException("POST service call failed !", e);
         }
-        return br;
     }
 
-    private <R> BaseResponse makeRequestWithFormData(String url, R request, HttpMethod method) {
+    /*public <T, R> BaseResponse<T> postRequest(String url, Class<T> clazz, RestParameter<R> params) throws RestException {
+        Log.d(TAG, "In RestServiceClient.postRequestForm ::");
+        try {
+            BaseResponse<T> br = makeRequestWithFormData(url, params, HttpMethod.POST, clazz);
+            if (br.isSuccess()) {
+                String temp = mapper.writeValueAsString(br.getResponse());
+                T type = mapper.readValue(temp, clazz);
+                br.setResponse(type);
+            }
+            return br;
+
+        } catch (Exception e) {
+            throw new RestException("POST service call failed !", e);
+        }
+    }*/
+
+    @Deprecated
+    private <P, Q> Q makeRequestWithFormData(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<Q> responseType) {
         Log.d(TAG, "In RestClient.makeRequestWithFormData ::");
         HttpHeaders requestHeaders = new HttpHeaders();
         //requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<R> httpEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<BaseResponse> response = restTemplate.exchange(url, method, httpEntity, BaseResponse.class);
+
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (params.getRequestBody() == null)
+            Log.w(TAG, "!! Calling post method with empty body !!");
+
+        if (params.hasPathParam())
+            builder.buildAndExpand(params.getPathParams());
+
+        HttpEntity<P> httpEntity = new HttpEntity<>(params.getRequestBody(), requestHeaders);
+        ResponseEntity<Q> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, responseType);
+        return response.getBody();
+    }
+
+
+    // ------------------------------------------ NEW METHODS -------------------------------------------------------- //
+
+    public <P, Q> Q GET(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<Q> responseType) throws RestException {
+        Log.d(TAG, "In RestServiceClient.get() ::");
+        try {
+            return makeCall(url, params, responseType, HttpMethod.GET);
+        } catch (Exception e) {
+            throw new RestException("GET service call failed !", e);
+        }
+    }
+
+    public <P, Q> Q POST(
+            @NonNull String url,
+            @NonNull RestParameter<P> params,
+            @NonNull ParameterizedTypeReference<Q> responseType) throws RestException {
+        Log.d(TAG, "In RestServiceClient.post() ::");
+        try {
+            return makeCall(url, params, responseType, HttpMethod.POST);
+        } catch (Exception e) {
+            throw new RestException("POST service call failed !", e);
+        }
+    }
+
+    private <P, Q> Q makeCall (@NonNull final String url,
+                               @NonNull final RestParameter<P> params,
+                               @NonNull final ParameterizedTypeReference<Q> responseType,
+                               @NonNull final HttpMethod method)
+            throws Exception {
+
+        Log.d(TAG, "In RestClient.makeCall");
+        final HttpHeaders requestHeaders = new HttpHeaders();
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        HttpEntity<P> httpEntity;
+
+        if (method == HttpMethod.GET) {
+
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            httpEntity = new HttpEntity<>(requestHeaders);
+
+            if (params.hasQueryParam())
+                builder.queryParams(params.getQueryParams());
+
+            if (params.hasPathParam())
+                builder.buildAndExpand(params.getPathParams());
+
+        } else if (method == HttpMethod.POST) {
+
+            requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpEntity = new HttpEntity<>(params.getRequestBody(), requestHeaders);
+
+            if (params.hasPathParam())
+                builder.buildAndExpand(params.getPathParams());
+
+        } else {
+            throw new RestException("Unsupported request type "+method);
+        }
+
+        final ResponseEntity<Q> response = restTemplate.exchange (
+                builder.toUriString(), method, httpEntity, responseType);
         return response.getBody();
     }
 }

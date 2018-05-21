@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.constants.GlobalConstants;
@@ -49,10 +48,10 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new FragmentHome())
-                .addToBackStack(null)
-                .commit();
+//        getFragmentManager().beginTransaction()
+//                .replace(R.id.content_frame, new FragmentHome())
+//                .addToBackStack(null)
+//                .commit();
     }
 
     @Override
@@ -99,6 +98,13 @@ public class MainActivity extends BaseActivity
                     .addToBackStack(null)
                     .commit();
 
+//            final String token = Utils.getPreferenceValue(getApplicationContext(), "dialog_flow_client_token");
+//            final boolean enableZipCodeMocking = Utils.isPreferenceSwitchedOn(getApplicationContext(), "enable_zip_code_mocking");
+//            final String mockZipCode = Utils.getPreferenceValue(getApplicationContext(), "mock_zip_code");
+//            final String app_environment = Utils.getPreferenceValue(getApplicationContext(), "app_environment");
+//            final String appServiceUrl = Utils.getPreferenceValue(getApplicationContext(), "app_service_url");
+
+
         } else if (id == R.id.nav_show_reservation) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentShowReservation())
@@ -107,8 +113,7 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_settings) {
             //Toast.makeText(this, "Nothing assigned", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 
         } else if (id == R.id.nav_profile) {
             fragmentManager.beginTransaction()

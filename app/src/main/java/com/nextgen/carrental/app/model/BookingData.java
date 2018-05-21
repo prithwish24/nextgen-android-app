@@ -6,6 +6,7 @@ import java.util.List;
 
 public class BookingData {
     public String step;
+    public String status;
     public String confNum;
     public Date pickupDateTime;
     public Date returnDateTime;
