@@ -16,7 +16,6 @@ import com.nextgen.carrental.app.adapter.ReservationListAdapter;
 import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
-import com.nextgen.carrental.app.model.User;
 import com.nextgen.carrental.app.service.RestClient;
 import com.nextgen.carrental.app.service.RestException;
 import com.nextgen.carrental.app.service.RestParameter;
@@ -37,7 +36,7 @@ import java.util.List;
 
 public class FragmentShowReservation extends Fragment {
     public static final String TAG = FragmentShowReservation.class.getName();
-    View view;
+    private View view;
 
     @Nullable
     @Override
@@ -55,12 +54,11 @@ public class FragmentShowReservation extends Fragment {
                 getActivity().getApplicationContext(), new ArrayList<BookingData>());
         listView.setAdapter(listAdapter);
 
-        final User user = new SessionManager(getActivity().getApplicationContext()).getLoggedInUser();
-        new ShowAllReservationTask(getActivity().getApplicationContext(), view, listAdapter).execute(user);
+        new ShowAllReservationTask(getActivity().getApplicationContext(), view, listAdapter).execute();
     }
 
 
-    private static class ShowAllReservationTask extends AsyncTask<User, Void, List<BookingData>> {
+    private static class ShowAllReservationTask extends AsyncTask<Void, Void, List<BookingData>> {
         private WeakReference<Context> contextRef;
         private WeakReference<View> viewRef;
         private ReservationListAdapter adapter;
@@ -77,41 +75,22 @@ public class FragmentShowReservation extends Fragment {
         }
 
         @Override
-        protected List<BookingData> doInBackground(User... params) {
-            String serviceURL = Utils.getServiceURL(contextRef.get(),
+        protected List<BookingData> doInBackground(Void... params) {
+            final String serviceURL = Utils.getServiceURL(contextRef.get(),
                     GlobalConstants.Services.ALL_RESERVATION);
+            final String userID = new SessionManager(contextRef.get()).getLoggedInUserID();
 
             RestParameter data = new RestParameter();
-            //data.addQueryParam("username", params[0].getUserId());
-            data.addQueryParam("username", "jsmith");
+            data.addQueryParam("username", userID);
 
             ParameterizedTypeReference<BaseResponse<List<BookingData>>> typeRef
                     = new ParameterizedTypeReference<BaseResponse<List<BookingData>>> (){};
 
             try {
                 final BaseResponse<List<BookingData>> response = RestClient.INSTANCE.GET(serviceURL, data, typeRef);
-
                 if (response != null) {
                     if (response.isSuccess()) {
-                        final List<BookingData> list = response.getResponse();
-                        return list;
-
-                        // FIXME TEMP code till service change
-                        /*List<LinkedHashMap<String, Object>> resList = response.getResponse();
-                        ArrayList<BookingData> bookingDataList = new ArrayList<>(resList.size());
-
-                        for (LinkedHashMap<String, Object> lhMap  : resList) {
-                            BookingData bookingData = new BookingData();
-                            bookingData.confNum = (String) lhMap.get("confNum");
-                            bookingData.carType = (String) lhMap.get("carType");
-                            bookingData.pickupLoc = (String) lhMap.get("pickupLoc");
-                            bookingData.returnLoc = (String) lhMap.get("returnLoc");
-                            bookingData.pickupDateTime = (Date) lhMap.get("pickupDateTime");
-                            bookingData.returnDateTime = (Date) lhMap.get("returnDateTime");
-                            bookingDataList.add(bookingData);
-                        }
-                        return bookingDataList;*/
-
+                        return response.getResponse();
                     } else {
                         Log.e(TAG, response.getError().toString());
                     }

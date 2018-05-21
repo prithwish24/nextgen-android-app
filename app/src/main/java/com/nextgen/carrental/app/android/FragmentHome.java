@@ -3,7 +3,6 @@ package com.nextgen.carrental.app.android;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,7 +29,6 @@ import org.springframework.core.ParameterizedTypeReference;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -58,9 +56,12 @@ public class FragmentHome extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         final ListView listView = homeView.findViewById(R.id.show_trips_list_view);
-        TripsListAdapter adapter = new TripsListAdapter(getActivity(), new ArrayList<BookingData>());
+        final TripsListAdapter adapter = new TripsListAdapter(
+                getActivity().getApplicationContext(), new ArrayList<BookingData>());
         listView.setAdapter(adapter);
+
         FloatingActionButton fab = homeView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +69,8 @@ public class FragmentHome extends Fragment {
                 startActivity(new Intent(getActivity().getApplicationContext(), VoiceChatActivity.class));
             }
         });
-        new GetMyTrips(getActivity().getApplicationContext(),view,adapter).execute();
+
+        new GetMyTrips(getActivity().getApplicationContext(), view, adapter).execute();
     }
 
     private class GetMyTrips extends AsyncTask<Void, Void, List<BookingData>> {

@@ -22,22 +22,36 @@ public class AIResponseTransformer {
 
     public BookingData transform(final Map<String, JsonElement> parameters) {
         final BookingData bookingData = new BookingData();
-        //bookingData.confNum     = parameters.get("confnumber").getAsString();
+        if (parameters.get("confirmationnumber") != null) {
+            bookingData.confNum = parameters.get("confirmationnumber").getAsString();
+        }
         bookingData.step = parameters.get("step").getAsString();
-        bookingData.pickupLoc = parameters.get("pickuplocation").getAsString();
-        bookingData.returnLoc = parameters.get("pickuplocation").getAsString();
+        bookingData.pickupLoc = extractLocation(parameters.get("pickuplocation"));
+        bookingData.returnLoc = bookingData.pickupLoc;
         bookingData.carType = parameters.get("cartype").getAsString();
-        bookingData.pickupDateTime = parseDate(parameters.get("pickupdate").getAsString(), parameters.get("pickuptime").getAsString());
-
+        bookingData.pickupDateTime = parseDate(parameters.get("pickupdate"), parameters.get("pickuptime"));
         bookingData.returnDateTime = calculateReturnDateTime(bookingData.pickupDateTime, parameters.get("duration"));
 
         return bookingData;
     }
 
-    private Date parseDate(String dateStr, String timeStr) {
+    private String extractLocation(final JsonElement jsonElement) {
+        StringBuilder sb = new StringBuilder();
+        if (jsonElement.isJsonObject()) {
+                final JsonObject jsonObject = jsonElement.getAsJsonObject();
+                sb.append( jsonObject.get("city").getAsString())
+                                .append(" ")
+                                .append( jsonObject.get("business-name").getAsString());
+            } else {
+                sb.append(jsonElement.getAsString());
+            }
+        return sb.toString();
+    }
+
+    private Date parseDate(JsonElement dateStr, JsonElement timeStr) {
         try {
-            final Date date = Utils.fmtDateTime(dateStr, Utils.RESP_DATE_FMT);
-            final Date time = Utils.fmtDateTime(timeStr, Utils.RESP_TIME_FMT);
+            final Date date = Utils.fmtDateTime(dateStr.getAsString(), Utils.RESP_DATE_FMT);
+            final Date time = Utils.fmtDateTime(timeStr.getAsString(), Utils.RESP_TIME_FMT);
 
             Calendar calendarA = Calendar.getInstance();
             calendarA.setTime(date);

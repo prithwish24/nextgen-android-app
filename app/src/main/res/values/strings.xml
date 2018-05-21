@@ -42,6 +42,9 @@
 
     <string name="show_reservation_thumbnail">thumbnail</string>
 
+    <!-- Confirmation fragment -->
+    <string name="review_screen_user_message">Please review your booking information..</string>
+    <string name="confirmation_screen_user_message">CONFIRMATION # </string>
 
     <!-- Profile page strings -->
     <string name="profile_name">Name</string>

@@ -233,7 +233,7 @@ public class VoiceChatActivity extends BaseActivity
                 final String speech = result.getFulfillment().getSpeech();
                 final String displayText = result.getFulfillment().getDisplayText();
                 Log.i(TAG, "Speech: " + speech);
-                Log.i(TAG, "Speech: " + displayText);
+                Log.i(TAG, "Display Text: " + displayText);
 
                 addBoTResponseToChatRoster(TextUtils.isEmpty(displayText) ? speech : displayText);
                 TTS.speak(speech);
@@ -266,51 +266,15 @@ public class VoiceChatActivity extends BaseActivity
                                     .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
                                     .addToBackStack(null)
                                     .commit();
-
-                            //addBoTResponseToChatRoster(displayText);
-                            //TTS.speak(speech);
-                            //TTS.speak("Please review your booking information. Would you like to confirm this booking?");
-
+                            
                         } else if (TextUtils.equals(step, "confirmation")) {
-                            final BookingData bookingData = new AIResponseTransformer().transform(parameters);
-                            fragmentConfirmation.updateConfirmationNumber("99024651");
-
-                            //addBoTResponseToChatRoster(displayText);
-                            //TTS.speak(speech);
-
-                            /*Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
-                            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.detach(fragment).commit();
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
-                            fragmentConfirmation.bindConfirmationData(bookingData);
-
-                            getFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
-                                    .commit();*/
-                            /*final Fragment fragment = getFragmentManager().findFragmentByTag(FragmentConfirmation.TAG);
-                            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.detach(fragment);
-                            transaction.attach(fragment);
-                            transaction.commit();*/
-
-                        /*} else {
-                            addBoTResponseToChatRoster(displayText);
-                            TTS.speak(speech);*/
+                            fragmentConfirmation.updateConfirmationNumber(bookingData.confNum);
 
                         }
                     }
                 }
-
-                /*
-                 *  ---- FINAL STEP ----
-                 *  1. Context is missing here. Need context till RES# generates.
-                 *  2. Need some flag like 'review' to know the end step.
-                 *  3. CONF# should be somewhere to extract easily and pass into the fragment
-                 *     which replace green highlighted section
-                 *  4. speech should not contain CONF#. It feels ugly to hear.
-                 */
 
             }
         });
@@ -382,10 +346,11 @@ public class VoiceChatActivity extends BaseActivity
         switch (viewId) {
             case R.id.close_button:
                 Toast.makeText(VoiceChatActivity.this, "Close clicked", Toast.LENGTH_SHORT).show();
-                onBackPressed();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 break;
             case R.id.info_button:
-                Toast.makeText(VoiceChatActivity.this, "Info clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VoiceChatActivity.this, "Showing dummy confirmation", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.vc_content_frame, new FragmentConfirmation())
                         .addToBackStack(null)
