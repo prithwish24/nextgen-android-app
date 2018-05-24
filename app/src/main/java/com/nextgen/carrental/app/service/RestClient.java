@@ -13,6 +13,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
@@ -202,31 +203,29 @@ public enum RestClient {
         final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpEntity<P> httpEntity;
 
+        if (params.hasQueryParam())
+            builder.queryParams(params.getQueryParams());
+
+//        if (params.hasPathParam())
+//            builder.buildAndExpand(params.getPathParams());
+
         if (method == HttpMethod.GET) {
 
             requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             httpEntity = new HttpEntity<>(requestHeaders);
-
-            if (params.hasQueryParam())
-                builder.queryParams(params.getQueryParams());
-
-            if (params.hasPathParam())
-                builder.buildAndExpand(params.getPathParams());
 
         } else if (method == HttpMethod.POST) {
 
             requestHeaders.setContentType(MediaType.APPLICATION_JSON);
             httpEntity = new HttpEntity<>(params.getRequestBody(), requestHeaders);
 
-            if (params.hasPathParam())
-                builder.buildAndExpand(params.getPathParams());
-
         } else {
             throw new RestException("Unsupported request type "+method);
         }
 
+        String finalUrl = params.hasPathParam() ? builder.buildAndExpand(params.getPathParams()).toUriString():builder.toUriString();
         final ResponseEntity<Q> response = restTemplate.exchange (
-                builder.toUriString(), method, httpEntity, responseType);
+                finalUrl, method, httpEntity, responseType);
         return response.getBody();
     }
 }

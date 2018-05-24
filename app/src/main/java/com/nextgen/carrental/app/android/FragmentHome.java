@@ -94,7 +94,7 @@ public class FragmentHome extends Fragment {
                         GlobalConstants.Services.UPCOMING_RESERVATION);
 
                 RestParameter data = new RestParameter();
-                data.addQueryParam("sessionId", sessionID);
+                data.addPathParam("sessionId", sessionID);
                 data.addQueryParam("username", username);
 
                 ParameterizedTypeReference<BaseResponse<List<BookingData>>> typeRef

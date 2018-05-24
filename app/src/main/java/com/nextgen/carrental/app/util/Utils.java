@@ -78,8 +78,7 @@ public class Utils {
 
             sb.append(':')
                     .append(svc.getPort())
-                    .append(svc.getName())
-                    .append('/');
+                    .append(svc.getName());
 
             Log.d(TAG, "Service URL: "+sb.toString());
         }
