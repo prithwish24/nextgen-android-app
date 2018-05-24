@@ -30,7 +30,7 @@ public enum CarClassEnum {
 
     public static CarClassEnum find(@NonNull final String type) {
         for (CarClassEnum cc : CarClassEnum.values()) {
-            if (TextUtils.equals(cc.name().toLowerCase(), type)) {
+            if (TextUtils.equals(cc.name().toLowerCase(), type.toLowerCase())) {
                 return cc;
             }
         }
