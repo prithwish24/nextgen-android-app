@@ -1,5 +1,6 @@
 package com.nextgen.carrental.app.model;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.nextgen.carrental.app.R;
@@ -27,9 +28,9 @@ public enum CarClassEnum {
         this.imgId = imgId;
     }
 
-    public static CarClassEnum find(final String type) {
+    public static CarClassEnum find(@NonNull final String type) {
         for (CarClassEnum cc : CarClassEnum.values()) {
-            if (TextUtils.equals(cc.name(), type)) {
+            if (TextUtils.equals(cc.name().toLowerCase(), type)) {
                 return cc;
             }
         }
