@@ -25,6 +25,7 @@
             app:srcCompat="@drawable/ic_close_white" />
 
         <TextView
+            android:id="@+id/vc_window_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

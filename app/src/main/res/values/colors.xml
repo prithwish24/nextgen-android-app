@@ -15,11 +15,12 @@
     <color name="fluorescentGreen">#CCFF90</color>
     <color name="default_background_material_light">#f3f4f3</color>
 
-    <!--<color name="yellow1">#FFEB00</color>
+    <color name="yellow1">#FFEB00</color>
     <color name="yellow2">#A89B00</color>
-    <color name="grey05">#A6A6A6</color>
+    <color name="grey05">#d6d6d6</color>
     <color name="orange4">#FF6E00</color>
     <color name="orange5">#9D4706</color>
     <color name="blue2">#3500EB</color>
-    <color name="blue25">#000022</color>-->
+    <color name="blue25">#000060</color>
+    <color name="cherry">#a70348</color>
 </resources>

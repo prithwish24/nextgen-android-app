@@ -1,187 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical">
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/tv_thankYou"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Thank You"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_confirm_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_thankYou"
+            android:gravity="center"
+            android:text="Your reservation is confirmed."
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
-        <TextView
-            android:id="@+id/confirm_number"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:background="@color/fluorescentGreen"
-            android:contentDescription="confirmation number"
-            android:gravity="left|center"
-            android:paddingLeft="10dp"
-            android:text="CONFIRMATION #: 13243545543"
-            android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="TRIP DETAILS" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Pickup:"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Confirmation Number"
+                android:layout_gravity="start|center_vertical"
+                android:textColor="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/confirm_pickup_time"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_confNumber"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Thu Apr 19, 2018 - 12:00 PM"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:text="456546546"
+                android:layout_gravity="end"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"/>
 
-            <TextView
-                android:id="@+id/confirm_pickup_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lambert-St. Louis Int. Airport"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
         </LinearLayout>
-
-        <LinearLayout
+        <View
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Return:"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/confirm_return_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Thu Apr 24, 2018 - 12:00 PM"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/confirm_return_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lambert-St. Louis Int. Airport"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="VEHICLE SELECTED" />
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryDark" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/white"
-            android:padding="10dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <TextView
+                android:id="@+id/tv_pickup_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:textSize="14sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/blue25"
+                android:maxLines="2"
+                android:scrollHorizontally="false"
+                android:text="Saint Louis Airport"/>
+            <TextView
+                android:id="@+id/tv_pickup_date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/tv_pickup_point"
+                android:textSize="14sp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/blue25"
+                android:text="May 30 2018 - 12:00 p.m."/>
+            <TextView
+                android:id="@+id/tv_car_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/tv_pickup_date_time"
+                android:textSize="14sp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/blue25"
+                android:text="Compact - Kia Soul or similar"/>
 
             <ImageView
-                android:id="@+id/vehicle_image_confirm"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/show_reservation_thumbnail"
+                android:id="@+id/iv_carType_thumbnail"
+                android:layout_width="120dp"
+                android:layout_height="90dp"
+                android:contentDescription="Vehicle Thumbnail"
                 android:scaleType="centerInside"
-                tools:src="@drawable/ct_compact" />
+                android:src="@drawable/ct_compact"
+                android:layout_alignParentEnd="true" />
 
-            <TextView
-                android:id="@+id/confirm_vehicle_class"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/vehicle_image_confirm"
-                android:paddingBottom="2sp"
-                android:paddingStart="5dp"
-                android:text="Economy"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/confirm_vehicle_class_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/confirm_vehicle_class"
-                android:layout_toEndOf="@id/vehicle_image_confirm"
-                android:paddingBottom="2sp"
-                android:paddingStart="5dp"
-                android:text="Mitsubishi Mirage or similar"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="SELECTED ADDONS" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/confirm_additional_equip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="GPS Navigator"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/button_done_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="DONE"
-            android:theme="@style/LoginActiveButtonStyle" />
     </LinearLayout>
 
-</ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/tv_weather_heading"
+            android:paddingBottom="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weather Forecast"/>
+        <View
+            android:id="@+id/tv_weather_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_weather_heading"
+            android:background="@color/grey05" />
+
+        <TextView
+            android:id="@+id/tv_weather_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_weather_separator"
+            android:textColor="@color/veryDarkGray"
+            android:textSize="12sp"
+            android:text="30 May 2018, Wednesday"/>
+        <TextView
+            android:id="@+id/tv_weather_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_weather_date"
+            android:textColor="@color/veryDarkGray"
+            android:textSize="22sp"
+            android:paddingTop="5dp"
+            android:text="St. Louis"/>
+        <TextView
+            android:id="@+id/tv_weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/tv_weather_separator"
+            android:textSize="14sp"
+            android:textColor="@color/blue25"
+            android:text="Mostly Cloudy"/>
+        <TextView
+            android:id="@+id/tv_weather_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/tv_weather_text"
+            android:textSize="20sp"
+            android:textColor="@color/blue2"
+            android:text="21/12 F"/>
+        <TextView
+            android:id="@+id/tv_weather_precipitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textSize="12sp"
+            android:textColor="@color/orange5"
+            android:layout_below="@id/tv_weather_temperature"
+            android:text="Precipitation: 10%"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/tv_offers_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:text="Offers for You"/>
+        <View
+            android:id="@+id/tv_offers_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_offers_heading"
+            android:background="@color/grey05" />
+        <TextView
+            android:id="@+id/tv_offers_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_offers_separator"
+            android:textColor="@color/cherry"
+            android:clickable="true"
+            android:focusable="true"
+            android:textSize="12sp"
+            android:text="Weekend Specials - Starting at $9.99/day"/>
+        <TextView
+            android:id="@+id/tv_offers_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_offers_name1"
+            android:textColor="@color/cherry"
+            android:clickable="true"
+            android:focusable="true"
+            android:textSize="12sp"
+            android:text="Promo XXXXX - Discount available on luxury cars and minivans."/>
+
+    </RelativeLayout>
+
+</LinearLayout>

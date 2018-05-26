@@ -73,7 +73,7 @@ public class VoiceChatActivity extends BaseActivity
     private AIButton aiButton;
     private Handler handler;
     private FragmentVoiceChat fragmentVoiceChat;
-    private FragmentConfirmation fragmentConfirmation;
+    private FragmentReview fragmentReview;
     public Address currentGpsAddress;
 
     @Override
@@ -87,16 +87,15 @@ public class VoiceChatActivity extends BaseActivity
         }
         setContentView(R.layout.activity_voice_chat);
 
-        //SharedPreferences pref = getApplicationContext().getSharedPreferences(SessionManager.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        //sessionId = pref.getString(SessionManager.SESSION_KEY_ID,"");
-        //Utils.getSettingsValue(getApplicationContext(), SessionManager.SESSION_KEY_ID);
+
+        ((TextView)findViewById(R.id.vc_window_title)).setText(GlobalConstants.AGENT_NAME);
 
         this.aiButton = findViewById(R.id.aiMicButton);
         findViewById(R.id.close_button).setOnClickListener(this);
         findViewById(R.id.info_button).setOnClickListener(this);
 
         this.fragmentVoiceChat = new FragmentVoiceChat();
-        this.fragmentConfirmation = new FragmentConfirmation();
+        this.fragmentReview = new FragmentReview();
 
         // Clear existing history
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -259,18 +258,24 @@ public class VoiceChatActivity extends BaseActivity
                              */
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
-                            fragmentConfirmation.bindConfirmationData(bookingData);
+                            fragmentReview.bindConfirmationData(bookingData);
 
                             getFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.vc_content_frame, fragmentConfirmation, FragmentConfirmation.TAG)
+                                    .replace(R.id.vc_content_frame, fragmentReview, FragmentReview.TAG)
                                     .addToBackStack(null)
                                     .commit();
 
                         } else if (TextUtils.equals(step, "confirmation")) {
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
-                            fragmentConfirmation.updateConfirmationNumber(bookingData.confNum);
+                            FragmentConfirm fragmentConfirm = new FragmentConfirm();
+                            fragmentConfirm.bindConfirmation(bookingData);
+
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.vc_content_frame, fragmentConfirm, FragmentConfirm.TAG)
+                                    .commit();
 
                         }
                     }
@@ -352,7 +357,7 @@ public class VoiceChatActivity extends BaseActivity
             case R.id.info_button:
                 Toast.makeText(VoiceChatActivity.this, "Showing dummy confirmation", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.vc_content_frame, new FragmentConfirmation())
+                        .replace(R.id.vc_content_frame, new FragmentConfirm())
                         .addToBackStack(null)
                         .commit();
                 break;

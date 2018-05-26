@@ -88,13 +88,6 @@ public class MainActivity extends BaseActivity
                     .addToBackStack(null)
                     .commit();
 
-//            final String token = Utils.getSettingsValue(getApplicationContext(), "dialog_flow_client_token");
-//            final boolean enableZipCodeMocking = Utils.isPreferenceSwitchedOn(getApplicationContext(), "enable_zip_code_mocking");
-//            final String mockZipCode = Utils.getSettingsValue(getApplicationContext(), "mock_zip_code");
-//            final String app_environment = Utils.getSettingsValue(getApplicationContext(), "app_environment");
-//            final String appServiceUrl = Utils.getSettingsValue(getApplicationContext(), "app_service_url");
-
-
         } else if (id == R.id.nav_show_reservation) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentShowReservation())
