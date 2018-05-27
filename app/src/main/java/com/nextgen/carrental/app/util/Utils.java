@@ -23,6 +23,7 @@ public class Utils {
     public static final String LONG_DATE_TIME = "EEE MMM d, yyyy - h:mm a";
     public static final String RESP_DATE_FMT = "yyyy-MM-dd";
     public static final String RESP_TIME_FMT = "hh:mm:ss";
+    public static final String YAHOO_WEATHER_DATE = "dd MMM yyyy";
 
 
     public static String fmtTime(Date value) {

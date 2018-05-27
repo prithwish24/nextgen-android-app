@@ -270,7 +270,8 @@ public class VoiceChatActivity extends BaseActivity
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
                             FragmentConfirm fragmentConfirm = new FragmentConfirm();
-                            fragmentConfirm.bindConfirmation(bookingData);
+                            fragmentConfirm.bindBookingData(bookingData);
+                            fragmentConfirm.bindGpsLocation(currentGpsAddress);
 
                             getFragmentManager()
                                     .beginTransaction()

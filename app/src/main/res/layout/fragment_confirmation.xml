@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -172,24 +170,54 @@
             android:textSize="14sp"
             android:textColor="@color/blue25"
             android:text="Mostly Cloudy"/>
-        <TextView
-            android:id="@+id/tv_weather_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_current_temp"
             android:layout_alignParentEnd="true"
             android:layout_below="@id/tv_weather_text"
-            android:textSize="20sp"
-            android:textColor="@color/blue2"
-            android:text="21/12 F"/>
-        <TextView
-            android:id="@+id/tv_weather_precipitation"
+            android:gravity="end"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_weather_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/blue2"
+                android:text="83 F"/>
+            <TextView
+                android:id="@+id/tv_weather_high_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/orange5"
+                android:text="High/Low:   94/81 F"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_future_temp"
             android:layout_alignParentEnd="true"
-            android:textSize="12sp"
-            android:textColor="@color/orange5"
-            android:layout_below="@id/tv_weather_temperature"
-            android:text="Precipitation: 10%"/>
+            android:layout_below="@id/tv_weather_text"
+            android:gravity="start"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_weather_temp_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/purple"
+                android:text="High: 93 F"/>
+            <TextView
+                android:id="@+id/tv_weather_temp_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/purple"
+                android:text="Low:  81 F"/>
+        </LinearLayout>
 
     </RelativeLayout>
 
