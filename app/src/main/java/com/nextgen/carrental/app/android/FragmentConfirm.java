@@ -79,6 +79,7 @@ public class FragmentConfirm extends Fragment {
         } else {
             Toast.makeText(getContext(), "There is a technical difficulties to confirm your booking. " +
                     "Please try again later later or call 800-xxx-xxx for assistance.", Toast.LENGTH_LONG).show();
+
         }
 
     }
@@ -138,6 +139,7 @@ public class FragmentConfirm extends Fragment {
         protected void onPostExecute(WeatherForecast wf) {
             super.onPostExecute(wf);
             final View view = viewRef.get();
+            final char degreeSymbol = (char) 0x00B0;
             final String dateStr = Utils.fmtTime(pickupDate, Utils.YAHOO_WEATHER_DATE);
             final String curDateStr = Utils.fmtTime(new Date(), Utils.YAHOO_WEATHER_DATE);
             final boolean isBookingToday = TextUtils.equals(dateStr, curDateStr);
@@ -161,23 +163,23 @@ public class FragmentConfirm extends Fragment {
                         view.findViewById(R.id.layout_current_temp).setVisibility(View.VISIBLE);
 
                         str.setLength(0);
-                        str.append(wf.getCondition().getTemp()).append(" ").append(tempUnit);
+                        str.append(wf.getCondition().getTemp()).append(degreeSymbol).append(" ").append(tempUnit);
                         ((TextView) view.findViewById(R.id.tv_weather_temperature)).setText(str.toString());
 
                         str.setLength(0);
-                        str.append("High/Low:   ").append(f.getHigh()).append("/")
-                                .append(f.getLow()).append(" ").append(tempUnit);
+                        str.append("High/Low:   ").append(f.getHigh()).append(degreeSymbol).append("/")
+                                .append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
                         ((TextView) view.findViewById(R.id.tv_weather_high_low)).setText(str.toString());
 
                     } else {
                         view.findViewById(R.id.layout_future_temp).setVisibility(View.VISIBLE);
 
                         str.setLength(0);
-                        str.append("High: ").append(f.getHigh()).append(" ").append(tempUnit);
+                        str.append("High: ").append(f.getHigh()).append(degreeSymbol).append(" ").append(tempUnit);
                         ((TextView) view.findViewById(R.id.tv_weather_temp_high)).setText(str.toString());
 
                         str.setLength(0);
-                        str.append("Low:  ").append(f.getLow()).append(" ").append(tempUnit);
+                        str.append("Low:  ").append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
                         ((TextView) view.findViewById(R.id.tv_weather_high_low)).setText(str.toString());
                     }
 
