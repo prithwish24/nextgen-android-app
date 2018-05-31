@@ -430,6 +430,11 @@ public class VoiceChatActivity extends BaseActivity
         @Override
         protected void onPostExecute(AIResponse aiResponse) {
             if (aiResponse != null) {
+                if (aiResponse.getResult().getFulfillment() != null) {
+                    addBoTResponseToChatRoster(aiResponse.getResult().getFulfillment().getSpeech());
+                    TTS.speak(aiResponse.getResult().getFulfillment().getSpeech());
+                }
+
                 try {
                     final String svcURL = Utils.getServiceURL(contextRef.get(),
                             GlobalConstants.Services.SAVE_DUMMY_ZIPCODE);

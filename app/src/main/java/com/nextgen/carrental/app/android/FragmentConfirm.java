@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nextgen.carrental.app.R;
+import com.nextgen.carrental.app.bo.BaseResponse;
 import com.nextgen.carrental.app.constants.GlobalConstants;
 import com.nextgen.carrental.app.model.BookingData;
 import com.nextgen.carrental.app.model.CarClassEnum;
@@ -41,7 +42,7 @@ public class FragmentConfirm extends Fragment {
     public static final String TAG = FragmentConfirm.class.getName();
     private View view;
     private BookingData bookingData;
-    private Address address;
+    private Address gpsAddress;
 
     @Nullable
     @Override
@@ -74,11 +75,14 @@ public class FragmentConfirm extends Fragment {
 
 
             new GetWeatherForecast(getActivity().getApplicationContext(),
-                    view, address, bookingData.pickupDateTime).execute();
+                    view, gpsAddress, bookingData).execute();
 
         } else {
             Toast.makeText(getContext(), "There is a technical difficulties to confirm your booking. " +
                     "Please try again later later or call 800-xxx-xxx for assistance.", Toast.LENGTH_LONG).show();
+
+            new GetWeatherForecast(getActivity().getApplicationContext(),
+                    view, gpsAddress, bookingData).execute();
 
         }
 
@@ -89,7 +93,7 @@ public class FragmentConfirm extends Fragment {
     }
 
     public void bindGpsLocation (final Address address) {
-        this.address = address;
+        this.gpsAddress = address;
     }
 
 
@@ -97,37 +101,47 @@ public class FragmentConfirm extends Fragment {
         private WeakReference<Context> contextRef;
         private WeakReference<View> viewRef;
         private Address address;
-        private Date pickupDate;
+        private BookingData bookingData;
 
-        GetWeatherForecast(final Context context, final View view, final Address address, final Date pickupDate) {
+        private String serviceURL;
+        private RestParameter<Object> param;
+        private ParameterizedTypeReference<BaseResponse<WeatherForecast>> responseType;
+
+        private GetWeatherForecast(final Context context, final View view, final Address address, final BookingData bookingData) {
             this.contextRef = new WeakReference<>(context);
             this.viewRef = new WeakReference<>(view);
             this.address = address;
-            this.pickupDate = pickupDate;
+            this.bookingData = bookingData;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
+            serviceURL = Utils.getServiceURL(contextRef.get(), GlobalConstants.Services.GET_WEATHER_FORECAST);
+            param = new RestParameter<>();
+            responseType = new ParameterizedTypeReference<BaseResponse<WeatherForecast>>() {
+            };
+
+            // prepare request parameters
+            param.addPathParam("sessionId", sessionID);
+
+            if (bookingData != null)
+                param.addQueryParam("location", bookingData.pickupLoc);
+            else
+                param.addQueryParam("city", "St. Louis");
         }
 
         @Override
         protected WeatherForecast doInBackground(Void... voids) {
             try {
-                final String svcURL = Utils.getServiceURL(contextRef.get(),
-                        GlobalConstants.Services.GET_WEATHER_FORECAST);
-                final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
-
-                final RestParameter<Object> param = new RestParameter<>();
-                param.addPathParam("sessionId", sessionID);
-                if (address != null) {
-                    if (address.getLocality() != null) {
-                        param.addQueryParam("city", address.getLocality());
-                    } else if (address.getAdminArea() != null) {
-                        param.addQueryParam("city", address.getAdminArea());
-                    }
+                final BaseResponse<WeatherForecast> baseResponse = RestClient.INSTANCE.GET(serviceURL, param, responseType);
+                if (baseResponse.isSuccess()) {
+                    return baseResponse.getResponse();
+                } else {
+                    Log.e(TAG, baseResponse.getError().toString());
                 }
-
-                ParameterizedTypeReference<WeatherForecast> responseType = new ParameterizedTypeReference<WeatherForecast>() {
-                };
-
-                return RestClient.INSTANCE.GET(svcURL, param, responseType);
-
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
             }
@@ -138,52 +152,65 @@ public class FragmentConfirm extends Fragment {
         @Override
         protected void onPostExecute(WeatherForecast wf) {
             super.onPostExecute(wf);
-            final View view = viewRef.get();
-            final char degreeSymbol = (char) 0x00B0;
-            final String dateStr = Utils.fmtTime(pickupDate, Utils.YAHOO_WEATHER_DATE);
-            final String curDateStr = Utils.fmtTime(new Date(), Utils.YAHOO_WEATHER_DATE);
-            final boolean isBookingToday = TextUtils.equals(dateStr, curDateStr);
-            final String tempUnit = wf.getUnits().getTemperature();
+            if (wf != null) {
+                final View view = viewRef.get();
+                final char degreeSymbol = (char) 0x00B0;
+                Date dateToMatch;
+                if (bookingData != null)
+                    dateToMatch = bookingData.pickupDateTime;
+                else
+                    dateToMatch = new Date();
+                final String dateStr = Utils.fmtTime(dateToMatch, Utils.YAHOO_WEATHER_DATE);
+                final String curDateStr = Utils.fmtTime(new Date(), Utils.YAHOO_WEATHER_DATE);
+                final boolean isBookingToday = TextUtils.equals(dateStr, curDateStr);
+                final String tempUnit = wf.getUnits().getTemperature();
 
-            final StringBuilder str = new StringBuilder();
+                final StringBuilder str = new StringBuilder();
 
-            for (WeatherForecast.Forecast f : wf.getForecastList()) {
-                if ( TextUtils.equals(f.getDate().toUpperCase(), dateStr.toUpperCase()) ) {
-                    str.append(f.getDate()).append(" ,").append(WeekdayEnum.valueOf(f.getDay()).name());
-                    ((TextView) view.findViewById(R.id.tv_weather_date)).setText(str.toString());
-
-                    str.setLength(0);
-                    str.append(wf.getLocation().getCity()).append(", ").append(wf.getLocation().getCountry());
-                    ((TextView) view.findViewById(R.id.tv_weather_city)).setText(str.toString());
-
-                    ((TextView) view.findViewById(R.id.tv_weather_text)).setText(f.getText());
-
-
-                    if (isBookingToday) {
-                        view.findViewById(R.id.layout_current_temp).setVisibility(View.VISIBLE);
+                for (WeatherForecast.Forecast f : wf.getForecastList()) {
+                    if (TextUtils.equals(f.getDate().toUpperCase(), dateStr.toUpperCase())) {
+                        final WeekdayEnum weekday = WeekdayEnum.find(f.getDay());
+                        str.append(f.getDate()).append(", ").append(weekday!=null?weekday.name():"");
+                        ((TextView) view.findViewById(R.id.tv_weather_date)).setText(str.toString());
 
                         str.setLength(0);
-                        str.append(wf.getCondition().getTemp()).append(degreeSymbol).append(" ").append(tempUnit);
-                        ((TextView) view.findViewById(R.id.tv_weather_temperature)).setText(str.toString());
+                        str.append(wf.getLocation().getCity()).append(", ").append(wf.getLocation().getCountry());
+                        ((TextView) view.findViewById(R.id.tv_weather_city)).setText(str.toString());
 
-                        str.setLength(0);
-                        str.append("High/Low:   ").append(f.getHigh()).append(degreeSymbol).append("/")
-                                .append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
-                        ((TextView) view.findViewById(R.id.tv_weather_high_low)).setText(str.toString());
+                        ((TextView) view.findViewById(R.id.tv_weather_text)).setText(f.getText());
 
-                    } else {
-                        view.findViewById(R.id.layout_future_temp).setVisibility(View.VISIBLE);
 
-                        str.setLength(0);
-                        str.append("High: ").append(f.getHigh()).append(degreeSymbol).append(" ").append(tempUnit);
-                        ((TextView) view.findViewById(R.id.tv_weather_temp_high)).setText(str.toString());
+                        if (isBookingToday) {
+                            view.findViewById(R.id.layout_future_temp).setVisibility(View.GONE);
+                            view.findViewById(R.id.layout_current_temp).setVisibility(View.VISIBLE);
 
-                        str.setLength(0);
-                        str.append("Low:  ").append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
-                        ((TextView) view.findViewById(R.id.tv_weather_high_low)).setText(str.toString());
+                            str.setLength(0);
+                            str.append(wf.getCondition().getTemp()).append(degreeSymbol).append(" ").append(tempUnit);
+                            ((TextView) view.findViewById(R.id.tv_weather_current_temp)).setText(str.toString());
+
+                            str.setLength(0);
+                            str.append("High: ").append(f.getHigh()).append(degreeSymbol).append(" ").append(tempUnit);
+                            ((TextView) view.findViewById(R.id.tv_weather_current_high)).setText(str.toString());
+
+                            str.setLength(0);
+                            str.append("Low : ").append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
+                            ((TextView) view.findViewById(R.id.tv_weather_current_low)).setText(str.toString());
+
+                        } else {
+                            view.findViewById(R.id.layout_current_temp).setVisibility(View.GONE);
+                            view.findViewById(R.id.layout_future_temp).setVisibility(View.VISIBLE);
+
+                            str.setLength(0);
+                            str.append("High: ").append(f.getHigh()).append(degreeSymbol).append(" ").append(tempUnit);
+                            ((TextView) view.findViewById(R.id.tv_weather_future_high)).setText(str.toString());
+
+                            str.setLength(0);
+                            str.append("Low : ").append(f.getLow()).append(degreeSymbol).append(" ").append(tempUnit);
+                            ((TextView) view.findViewById(R.id.tv_weather_future_low)).setText(str.toString());
+                        }
+
+                        break;
                     }
-
-                    break;
                 }
             }
 

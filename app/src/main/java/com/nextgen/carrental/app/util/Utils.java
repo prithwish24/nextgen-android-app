@@ -52,8 +52,8 @@ public class Utils {
     }
 
     public static String getServiceURL(@NonNull Context context, @NonNull final GlobalConstants.Services svc) {
-        final String environment = getSettingsValue(context, "app_environment");
-        final String serviceDomain = getSettingsValue(context, "app_service_url");
+        final String environment = getSettingsValue(context, "app_environment", "dev");
+        final String serviceDomain = getSettingsValue(context, "app_service_url", "http://18.188.102.146");
         final StringBuilder sb = new StringBuilder(serviceDomain);
 
         // Prod URL can have domain name or ip address with

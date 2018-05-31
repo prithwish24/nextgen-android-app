@@ -105,7 +105,7 @@
                 android:layout_below="@id/tv_pickup_date_time"
                 android:textSize="14sp"
                 android:paddingBottom="5dp"
-                android:textColor="@color/blue25"
+                android:textColor="@color/veryDarkGray"
                 android:text="Compact - Kia Soul or similar"/>
 
             <ImageView
@@ -147,28 +147,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_below="@id/tv_weather_separator"
             android:textColor="@color/veryDarkGray"
-            android:textSize="12sp"
+            android:textSize="14dp"
             android:text="30 May 2018, Wednesday"/>
         <TextView
             android:id="@+id/tv_weather_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_weather_date"
-            android:textColor="@color/veryDarkGray"
-            android:textSize="22sp"
             android:paddingTop="5dp"
-            android:text="St. Louis"/>
+            android:text="St. Louis, United States"
+            android:textColor="@color/blue25"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_weather_disclaimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_below="@id/tv_weather_city"
+            android:paddingTop="15dp"
+            android:text="* weather report is based on third party system."
+            android:textColor="@color/grey06"
+            android:textSize="8sp" />
         <TextView
             android:id="@+id/tv_weather_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@id/tv_weather_separator"
             android:textSize="14sp"
-            android:textColor="@color/blue25"
+            android:textColor="@color/orange5"
             android:text="Mostly Cloudy"/>
         <LinearLayout
             android:id="@+id/layout_current_temp"
@@ -180,19 +192,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/tv_weather_temperature"
+                android:id="@+id/tv_weather_current_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/blue2"
                 android:text="83 F"/>
             <TextView
-                android:id="@+id/tv_weather_high_low"
+                android:id="@+id/tv_weather_current_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:textColor="@color/orange5"
-                android:text="High/Low:   94/81 F"/>
+                android:textColor="@color/teal"
+                android:text="High: 88 F"/>
+            <TextView
+                android:id="@+id/tv_weather_current_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/teal"
+                android:text="Low : 67 F"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_future_temp"
@@ -204,14 +223,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/tv_weather_temp_high"
+                android:id="@+id/tv_weather_future_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/purple"
                 android:text="High: 93 F"/>
             <TextView
-                android:id="@+id/tv_weather_temp_low"
+                android:id="@+id/tv_weather_future_low"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"

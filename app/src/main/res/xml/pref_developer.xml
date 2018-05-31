@@ -8,7 +8,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="63001"
+        android:defaultValue="63145"
         android:inputType="textCapWords"
         android:key="mock_zip_code"
         android:maxLines="1"
@@ -17,7 +17,7 @@
         android:title="Mock Zip Code" />
 
     <ListPreference
-        android:defaultValue="-1"
+        android:defaultValue="0"
         android:entries="@array/pref_environment_list"
         android:entryValues="@array/pref_environment_list"
         android:key="app_environment"
