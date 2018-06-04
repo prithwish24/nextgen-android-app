@@ -151,7 +151,7 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-        <TextView
+       <!-- <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -175,7 +175,152 @@
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="PRICING" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/review_price_vehicle_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2sp"
+                android:text="Vehicle"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/review_price_vehicle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_vehicle_heading"
+                android:paddingBottom="2sp"
+                android:paddingStart="10dp"
+                android:text="Compact - Nissan Versa Or Similar"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/review_price_vehicle_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_vehicle_heading"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="2sp"
+                android:text="$ 218.50"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/review_price_tax_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_vehicle_text"
+                android:paddingBottom="2sp"
+                android:paddingTop="5dp"
+                android:text="Taxes &amp; Fees"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <!--<TextView
+                android:id="@+id/review_price_tax1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax_heading"
+                android:paddingBottom="2sp"
+                android:text="Concession Recoup Fee 11.11%"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/review_price_tax1_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax_heading"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="2sp"
+                android:text="$ 25.38"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/review_price_tax2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax1"
+                android:paddingBottom="2sp"
+                android:text="Veh License Fee Recovery 1.65/Day"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/review_price_tax2_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax1_val"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="2sp"
+                android:text="$ 9.90"
+                android:textColor="@color/black"
+                android:textSize="12sp" />-->
+            <TextView
+                android:id="@+id/review_price_tax3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax_heading"
+                android:paddingBottom="2sp"
+                android:paddingStart="10dp"
+                android:text="State Tax (8.6%)"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/review_price_tax3_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax_heading"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="2sp"
+                android:text="$ 26.65"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@id/review_price_tax3"
+                android:background="@color/darkGray" />
+            <TextView
+                android:id="@+id/review_price_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax3"
+                android:paddingTop="10dp"
+                android:text="ESTIMATED TOTAL"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/review_price_total_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_price_tax3_val"
+                android:layout_alignParentEnd="true"
+                android:paddingTop="10dp"
+                android:text="$ 336.59"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
 
         <!--<LinearLayout
             android:layout_marginTop="15dp"

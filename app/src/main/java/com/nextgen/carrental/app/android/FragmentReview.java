@@ -71,6 +71,8 @@ public class FragmentReview extends Fragment {
                 carClassImage.setImageResource(carClass.getImgId());
                 carClassDesc.setText(carClass.getDesc());
                 ((TextView) view.findViewById(R.id.review_vehicle_class)).setText(carClass.name());
+                tmpStr = carClass.name() + " - " + carClass.getDesc();
+                ((TextView) view.findViewById(R.id.review_price_vehicle_text)).setText(tmpStr);
             }
 
             ((TextView) view.findViewById(R.id.review_message)).setText(R.string.review_screen_user_message);
@@ -84,9 +86,11 @@ public class FragmentReview extends Fragment {
             tmpStr = Utils.fmtTime(bookingData.returnDateTime, Utils.LONG_DATE_TIME);
             ((TextView) view.findViewById(R.id.review_return_time)).setText(tmpStr);
 
-            for (String str : bookingData.additionalEquip) {
+
+
+            /*for (String str : bookingData.additionalEquip) {
                 ((TextView) view.findViewById(R.id.review_additional_equip)).setText(str + "\n");
-            }
+            }*/
 
         }
     }
