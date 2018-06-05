@@ -336,7 +336,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             } else {
                 final TextView mErrorMessage = activityRef.get().findViewById(R.id.login_error_message);
                 final String str = activityRef.get().getString(R.string.error_incorrect_login_attempt);
-                mErrorMessage.setText(str);
+                final String message= response.getError()!=null?response.getError().getText():str;
+                mErrorMessage.setText("ERROR:"+ message);
                 showProgress(false);
             }
 
