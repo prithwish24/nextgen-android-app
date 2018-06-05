@@ -400,6 +400,7 @@ public class VoiceChatActivity extends BaseActivity
     private class GetUserSessionIdTask extends AsyncTask<Void, Void, AIResponse> {
         private WeakReference<Context> contextRef;
         private WeakReference<Address> addressRef;
+        private SessionManager sessionManager;
 
         GetUserSessionIdTask(Context context, Address address) {
             this.contextRef = new WeakReference<>(context);
@@ -407,15 +408,23 @@ public class VoiceChatActivity extends BaseActivity
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            sessionManager = new SessionManager(contextRef.get());
+        }
+
+        @Override
         protected AIResponse doInBackground(Void... requests) {
             try {
-                final String sessionID = new SessionManager(contextRef.get()).getLoggedInSessionID();
                 final Map<String, String> maps = new HashMap<>(1);
-                maps.put(SessionManager.SESSION_KEY_ID, sessionID);
+                maps.put(SessionManager.SESSION_KEY_ID, sessionManager.getLoggedInSessionID());
+                maps.put(GlobalConstants.USER_NAME, sessionManager.getLoggedInUserGivenName());
+                maps.put(GlobalConstants.PREFERRED_CAR, sessionManager.getLoggedInUserCarPref());
 
                 final AIContext aiContext = new AIContext("CarRental");
                 aiContext.setParameters(maps);
-                final RequestExtras requestExtras = new RequestExtras(Collections.singletonList(aiContext), null);
+                final RequestExtras requestExtras = new RequestExtras (
+                        Collections.singletonList(aiContext), null);
 
                 aiButton.getAIService().resetContexts();
                 final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH, requestExtras);

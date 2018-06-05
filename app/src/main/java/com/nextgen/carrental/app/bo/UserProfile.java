@@ -8,8 +8,10 @@ import java.util.List;
 
 
 public class UserProfile {
-	@JsonProperty("fullname")
-	private String fullName;
+	@JsonProperty("firstName")
+	private String firstName;
+	@JsonProperty("lastName")
+	private String lastName;
 	@JsonProperty("username")
 	private String username;
 	@JsonProperty("mobileNo")
@@ -20,6 +22,8 @@ public class UserProfile {
 	private String password;
 	@JsonProperty("dateOfBirth")
 	private String dateOfBirth;
+	@JsonProperty("carTypePref")
+	private String carTypePref;
 	@JsonProperty("preferences")
 	private List<Preference> preferences;
 
@@ -27,12 +31,16 @@ public class UserProfile {
 	}
 
 	public UserProfile(String emailId, String fullName) {
-		this.fullName = fullName;
+		this.firstName = fullName;
 		this.emailId = emailId;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public void setMobileNo(String mobileNo) {
@@ -51,12 +59,20 @@ public class UserProfile {
 		this.dateOfBirth = dateOfBirth;
 	}
 
+	public void setCarTypePref(String carTypePref) {
+		this.carTypePref = carTypePref;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
 	}
 
 	public String getUsername() {
@@ -77,6 +93,10 @@ public class UserProfile {
 
 	public String getDateOfBirth() {
 		return dateOfBirth;
+	}
+
+	public String getCarTypePref() {
+		return carTypePref;
 	}
 
 	public List<Preference> getPreferences() {

@@ -9,6 +9,8 @@ package com.nextgen.carrental.app.constants;
 public class GlobalConstants {
 
     public static final String AGENT_NAME = "Agent Emily";
+    public static final String USER_NAME = "name";
+    public static final String PREFERRED_CAR = "carpref";
 
     public enum Services {
         USER_LOGIN ("profile", "8001", "/login"),

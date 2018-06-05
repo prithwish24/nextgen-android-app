@@ -14,10 +14,12 @@ import com.nextgen.carrental.app.model.User;
  */
 
 public class SessionManager {
-    public static final String SESSION_KEY_NAME = "name";
+    public static final String SESSION_KEY_FIRSTNAME = "firstname";
+    public static final String SESSION_KEY_LASTNAME = "lastname";
     public static final String SESSION_KEY_USERID = "userId";
     public static final String SESSION_KEY_EMAIL = "email";
     public static final String SESSION_KEY_ID = "sessionId";
+    public static final String SESSION_KEY_CARPREF = "carPreference";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -38,9 +40,11 @@ public class SessionManager {
 
     public void createLoginSession(UserProfile userProfile,String sessionId) {
         editor.putBoolean(IS_LOGGED_IN, true);
-        editor.putString(SESSION_KEY_NAME, userProfile.getFullName());
+        editor.putString(SESSION_KEY_FIRSTNAME, userProfile.getFirstName());
+        editor.putString(SESSION_KEY_LASTNAME, userProfile.getLastName());
         editor.putString(SESSION_KEY_EMAIL, userProfile.getEmailId());
         editor.putString(SESSION_KEY_USERID, userProfile.getUsername());
+        editor.putString(SESSION_KEY_CARPREF, userProfile.getCarTypePref());
         editor.putString(SESSION_KEY_ID, sessionId);
         editor.commit();
     }
@@ -48,9 +52,17 @@ public class SessionManager {
     public User getLoggedInUser(){
         User user = new User();
         user.setUserId(sharedPreferences.getString(SESSION_KEY_USERID, ""));
-        user.setName(sharedPreferences.getString(SESSION_KEY_NAME, ""));
+        user.setName(sharedPreferences.getString(SESSION_KEY_FIRSTNAME, ""));
         user.setEmail(sharedPreferences.getString(SESSION_KEY_EMAIL, ""));
         return user;
+    }
+
+    public String getLoggedInUserGivenName() {
+        return sharedPreferences.getString(SESSION_KEY_FIRSTNAME, null);
+    }
+
+    public String getLoggedInUserCarPref() {
+        return sharedPreferences.getString(SESSION_KEY_CARPREF, null);
     }
 
     public String getLoggedInUserID() {
