@@ -1,12 +1,9 @@
 package com.nextgen.carrental.app.android;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +68,8 @@ public class FragmentReview extends Fragment {
                 carClassImage.setImageResource(carClass.getImgId());
                 carClassDesc.setText(carClass.getDesc());
                 ((TextView) view.findViewById(R.id.review_vehicle_class)).setText(carClass.name());
-                tmpStr = carClass.name() + " - " + carClass.getDesc();
-                ((TextView) view.findViewById(R.id.review_price_vehicle_text)).setText(tmpStr);
+                //tmpStr = carClass.name() + " - " + carClass.getDesc();
+                //((TextView) view.findViewById(R.id.review_price_vehicle_text)).setText(tmpStr);
             }
 
             ((TextView) view.findViewById(R.id.review_message)).setText(R.string.review_screen_user_message);
@@ -86,11 +83,9 @@ public class FragmentReview extends Fragment {
             tmpStr = Utils.fmtTime(bookingData.returnDateTime, Utils.LONG_DATE_TIME);
             ((TextView) view.findViewById(R.id.review_return_time)).setText(tmpStr);
 
-
-
-            /*for (String str : bookingData.additionalEquip) {
+            for (String str : bookingData.additionalEquip) {
                 ((TextView) view.findViewById(R.id.review_additional_equip)).setText(str + "\n");
-            }*/
+            }
 
         }
     }

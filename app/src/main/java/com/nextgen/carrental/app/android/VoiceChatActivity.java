@@ -358,7 +358,7 @@ public class VoiceChatActivity extends BaseActivity
             case R.id.info_button:
                 Toast.makeText(VoiceChatActivity.this, "Showing dummy confirmation", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.vc_content_frame, new FragmentConfirm())
+                        .replace(R.id.vc_content_frame, new FragmentReview())
                         .addToBackStack(null)
                         .commit();
                 break;

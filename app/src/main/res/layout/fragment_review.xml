@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/review_message"
             android:layout_width="match_parent"
@@ -31,151 +32,153 @@
             android:layout_marginTop="10dp"
             android:text="TRIP DETAILS" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Pickup:"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2sp"
+                        android:text="Pickup:"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/review_pickup_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Thu Apr 19, 2018 - 12:00 PM"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/review_pickup_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2sp"
+                        android:text="Thu Apr 19, 2018 - 12:00 PM"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/review_pickup_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lambert-St. Louis Int. Airport"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/review_pickup_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lambert-St. Louis Int. Airport"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Return:"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2sp"
+                        android:text="Return:"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/review_return_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="Thu Apr 24, 2018 - 12:00 PM"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/review_return_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2sp"
+                        android:text="Thu Apr 24, 2018 - 12:00 PM"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/review_return_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lambert-St. Louis Int. Airport"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/review_return_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lambert-St. Louis Int. Airport"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="VEHICLE SELECTED" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/white"
-            android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="VEHICLE SELECTED" />
 
-            <ImageView
-                android:id="@+id/review_vehicle_image"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/show_reservation_thumbnail"
-                android:scaleType="centerInside"
-                tools:src="@drawable/ct_compact" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/white"
+                    android:padding="10dp">
 
-            <TextView
-                android:id="@+id/review_vehicle_class"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/review_vehicle_image"
-                android:paddingBottom="2sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:text="Economy"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/review_vehicle_image"
+                        android:layout_width="100dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/show_reservation_thumbnail"
+                        android:scaleType="centerInside"
+                        tools:src="@drawable/ct_compact" />
 
-            <TextView
-                android:id="@+id/review_vehicle_class_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/review_vehicle_class"
-                android:layout_toEndOf="@id/review_vehicle_image"
-                android:paddingBottom="2sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:text="Mitsubishi Mirage or similar"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/review_vehicle_class"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/review_vehicle_image"
+                        android:paddingBottom="2sp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="Economy"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-       <!-- <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="SELECTED ADDONS" />
+                    <TextView
+                        android:id="@+id/review_vehicle_class_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/review_vehicle_class"
+                        android:layout_toEndOf="@id/review_vehicle_image"
+                        android:paddingBottom="2sp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="Mitsubishi Mirage or similar"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:text="SELECTED ADDONS" />
 
-            <TextView
-                android:id="@+id/review_additional_equip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2sp"
-                android:text="GPS Navigator"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
-        </LinearLayout>-->
+                            <TextView
+                                android:id="@+id/review_additional_equip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="2sp"
+                                android:text="GPS Navigator"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -206,7 +209,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/review_price_vehicle_heading"
                 android:paddingBottom="2sp"
-                android:paddingStart="10dp"
                 android:text="Compact - Nissan Versa Or Similar"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
@@ -232,7 +234,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="14sp" />
-            <!--<TextView
+            <TextView
                 android:id="@+id/review_price_tax1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -269,14 +271,13 @@
                 android:paddingBottom="2sp"
                 android:text="$ 9.90"
                 android:textColor="@color/black"
-                android:textSize="12sp" />-->
+                android:textSize="12sp" />
             <TextView
                 android:id="@+id/review_price_tax3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/review_price_tax_heading"
+                android:layout_below="@id/review_price_tax2"
                 android:paddingBottom="2sp"
-                android:paddingStart="10dp"
                 android:text="State Tax (8.6%)"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
@@ -284,24 +285,25 @@
                 android:id="@+id/review_price_tax3_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/review_price_tax_heading"
+                android:layout_below="@id/review_price_tax2_val"
                 android:layout_alignParentEnd="true"
                 android:paddingBottom="2sp"
                 android:text="$ 26.65"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
-            <view
+
+            <android.support.v4.widget.Space
+                android:id="@+id/hz_separator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_below="@id/review_price_tax3"
-                android:background="@color/darkGray" />
+                android:layout_below="@+id/review_price_tax3"
+                android:background="?android:attr/listDivider"/>
+
             <TextView
                 android:id="@+id/review_price_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/review_price_tax3"
+                android:layout_below="@id/hz_separator"
                 android:paddingTop="10dp"
                 android:text="ESTIMATED TOTAL"
                 android:textColor="@color/colorPrimaryDark"
@@ -311,7 +313,7 @@
                 android:id="@+id/review_price_total_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/review_price_tax3_val"
+                android:layout_below="@id/hz_separator"
                 android:layout_alignParentEnd="true"
                 android:paddingTop="10dp"
                 android:text="$ 336.59"
