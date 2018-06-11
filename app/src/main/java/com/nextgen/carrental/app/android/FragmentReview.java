@@ -68,8 +68,8 @@ public class FragmentReview extends Fragment {
                 carClassImage.setImageResource(carClass.getImgId());
                 carClassDesc.setText(carClass.getDesc());
                 ((TextView) view.findViewById(R.id.review_vehicle_class)).setText(carClass.name());
-                //tmpStr = carClass.name() + " - " + carClass.getDesc();
-                //((TextView) view.findViewById(R.id.review_price_vehicle_text)).setText(tmpStr);
+                tmpStr = carClass.name() + " - " + carClass.getDesc();
+                ((TextView) view.findViewById(R.id.review_price_vehicle_text)).setText(tmpStr);
             }
 
             ((TextView) view.findViewById(R.id.review_message)).setText(R.string.review_screen_user_message);
@@ -86,6 +86,14 @@ public class FragmentReview extends Fragment {
             for (String str : bookingData.additionalEquip) {
                 ((TextView) view.findViewById(R.id.review_additional_equip)).setText(str + "\n");
             }
+
+            if (bookingData.pricing != null) {
+                ((TextView) view.findViewById(R.id.review_price_vehicle_value)).setText("$ "+bookingData.pricing.vehicleRent);
+                ((TextView) view.findViewById(R.id.review_price_tax1_val)).setText("$ "+bookingData.pricing.concessionFee);
+                ((TextView) view.findViewById(R.id.review_price_tax3_val)).setText("$ "+bookingData.pricing.salesTax);
+                ((TextView) view.findViewById(R.id.review_price_total_val)).setText("$ "+bookingData.pricing.estimatedTotal);
+            }
+
 
         }
     }

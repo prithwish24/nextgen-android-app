@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.nextgen.carrental.app.model.BookingData;
+import com.nextgen.carrental.app.model.Pricing;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,8 +32,18 @@ public class AIResponseTransformer {
         bookingData.carType = parameters.get("cartype").getAsString();
         bookingData.pickupDateTime = parseDate(parameters.get("pickupdate"), parameters.get("pickuptime"));
         bookingData.returnDateTime = calculateReturnDateTime(bookingData.pickupDateTime, parameters.get("duration"));
+        bookingData.pricing = extractPricing(parameters);
 
         return bookingData;
+    }
+
+    private Pricing extractPricing (final Map<String, JsonElement> parameters) {
+        Pricing pr = new Pricing();
+        pr.vehicleRent = parameters.get("vehicleRentPrice").getAsString();
+        pr.concessionFee = parameters.get("consessionFee").getAsString();
+        pr.salesTax = parameters.get("salesTax").getAsString();
+        pr.estimatedTotal = parameters.get("estimatedTotal").getAsString();
+        return pr;
     }
 
     private String extractLocation(final JsonElement jsonElement) {

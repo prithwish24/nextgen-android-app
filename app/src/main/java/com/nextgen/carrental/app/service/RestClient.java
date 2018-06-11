@@ -188,7 +188,7 @@ public enum RestClient {
         try {
             return makeCall(url, params, responseType, HttpMethod.POST);
         } catch (Exception e) {
-            throw new RestException("POST service call failed !", e);
+            throw new RestException("POST service call failed ! Error: "+e.getMessage(), e);
         }
     }
 

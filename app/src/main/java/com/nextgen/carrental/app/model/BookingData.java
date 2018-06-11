@@ -13,5 +13,6 @@ public class BookingData {
     public String pickupLoc;
     public String returnLoc;
     public String carType;
+    public Pricing pricing;
     public List<String> additionalEquip = new ArrayList<>();
 }
