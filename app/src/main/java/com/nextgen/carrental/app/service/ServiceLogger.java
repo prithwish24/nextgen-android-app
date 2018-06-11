@@ -6,10 +6,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.StreamUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class ServiceLogger implements ClientHttpRequestInterceptor {
@@ -31,17 +30,15 @@ public class ServiceLogger implements ClientHttpRequestInterceptor {
             if (response == null) {
                 Log.d(TAG, "Response is NULL !");
             } else {
-                //String respStr = StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8);
-                Log.d(TAG, response.getHeaders().getContentType().toString());
-                Log.d(TAG, response.getHeaders().getAcceptEncoding().toString());
-                //Log.d(TAG, respStr);
-                final StringBuilder sb = new StringBuilder();
+                String respStr = StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8);
+                Log.d(TAG, respStr);
+                /*final StringBuilder sb = new StringBuilder();
                 final BufferedReader br = new BufferedReader(new InputStreamReader(response.getBody()));
                 String str;
                 while ((str = br.readLine()) != null) {
                     sb.append(str);
                 }
-                Log.d(TAG, sb.toString());
+                Log.d(TAG, sb.toString());*/
             }
         }
         return response;
