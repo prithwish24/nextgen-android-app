@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -16,8 +17,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Rest service client
@@ -31,7 +34,6 @@ public enum RestClient {
     private final String TAG = RestClient.class.getName();
     private final int DEFAULT_SERVICE_TIMEOUT = 20 * 1000;
     private final RestTemplate restTemplate;
-    //private final ObjectMapper mapper;
 
     RestClient() {
         restTemplate = new RestTemplate();
@@ -46,8 +48,11 @@ public enum RestClient {
                 super.setReadTimeout(DEFAULT_SERVICE_TIMEOUT);
             }
         });
-
-        //mapper = new ObjectMapper();
+        restTemplate.setInterceptors(new ArrayList<ClientHttpRequestInterceptor>() {
+            {
+                add(new ServiceLogger());
+            }
+        });
     }
 
     @Deprecated
@@ -176,7 +181,7 @@ public enum RestClient {
         try {
             return makeCall(url, params, responseType, HttpMethod.GET);
         } catch (Exception e) {
-            throw new RestException("GET service call failed !", e);
+            throw new RestException("GET service call failed ! Error: "+e.getMessage(), e);
         }
     }
 
