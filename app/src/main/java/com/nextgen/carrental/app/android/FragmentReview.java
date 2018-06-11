@@ -87,13 +87,10 @@ public class FragmentReview extends Fragment {
                 ((TextView) view.findViewById(R.id.review_additional_equip)).setText(str + "\n");
             }
 
-            if (bookingData.pricing != null) {
-                ((TextView) view.findViewById(R.id.review_price_vehicle_value)).setText("$ "+bookingData.pricing.vehicleRent);
-                ((TextView) view.findViewById(R.id.review_price_tax1_val)).setText("$ "+bookingData.pricing.concessionFee);
-                ((TextView) view.findViewById(R.id.review_price_tax3_val)).setText("$ "+bookingData.pricing.salesTax);
-                ((TextView) view.findViewById(R.id.review_price_total_val)).setText("$ "+bookingData.pricing.estimatedTotal);
-            }
-
+            ((TextView) view.findViewById(R.id.review_price_vehicle_value)).setText("$ "+bookingData.vehicleRentPrice);
+            ((TextView) view.findViewById(R.id.review_price_tax1_val)).setText("$ "+bookingData.consessionFee);
+            ((TextView) view.findViewById(R.id.review_price_tax3_val)).setText("$ "+bookingData.salesTax);
+            ((TextView) view.findViewById(R.id.review_price_total_val)).setText("$ "+bookingData.estimatedTotal);
 
         }
     }

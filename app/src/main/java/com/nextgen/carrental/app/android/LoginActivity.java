@@ -319,6 +319,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         @Override
         protected void onPostExecute(BaseResponse<UserProfile> response) {
             boolean success = (response != null) && response.isSuccess();
+
             if (success) {
                 UserProfile profile = response.getResponse();
                 SessionManager sessionManager = new SessionManager(activityRef.get().getApplicationContext());

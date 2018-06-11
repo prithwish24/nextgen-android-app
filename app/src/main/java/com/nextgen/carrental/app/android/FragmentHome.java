@@ -118,12 +118,11 @@ public class FragmentHome extends Fragment {
         @Override
         protected void onPostExecute(final List<BookingData> bookingDataList) {
             final View viewMessage = viewRef.get().findViewById(R.id.no_trip_list_view);
+            final View viewList = viewRef.get().findViewById(R.id.show_trips_list_view);
+
             if (bookingDataList == null || bookingDataList.size() == 0) {
                 viewMessage.setVisibility(View.VISIBLE);
-
-                final View viewList = viewRef.get().findViewById(R.id.show_trips_list_view);
                 viewList.setVisibility(View.GONE);
-
             } else {
                 viewMessage.setVisibility(View.GONE);
                 adapter.setItemList(bookingDataList);

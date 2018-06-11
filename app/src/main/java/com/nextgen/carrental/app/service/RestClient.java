@@ -9,18 +9,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+
 
 /**
  * Rest service client
@@ -36,23 +35,17 @@ public enum RestClient {
     private final RestTemplate restTemplate;
 
     RestClient() {
-        restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory() {
+        restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory() {
             public void setConnectTimeout(int connectTimeout) {
                 super.setConnectTimeout(DEFAULT_SERVICE_TIMEOUT);
             }
-
             public void setReadTimeout(int readTimeout) {
                 super.setReadTimeout(DEFAULT_SERVICE_TIMEOUT);
             }
-        });
-        restTemplate.setInterceptors(new ArrayList<ClientHttpRequestInterceptor>() {
-            {
-                add(new ServiceLogger());
-            }
-        });
+        }));
+        restTemplate.setInterceptors(Collections.<ClientHttpRequestInterceptor>singletonList(new ServiceLogger()));
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
     @Deprecated

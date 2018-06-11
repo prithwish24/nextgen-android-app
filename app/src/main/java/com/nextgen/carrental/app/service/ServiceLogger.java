@@ -9,8 +9,8 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class ServiceLogger implements ClientHttpRequestInterceptor {
     private static final String TAG = ServiceLogger.class.getName();
@@ -19,7 +19,7 @@ public class ServiceLogger implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         Log.d (TAG, "========== Request Body ========== ");
         if (body != null && body.length > 0) {
-            String reqBody = new String(body, "UTF-8");
+            String reqBody = new String(body, StandardCharsets.UTF_8);
             Log.d (TAG, reqBody);
         }
 
@@ -31,14 +31,16 @@ public class ServiceLogger implements ClientHttpRequestInterceptor {
             if (response == null) {
                 Log.d(TAG, "Response is NULL !");
             } else {
+                //String respStr = StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8);
+                Log.d(TAG, response.getHeaders().getContentType().toString());
+                Log.d(TAG, response.getHeaders().getAcceptEncoding().toString());
+                //Log.d(TAG, respStr);
                 final StringBuilder sb = new StringBuilder();
                 final BufferedReader br = new BufferedReader(new InputStreamReader(response.getBody()));
                 String str;
                 while ((str = br.readLine()) != null) {
                     sb.append(str);
                 }
-                br.close();
-
                 Log.d(TAG, sb.toString());
             }
         }

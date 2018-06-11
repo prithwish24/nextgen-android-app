@@ -13,6 +13,9 @@ public class BookingData {
     public String pickupLoc;
     public String returnLoc;
     public String carType;
-    public Pricing pricing;
+    public String vehicleRentPrice;
+    public String consessionFee;
+    public String salesTax;
+    public String estimatedTotal;
     public List<String> additionalEquip = new ArrayList<>();
 }
