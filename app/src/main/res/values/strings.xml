@@ -45,6 +45,10 @@
     <!-- Confirmation fragment -->
     <string name="review_screen_user_message">Please review your booking information..</string>
     <string name="confirmation_screen_user_message">CONFIRMATION # </string>
+    <string name="promo_list">
+        <li>Weekend Specials - Starting at $9.99/day</li>
+        <li>Discount available on luxury cars</li>
+    </string>
 
     <!-- Profile page strings -->
     <string name="profile_name">Name</string>

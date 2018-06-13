@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/widget_weather"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:minHeight="80dp"
+                android:layout_marginEnd="1dp">
+                <TextView
+                    android:id="@+id/widget_weather_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mostly Clear"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/yellow2"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/widget_weather_temp"
+                    android:layout_below="@id/widget_weather_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="90 F"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue2" />
+                <TextView
+                    android:id="@+id/widget_weather_max_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/widget_weather_temp"
+                    android:layout_weight="0"
+                    android:text="75 / 92 F"
+                    android:textSize="14sp"
+                    android:textColor="@color/cherry"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/widget_gas_station"
+                android:layout_marginStart="1dp"
+                android:background="@color/white"
+                android:minHeight="80dp"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/widget_gas_station_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Philips - 1 mi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/yellow2" />
+                <TextView
+                    android:id="@+id/widget_gas_station_price_petrol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/widget_gas_station_text"
+                    android:text="R: $2.98 | P:$3.49"
+                    android:textSize="16sp"
+                    android:textColor="@color/blue2"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal" />
+                <TextView
+                    android:id="@+id/widget_gas_station_price_diesel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/widget_gas_station_price_petrol"
+                    android:layout_marginBottom="8dp"
+                    android:text="Diesel: $3.26"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/cherry"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+
+        </TableRow>
+
+
+    </TableLayout>
+
+
+</LinearLayout>
