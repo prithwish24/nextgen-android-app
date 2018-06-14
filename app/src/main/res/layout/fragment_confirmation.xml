@@ -131,7 +131,7 @@
         <include layout="@layout/fragment_confirm_widgets" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -247,9 +247,9 @@
                 android:text="Low:  81 F"/>
         </LinearLayout>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -290,6 +290,6 @@
             android:textSize="12sp"
             android:text="Promo XXXXX - Discount available on luxury cars and minivans."/>
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </LinearLayout>

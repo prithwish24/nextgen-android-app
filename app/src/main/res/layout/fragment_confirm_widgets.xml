@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -12,17 +11,30 @@
 
         <TableRow
             android:layout_weight="1"
+            android:padding="2dp"
             android:gravity="center">
 
             <RelativeLayout
                 android:id="@+id/widget_weather"
-                android:background="@color/white"
+                android:background="@drawable/widget_background"
                 android:clickable="true"
                 android:focusable="true"
                 android:minHeight="80dp"
-                android:layout_marginEnd="1dp">
+                android:layout_marginEnd="2dp">
+                <TextView
+                    android:id="@+id/widget_weather_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weather Report"
+                    android:gravity="center_vertical"
+                    android:minHeight="22dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/startColor"
+                    android:background="@drawable/widget_header_background"
+                    />
                 <TextView
                     android:id="@+id/widget_weather_text"
+                    android:layout_below="@id/widget_weather_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Mostly Clear"
@@ -56,13 +68,25 @@
 
             <RelativeLayout
                 android:id="@+id/widget_gas_station"
-                android:layout_marginStart="1dp"
-                android:background="@color/white"
+                android:background="@drawable/widget_background"
                 android:minHeight="80dp"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:layout_marginStart="2dp">
+                <TextView
+                    android:id="@+id/widget_gas_station_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nearby Gas Station"
+                    android:gravity="center_vertical"
+                    android:minHeight="22dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/startColor"
+                    android:background="@drawable/widget_header_background"
+                    />
                 <TextView
                     android:id="@+id/widget_gas_station_text"
+                    android:layout_below="@id/widget_gas_station_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -95,8 +119,62 @@
 
         </TableRow>
 
+        <TableRow
+            android:layout_weight="0"
+            android:padding="2dp"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/widget_hotels"
+                android:background="@drawable/widget_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:minHeight="80dp"
+                android:layout_marginEnd="2dp">
+                <TextView
+                    android:id="@+id/widget_hotels_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hotels Deals"
+                    android:gravity="center_vertical"
+                    android:minHeight="22dp"
+                    android:paddingStart="5dp"
+                    android:textColor="@color/startColor"
+                    android:background="@drawable/widget_header_background"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/widget_hotels_heading"
+                    android:text="Promotion for You"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/widget_places"
+                android:background="@drawable/widget_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:minHeight="80dp"
+                android:layout_marginStart="2dp">
+                <TextView
+                    android:id="@+id/widget_places_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nearby Popular Places"
+                    android:gravity="center_vertical"
+                    android:minHeight="22dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/startColor"
+                    android:background="@drawable/widget_header_background"
+                    />
+
+            </RelativeLayout>
+
+        </TableRow>
 
     </TableLayout>
-
 
 </LinearLayout>
