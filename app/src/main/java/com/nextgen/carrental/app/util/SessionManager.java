@@ -49,6 +49,7 @@ public class SessionManager {
         editor.commit();
     }
 
+    @Deprecated
     public User getLoggedInUser(){
         User user = new User();
         user.setUserId(sharedPreferences.getString(SESSION_KEY_USERID, ""));
@@ -59,6 +60,14 @@ public class SessionManager {
 
     public String getLoggedInUserGivenName() {
         return sharedPreferences.getString(SESSION_KEY_FIRSTNAME, null);
+    }
+
+    public String getLoggedInUserLastName() {
+        return sharedPreferences.getString(SESSION_KEY_LASTNAME, null);
+    }
+
+    public String getLoggedInUserEmail() {
+        return sharedPreferences.getString(SESSION_KEY_EMAIL, null);
     }
 
     public String getLoggedInUserCarPref() {

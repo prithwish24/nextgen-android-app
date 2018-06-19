@@ -73,7 +73,7 @@ public class VoiceChatActivity extends BaseActivity
     private AIButton aiButton;
     private Handler handler;
     private FragmentVoiceChat fragmentVoiceChat;
-    private FragmentReview fragmentReview;
+    //private FragmentReview fragmentReview;
     public Address currentGpsAddress;
 
     @Override
@@ -95,7 +95,7 @@ public class VoiceChatActivity extends BaseActivity
         findViewById(R.id.info_button).setOnClickListener(this);
 
         this.fragmentVoiceChat = new FragmentVoiceChat();
-        this.fragmentReview = new FragmentReview();
+        //this.fragmentReview = new FragmentReview();
 
         // Clear existing history
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -258,6 +258,7 @@ public class VoiceChatActivity extends BaseActivity
                              */
 
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
+                            FragmentReview fragmentReview = new FragmentReview();
                             fragmentReview.bindConfirmationData(bookingData);
 
                             getFragmentManager()
@@ -271,7 +272,6 @@ public class VoiceChatActivity extends BaseActivity
                             final BookingData bookingData = new AIResponseTransformer().transform(parameters);
                             FragmentConfirm fragmentConfirm = new FragmentConfirm();
                             fragmentConfirm.bindBookingData(bookingData);
-                            fragmentConfirm.bindGpsLocation(currentGpsAddress);
 
                             getFragmentManager()
                                     .beginTransaction()
@@ -358,7 +358,7 @@ public class VoiceChatActivity extends BaseActivity
             case R.id.info_button:
                 Toast.makeText(VoiceChatActivity.this, "Showing dummy confirmation", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.vc_content_frame, new FragmentReview())
+                        .replace(R.id.vc_content_frame, new FragmentConfirm())
                         .addToBackStack(null)
                         .commit();
                 break;

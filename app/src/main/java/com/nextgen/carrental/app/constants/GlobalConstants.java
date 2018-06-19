@@ -12,6 +12,8 @@ public class GlobalConstants {
     public static final String USER_NAME = "name";
     public static final String PREFERRED_CAR = "carpref";
 
+    public static final char DEGREE_SYMBOL = (char) 0x00B0;
+
     public enum Services {
         USER_LOGIN ("profile", "8001", "/login"),
         UPCOMING_RESERVATION ("reservation", "8002", "/trips/upcoming/{sessionId}"),

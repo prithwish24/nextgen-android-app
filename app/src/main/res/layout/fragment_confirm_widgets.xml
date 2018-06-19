@@ -1,180 +1,325 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+ <LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical">
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:stretchColumns="*">
-
-        <TableRow
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <android.support.v7.widget.CardView
+            android:id="@+id/widget_weather"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:padding="2dp"
-            android:gravity="center">
-
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            android:background="@color/grayLight"
+            android:clickable="true"
+            android:focusable="true"
+            >
             <RelativeLayout
-                android:id="@+id/widget_weather"
-                android:background="@drawable/widget_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:minHeight="80dp"
-                android:layout_marginEnd="2dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="105dp"
+                android:paddingBottom="3dp">
                 <TextView
                     android:id="@+id/widget_weather_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Weather Report"
-                    android:gravity="center_vertical"
-                    android:minHeight="22dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/startColor"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="25dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="Weather Condition"
                     android:background="@drawable/widget_header_background"
+                    />
+                <ImageView
+                    android:id="@+id/widget_weather_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/widget_weather_heading"
+                    android:src="@drawable/ct_compact"
                     />
                 <TextView
                     android:id="@+id/widget_weather_text"
+                    android:layout_toEndOf="@id/widget_weather_icon"
                     android:layout_below="@id/widget_weather_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Mostly Clear"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/yellow2"
-                    android:textSize="18sp"
+                    android:textColor="@color/darkGray"
+                    android:textSize="14sp"
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/widget_weather_temp"
+                    android:layout_toEndOf="@id/widget_weather_icon"
                     android:layout_below="@id/widget_weather_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="90 F"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/blue2" />
                 <TextView
-                    android:id="@+id/widget_weather_max_min"
+                    android:id="@+id/widget_weather_min"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/widget_weather_icon"
                     android:layout_below="@id/widget_weather_temp"
-                    android:layout_weight="0"
-                    android:text="75 / 92 F"
-                    android:textSize="14sp"
-                    android:textColor="@color/cherry"
-                    android:textStyle="bold"
+                    android:text="Min: 75 F"
+                    android:textSize="12sp"
+                    android:textColor="@color/orange5"
+                    android:textStyle="normal"
                     android:gravity="center_horizontal" />
-
+                <TextView
+                    android:id="@+id/widget_weather_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/widget_weather_icon"
+                    android:layout_below="@id/widget_weather_min"
+                    android:text="Max: 92 F"
+                    android:textSize="12sp"
+                    android:textColor="@color/orange5"
+                    android:textStyle="normal"
+                    android:gravity="center_horizontal" />
             </RelativeLayout>
-
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/widget_fuel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            android:background="@color/grayLight"
+            android:clickable="true"
+            android:focusable="true"
+            >
             <RelativeLayout
-                android:id="@+id/widget_gas_station"
-                android:background="@drawable/widget_background"
-                android:minHeight="80dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginStart="2dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="105dp"
+                android:paddingBottom="3dp">
                 <TextView
                     android:id="@+id/widget_gas_station_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nearby Gas Station"
-                    android:gravity="center_vertical"
-                    android:minHeight="22dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/startColor"
+                    android:text="Nearby Gas Stations"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="25dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
                     android:background="@drawable/widget_header_background"
+                    />
+                <ImageView
+                    android:id="@+id/widget_gas_station_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_below="@id/widget_gas_station_heading"
+                    android:src="@mipmap/ic_gas_station"
                     />
                 <TextView
                     android:id="@+id/widget_gas_station_text"
+                    android:layout_toEndOf="@+id/widget_gas_station_icon"
                     android:layout_below="@id/widget_gas_station_heading"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Philips - 1 mi"
-                    android:textSize="18sp"
+                    android:text="Philips - 1mi"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/yellow2" />
+                    android:textColor="@color/darkGray" />
                 <TextView
-                    android:id="@+id/widget_gas_station_price_petrol"
+                    android:id="@+id/widget_gas_station_regular_petrol"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/widget_gas_station_icon"
                     android:layout_below="@id/widget_gas_station_text"
-                    android:text="R: $2.98 | P:$3.49"
-                    android:textSize="16sp"
+                    android:text="Regular: $2.98"
+                    android:textSize="12sp"
                     android:textColor="@color/blue2"
-                    android:textStyle="bold"
-                    android:gravity="center_horizontal" />
+                    android:textStyle="normal"/>
+                <TextView
+                    android:id="@+id/widget_gas_station_premium_petrol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/widget_gas_station_icon"
+                    android:layout_below="@id/widget_gas_station_regular_petrol"
+                    android:text="Premium: $3.49"
+                    android:textSize="12sp"
+                    android:textColor="@color/blue2"
+                    android:textStyle="normal"/>
                 <TextView
                     android:id="@+id/widget_gas_station_price_diesel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/widget_gas_station_price_petrol"
+                    android:layout_toEndOf="@+id/widget_gas_station_icon"
+                    android:layout_below="@id/widget_gas_station_premium_petrol"
                     android:layout_marginBottom="8dp"
                     android:text="Diesel: $3.26"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/cherry"
-                    android:textSize="14sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/orange5"
+                    android:textSize="12sp"
+                    android:textStyle="normal"/>
             </RelativeLayout>
 
-        </TableRow>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 
-        <TableRow
-            android:layout_weight="0"
-            android:padding="2dp"
-            android:gravity="center">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <android.support.v7.widget.CardView
+            android:id="@+id/widget_hotels"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            android:background="@color/grayLight"
+            android:clickable="true"
+            android:focusable="true"
+            >
             <RelativeLayout
-                android:id="@+id/widget_hotels"
-                android:background="@drawable/widget_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:minHeight="80dp"
-                android:layout_marginEnd="2dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="105dp"
+                android:paddingBottom="3dp">
                 <TextView
                     android:id="@+id/widget_hotels_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hotels Deals"
-                    android:gravity="center_vertical"
-                    android:minHeight="22dp"
-                    android:paddingStart="5dp"
-                    android:textColor="@color/startColor"
+                    android:text="Hotel Deals"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="25dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
                     android:background="@drawable/widget_header_background"
                     />
-
+                <ImageView
+                    android:id="@+id/widget_hotels_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/widget_hotels_heading"
+                    android:src="@drawable/ic_hotel_purple_24dp"
+                    />
                 <TextView
+                    android:id="@+id/widget_hotels_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/widget_hotels_heading"
-                    android:text="Promotion for You"
+                    android:layout_toEndOf="@id/widget_hotels_icon"
+                    android:text="$ 121/Day"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/purple"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
                     />
-
+                <TextView
+                    android:id="@+id/widget_hotels_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/widget_hotels_price"
+                    android:layout_toEndOf="@id/widget_hotels_icon"
+                    android:gravity="center_horizontal"
+                    android:text="Grab Now"
+                    android:textColor="@color/veryDarkGray"
+                    android:textSize="12sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    />
+                <TextView
+                    android:id="@+id/widget_hotels_deal3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/widget_hotels_icon"
+                    android:text="* terms and condition applicable"
+                    android:textColor="@color/darkGray"
+                    android:textSize="8sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    />
             </RelativeLayout>
-
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:id="@+id/widget_places"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            android:background="@color/grayLight"
+            android:clickable="true"
+            android:focusable="true"
+            >
             <RelativeLayout
-                android:id="@+id/widget_places"
-                android:background="@drawable/widget_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:minHeight="80dp"
-                android:layout_marginStart="2dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="105dp"
+                android:paddingBottom="3dp">
                 <TextView
                     android:id="@+id/widget_places_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nearby Popular Places"
-                    android:gravity="center_vertical"
-                    android:minHeight="22dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/startColor"
+                    android:text="Nearby Attractions"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minHeight="25dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
                     android:background="@drawable/widget_header_background"
                     />
 
+                <ImageView
+                    android:id="@+id/widget_places_thumbnail"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/widget_places_heading"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/st_louis"
+                    />
+                <TextView
+                    android:id="@+id/widget_places_heading_text"
+                    android:layout_below="@id/widget_places_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tap to see details"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/darkGray"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    />
             </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 
-        </TableRow>
-
-    </TableLayout>
-
-</LinearLayout>
+ </LinearLayout>

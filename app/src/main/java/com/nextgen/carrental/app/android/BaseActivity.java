@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.nextgen.carrental.app.R;
 import com.nextgen.carrental.app.ai.AIApplication;
-import com.nextgen.carrental.app.model.User;
 import com.nextgen.carrental.app.util.SessionManager;
 import com.nextgen.carrental.app.util.TTS;
 
@@ -85,13 +84,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(navView);
 
-        final User user = sessionManager.getLoggedInUser();
+        //final User user = sessionManager.getLoggedInUser();
+        final String name = sessionManager.getLoggedInUserGivenName()
+                + " " + sessionManager.getLoggedInUserLastName();
 
         final View headerView = navigationView.getHeaderView(0);
         final TextView textViewName = headerView.findViewById(R.id.textView_name);
         final TextView textViewEmail = headerView.findViewById(R.id.textView_email);
-        textViewName.setText(user.getName());
-        textViewEmail.setText(user.getEmail());
+        textViewName.setText(name);
+        textViewEmail.setText(sessionManager.getLoggedInUserEmail());
 
         final ImageView imageViewProfile = headerView.findViewById(R.id.imageView_profile);
         imageViewProfile.setImageResource(R.mipmap.ic_profilepic);

@@ -16,6 +16,9 @@
     <color name="default_background_material_light">#dadfda</color>
     <color name="chat_background_material_light">#eaefea</color>
 
+    <color name="transparentYellow">#eefffef2</color>
+    <color name="transparentWhite">#eeffffff</color>
+
     <color name="yellow1">#e9e51d</color>
     <color name="yellow2">#A89B00</color>
     <color name="grey05">#d6d6d6</color>
@@ -28,4 +31,6 @@
     <color name="purple">#8e2aa3</color>
     <color name="teal">#4db6ac</color>
 
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>
 </resources>

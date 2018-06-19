@@ -24,7 +24,7 @@
             android:layout_margin="10dp"
             android:contentDescription="@string/close_icon"
             android:padding="5dp"
-            app:srcCompat="@drawable/ic_close_white" />
+            app:srcCompat="@drawable/ic_close_black" />
 
         <TextView
             android:id="@+id/vc_window_title"

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#85ffffff"
+    android:paddingBottom="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    >
+
+    <TextView
+        android:id="@+id/tv_weather_heading"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Weather Forecast"/>
+    <ImageView
+        android:id="@+id/widget_weather_close"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_gray"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Close"
+        />
+    <View
+        android:id="@+id/tv_weather_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_weather_heading"
+        android:background="@color/grey05" />
+    <TextView
+        android:id="@+id/tv_weather_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/tv_weather_separator"
+        android:textColor="@color/veryDarkGray"
+        android:textSize="12sp"
+        android:text="30 May 2018, Wednesday"/>
+    <TextView
+        android:id="@+id/tv_weather_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_weather_date"
+        android:text="St. Louis, United States"
+        android:textColor="@color/blue25"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_weather_disclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="15dp"
+        android:text="* weather report is collected from third party system."
+        android:textColor="@color/grey06"
+        android:textSize="10sp" />
+
+    <RelativeLayout
+        android:id="@+id/weather_frame_current"
+        android:layout_below="@id/tv_weather_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="@color/transparentYellow"
+        android:layout_marginTop="5dp"
+        >
+        <TextView
+            android:id="@+id/tv_weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange5"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"
+            android:text="Mostly Cloudy"/>
+        <ImageView
+            android:id="@+id/iv_weather_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_weather_text"
+            android:src="@drawable/ic_arrow_downward_black_24dp"
+            />
+        <TextView
+            android:id="@+id/tv_weather_current_low"
+            android:layout_below="@id/tv_weather_text"
+            android:layout_toEndOf="@+id/iv_weather_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="3dp"
+            android:paddingEnd="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/darkGray"
+            android:text="67"/>
+        <ImageView
+            android:id="@+id/iv_weather_high"
+            android:layout_below="@+id/tv_weather_text"
+            android:layout_toEndOf="@+id/tv_weather_current_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_upward_black_24dp"
+            />
+        <TextView
+            android:id="@+id/tv_weather_current_high"
+            android:layout_below="@id/tv_weather_text"
+            android:layout_toEndOf="@+id/iv_weather_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="3dp"
+            android:paddingEnd="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/darkGray"
+            android:text="87"/>
+        <TextView
+            android:id="@+id/tv_weather_current_temp"
+            android:layout_below="@+id/iv_weather_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingStart="5dp"
+            android:textSize="24sp"
+            android:typeface="sans"
+            android:textStyle="bold"
+            android:textScaleX="1.25"
+            android:scaleY="1.2"
+            android:textColor="@color/blue2"
+            android:text="83 F"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_below="@+id/weather_frame_current"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparentWhite"
+        android:scrollbars="vertical">
+        <TableLayout
+            android:id="@+id/weather_table_current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            >
+            <!--<TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="30dp"
+                >
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/teal"
+                    android:typeface="serif"
+                    android:textSize="14sp"
+                    android:text="Next 10 Days Forecast"
+                    android:gravity="center"
+                    android:layout_span="3" />
+            </TableRow>
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+                <TextView
+                    android:id="@+id/TextView04"
+                    android:text="Feb 7"
+                    android:textStyle="bold"
+                    android:typeface="serif"
+                    />
+                <TextView
+                    android:id="@+id/TextView03"
+                    android:text="Feb 8"
+                    android:textStyle="bold"
+                    android:typeface="serif"
+                    />
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:text="Feb 9"
+                    android:textStyle="bold"
+                    android:typeface="serif"
+                    />
+            </TableRow>-->
+
+        </TableLayout>
+
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/weather_forecast_day1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sunday"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/weather_forecast_text1"
+                android:layout_toRightOf="@+id/weather_forecast_day1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cloudy"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/weather_forecast_temp1"
+                android:layout_toStartOf="@+id/weather_forecast_text1"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90  29 F"
+                android:textSize="12sp"
+                />
+        </RelativeLayout>-->
+    </ScrollView>
+
+
+    <!--<LinearLayout
+        android:id="@+id/layout_current_temp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_weather_separator"
+        android:gravity="end"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:textColor="@color/orange5"
+            android:text="Mostly Cloudy"/>
+        <TextView
+            android:id="@+id/tv_weather_current_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="@color/blue2"
+            android:text="83 F"/>
+        <TextView
+            android:id="@+id/tv_weather_current_high_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/darkGray"
+            android:text="Max/ Min: 88/67 F"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_future_temp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_weather_text"
+        android:gravity="start"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_weather_future_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/purple"
+            android:text="High: 93 F"/>
+        <TextView
+            android:id="@+id/tv_weather_future_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/purple"
+            android:text="Low:  81 F"/>
+    </LinearLayout>-->
+
+</RelativeLayout>
