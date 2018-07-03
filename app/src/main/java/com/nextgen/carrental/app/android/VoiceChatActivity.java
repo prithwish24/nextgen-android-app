@@ -394,48 +394,51 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private class GetUserSessionIdTask extends AsyncTask<Void, Void, AIResponse> {
-        static final String START_SPEECH = "Welcome";
+        static final String START_SPEECH = "Start";
         static final String RESET_EVENT = "RESET_CONTEXT";
 
         private WeakReference<Context> contextRef;
         private WeakReference<Address> addressRef;
         private SessionManager sessionManager;
+        private AIService aiService;
+        private AIRequest aiRequest;
+        private RequestExtras aiRequestExtras;
 
         GetUserSessionIdTask(Context context, Address address) {
             this.contextRef = new WeakReference<>(context);
             this.addressRef = new WeakReference<>(address);
+            this.aiRequest = new AIRequest();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             sessionManager = new SessionManager(contextRef.get());
+            this.aiService = aiButton.getAIService();
+
+            // Set Event
+            AIEvent aiEvent = new AIEvent();
+            aiEvent.setName(RESET_EVENT);
+            aiRequest.setEvent(aiEvent);
+
+            //Set Context
+            final AIContext aiContext = new AIContext("app-input-context");
+            final Map<String, String> maps = new HashMap<>(1);
+            maps.put(GlobalConstants.PARAM_SESSION_ID, sessionManager.getLoggedInSessionID());
+            maps.put(GlobalConstants.PARAM_USER_NAME, sessionManager.getLoggedInUserGivenName());
+            maps.put(GlobalConstants.PARAM_PREFERRED_CAR, sessionManager.getLoggedInUserCarPref());
+            maps.put(GlobalConstants.PARAM_AGENT_NAME, GlobalConstants.AGENT_NAME);
+            aiContext.setParameters(maps);
+            aiRequestExtras = new RequestExtras (
+                    Collections.singletonList(aiContext), null);
         }
 
         @Override
         protected AIResponse doInBackground(Void... requests) {
             try {
-                final AIService aiService = aiButton.getAIService();
+                aiService.textRequest(aiRequest);
 
-                // Set Event
-                AIRequest request = new AIRequest();
-                AIEvent aiEvent = new AIEvent();
-                aiEvent.setName(RESET_EVENT);
-                request.setEvent(aiEvent);
-                aiService.textRequest(request);
-
-                //Set Context
-                final AIContext aiContext = new AIContext("app-input-context");
-                final Map<String, String> maps = new HashMap<>(1);
-                maps.put(GlobalConstants.PARAM_SESSION_ID, sessionManager.getLoggedInSessionID());
-                maps.put(GlobalConstants.PARAM_USER_NAME, sessionManager.getLoggedInUserGivenName());
-                maps.put(GlobalConstants.PARAM_PREFERRED_CAR, sessionManager.getLoggedInUserCarPref());
-                maps.put(GlobalConstants.PARAM_AGENT_NAME, GlobalConstants.AGENT_NAME);
-                aiContext.setParameters(maps);
-                final RequestExtras requestExtras = new RequestExtras (
-                        Collections.singletonList(aiContext), null);
-
-                return aiService.textRequest(START_SPEECH, requestExtras);
+                return aiService.textRequest(START_SPEECH, aiRequestExtras);
 
             } catch (AIServiceException e) {
                 Log.e(TAG, e.getMessage(), e);
