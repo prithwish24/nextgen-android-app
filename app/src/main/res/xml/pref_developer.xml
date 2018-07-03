@@ -27,7 +27,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="http://18.188.102.146"
+        android:defaultValue="http://52.201.244.148"
         android:inputType="textCapWords"
         android:key="app_service_url"
         android:maxLines="1"
@@ -37,7 +37,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="c57af71690154ea18eeeebe86edd152b"
+        android:defaultValue="210efa3038894bf38fd0cad26b993dbb"
         android:inputType="textCapWords"
         android:key="dialog_flow_client_token"
         android:maxLines="1"

@@ -53,8 +53,10 @@ import ai.api.AIServiceException;
 import ai.api.PartialResultsListener;
 import ai.api.RequestExtras;
 import ai.api.android.AIConfiguration;
+import ai.api.android.AIService;
 import ai.api.model.AIContext;
 import ai.api.model.AIError;
+import ai.api.model.AIEvent;
 import ai.api.model.AIOutputContext;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
@@ -65,9 +67,7 @@ public class VoiceChatActivity extends BaseActivity
         implements AIButton.AIButtonListener,
         PartialResultsListener, View.OnClickListener {
     private static final String TAG = VoiceChatActivity.class.getName();
-
     //public static String INITIAL_URL = "http://18.188.102.146:8002/zipcode/{sessionId}?zipcode={zipCode}";
-    final String START_SPEECH = "Hi";
 
     private PermissionManager permissionManager;
     private AIButton aiButton;
@@ -175,13 +175,9 @@ public class VoiceChatActivity extends BaseActivity
         aiButton.setResultsListener(this);
         aiButton.setPartialResultsListener(this);
 
-        //TTS.speak(START_SPEECH);
-
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        AIRequest firstRequest = new AIRequest();
-        firstRequest.setQuery(START_SPEECH);
         new GetUserSessionIdTask(getApplicationContext(), currentGpsAddress).execute();
     }
 
@@ -398,6 +394,9 @@ public class VoiceChatActivity extends BaseActivity
     }
 
     private class GetUserSessionIdTask extends AsyncTask<Void, Void, AIResponse> {
+        static final String START_SPEECH = "Welcome";
+        static final String RESET_EVENT = "RESET_CONTEXT";
+
         private WeakReference<Context> contextRef;
         private WeakReference<Address> addressRef;
         private SessionManager sessionManager;
@@ -416,19 +415,27 @@ public class VoiceChatActivity extends BaseActivity
         @Override
         protected AIResponse doInBackground(Void... requests) {
             try {
-                final Map<String, String> maps = new HashMap<>(1);
-                maps.put(SessionManager.SESSION_KEY_ID, sessionManager.getLoggedInSessionID());
-                maps.put(GlobalConstants.USER_NAME, sessionManager.getLoggedInUserGivenName());
-                maps.put(GlobalConstants.PREFERRED_CAR, sessionManager.getLoggedInUserCarPref());
+                final AIService aiService = aiButton.getAIService();
 
-                final AIContext aiContext = new AIContext("CarRental");
+                // Set Event
+                AIRequest request = new AIRequest();
+                AIEvent aiEvent = new AIEvent();
+                aiEvent.setName(RESET_EVENT);
+                request.setEvent(aiEvent);
+                aiService.textRequest(request);
+
+                //Set Context
+                final AIContext aiContext = new AIContext("app-input-context");
+                final Map<String, String> maps = new HashMap<>(1);
+                maps.put(GlobalConstants.PARAM_SESSION_ID, sessionManager.getLoggedInSessionID());
+                maps.put(GlobalConstants.PARAM_USER_NAME, sessionManager.getLoggedInUserGivenName());
+                maps.put(GlobalConstants.PARAM_PREFERRED_CAR, sessionManager.getLoggedInUserCarPref());
+                maps.put(GlobalConstants.PARAM_AGENT_NAME, GlobalConstants.AGENT_NAME);
                 aiContext.setParameters(maps);
                 final RequestExtras requestExtras = new RequestExtras (
                         Collections.singletonList(aiContext), null);
 
-                aiButton.getAIService().resetContexts();
-                final AIResponse response = aiButton.getAIService().textRequest(START_SPEECH, requestExtras);
-                return response;
+                return aiService.textRequest(START_SPEECH, requestExtras);
 
             } catch (AIServiceException e) {
                 Log.e(TAG, e.getMessage(), e);

@@ -8,9 +8,11 @@ package com.nextgen.carrental.app.constants;
 
 public class GlobalConstants {
 
-    public static final String AGENT_NAME = "Agent Emily";
-    public static final String USER_NAME = "name";
-    public static final String PREFERRED_CAR = "carpref";
+    public static final String AGENT_NAME = "Emily";
+    public static final String PARAM_SESSION_ID = "sessionId";
+    public static final String PARAM_USER_NAME = "username";
+    public static final String PARAM_PREFERRED_CAR = "carpref";
+    public static final String PARAM_AGENT_NAME = "agentname";
 
     public static final char DEGREE_SYMBOL = (char) 0x00B0;
 
